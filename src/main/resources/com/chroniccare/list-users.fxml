@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.chroniccare.controllers.ListUsersController"
+      spacing="15"
+      style="-fx-padding: 30; -fx-background-color: #f0f4ff;">
+
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Label text="Gestion des utilisateurs"
+               style="-fx-font-size: 22; -fx-font-weight: bold; -fx-text-fill: #2563eb;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="🏠 Accueil"
+                onAction="#goToHome"
+                style="-fx-background-color: #0f172a; -fx-text-fill: white;
+                       -fx-font-size: 13; -fx-font-weight: bold;
+                       -fx-padding: 10 20; -fx-cursor: hand;
+                       -fx-background-radius: 8;"/>
+        <Button text="+ Ajouter"
+                onAction="#goToAdd"
+                style="-fx-background-color: #2563eb; -fx-text-fill: white;
+                       -fx-font-size: 13; -fx-font-weight: bold;
+                       -fx-padding: 10 20; -fx-cursor: hand;
+                       -fx-background-radius: 8;"/>
+        <Button text="Déconnexion"
+                onAction="#goToLogin"
+                style="-fx-background-color: #ef4444; -fx-text-fill: white;
+                       -fx-font-size: 13; -fx-font-weight: bold;
+                       -fx-padding: 10 20; -fx-cursor: hand;
+                       -fx-background-radius: 8;"/>
+    </HBox>
+
+    <!-- Recherche + Filtre -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <TextField fx:id="searchField"
+                   promptText="Rechercher par nom, prénom ou email..."
+                   style="-fx-pref-height: 38; -fx-font-size: 13;"
+                   HBox.hgrow="ALWAYS"/>
+        <ComboBox fx:id="roleFilter"
+                  promptText="Filtrer par rôle"
+                  style="-fx-pref-width: 180; -fx-pref-height: 38;"/>
+        <Button text="Rechercher"
+                onAction="#handleSearch"
+                style="-fx-background-color: #2563eb; -fx-text-fill: white;
+                       -fx-font-size: 13; -fx-padding: 8 16;
+                       -fx-cursor: hand; -fx-background-radius: 8;"/>
+        <Button text="Réinitialiser"
+                onAction="#handleReset"
+                style="-fx-background-color: #6b7280; -fx-text-fill: white;
+                       -fx-font-size: 13; -fx-padding: 8 16;
+                       -fx-cursor: hand; -fx-background-radius: 8;"/>
+    </HBox>
+
+    <!-- Tableau -->
+    <TableView fx:id="usersTable"
+               VBox.vgrow="ALWAYS"
+               style="-fx-font-size: 13;">
+        <columns>
+            <TableColumn fx:id="idCol" text="ID" prefWidth="50"/>
+            <TableColumn fx:id="nomCol" text="Nom" prefWidth="110"/>
+            <TableColumn fx:id="prenomCol" text="Prénom" prefWidth="110"/>
+            <TableColumn fx:id="emailCol" text="Email" prefWidth="190"/>
+            <TableColumn fx:id="rolesCol" text="Rôle" prefWidth="140"/>
+            <TableColumn fx:id="genreCol" text="Genre" prefWidth="80"/>
+            <TableColumn fx:id="statusCol" text="Statut" prefWidth="90"/>
+            <TableColumn fx:id="actionsCol" text="Actions" prefWidth="160"/>
+        </columns>
+    </TableView>
+
+    <!-- Pagination -->
+    <HBox alignment="CENTER" spacing="10">
+        <Button text="◀ Précédent"
+                onAction="#previousPage"
+                style="-fx-background-color: #2563eb; -fx-text-fill: white;
+                       -fx-font-size: 13; -fx-padding: 8 16;
+                       -fx-cursor: hand; -fx-background-radius: 8;"/>
+        <Label fx:id="pageLabel"
+               text="Page 1"
+               style="-fx-font-size: 13; -fx-font-weight: bold;"/>
+        <Button text="Suivant ▶"
+                onAction="#nextPage"
+                style="-fx-background-color: #2563eb; -fx-text-fill: white;
+                       -fx-font-size: 13; -fx-padding: 8 16;
+                       -fx-cursor: hand; -fx-background-radius: 8;"/>
+    </HBox>
+
+    <!-- Compteur -->
+    <Label fx:id="countLabel"
+           style="-fx-font-size: 12; -fx-text-fill: #666;"/>
+
+</VBox>
