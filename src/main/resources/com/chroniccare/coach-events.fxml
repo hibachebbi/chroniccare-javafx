@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.chroniccare.controllers.CoachEventsController"
+            prefWidth="1200" prefHeight="760"
+            stylesheets="@home-styles.css">
+
+    <left>
+        <VBox styleClass="sidebar" prefWidth="230" spacing="0">
+            <VBox styleClass="sidebar-brand" spacing="4">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="+" styleClass="brand-icon"/>
+                    <Label text="ChronicCare" styleClass="brand-title"/>
+                </HBox>
+                <Label text="Suivi medical intelligent" styleClass="brand-subtitle"/>
+            </VBox>
+            <VBox styleClass="sidebar-user-card" spacing="6">
+                <Label fx:id="sidebarAvatar" styleClass="sidebar-avatar"/>
+                <Label fx:id="sidebarUserName" styleClass="sidebar-user-name"/>
+                <Label text="Coach" styleClass="sidebar-role-badge"
+                       style="-fx-text-fill: #4ade80; -fx-background-color: #14532d;"/>
+            </VBox>
+            <Separator styleClass="sidebar-sep"/>
+            <VBox styleClass="nav-section" spacing="2" VBox.vgrow="ALWAYS">
+                <Label text="NAVIGATION" styleClass="nav-section-label"/>
+                <Button text="Événements" styleClass="nav-btn, nav-btn-active" maxWidth="Infinity"/>
+                <Button text="Exercices" styleClass="nav-btn" onAction="#goToExercises" maxWidth="Infinity"/>
+                <Button text="Mon profil" styleClass="nav-btn" onAction="#goToProfile" maxWidth="Infinity"/>
+            </VBox>
+            <VBox styleClass="sidebar-bottom">
+                <Separator styleClass="sidebar-sep"/>
+                <Button text="Déconnexion" styleClass="nav-btn, nav-btn-logout"
+                        onAction="#handleLogout" maxWidth="Infinity"/>
+            </VBox>
+        </VBox>
+    </left>
+
+    <center>
+        <VBox styleClass="main-content" spacing="0">
+            <HBox styleClass="topbar" alignment="CENTER_LEFT" spacing="16">
+                <Label text="Mes événements" styleClass="page-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="topbarDate" styleClass="topbar-date"/>
+                <HBox styleClass="topbar-user-pill" alignment="CENTER" spacing="8">
+                    <Label fx:id="topbarAvatar" styleClass="topbar-avatar"/>
+                    <Label fx:id="topbarUserName" styleClass="topbar-username"/>
+                </HBox>
+            </HBox>
+
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="content-scroll">
+                 <VBox spacing="20" styleClass="dashboard-body">
+                     <HBox styleClass="welcome-banner" alignment="CENTER_LEFT" spacing="18">
+                        <VBox spacing="8">
+                            <Label text="Organise tes événements coach" styleClass="welcome-title"/>
+                            <Label text="Crée, trie, recherche et suis les patients inscrits à chacune de tes sessions."
+                                   styleClass="welcome-subtitle" wrapText="true"/>
+                        </VBox>
+                        <Region HBox.hgrow="ALWAYS"/>
+                         <Button text="+ Nouvel événement" styleClass="btn-secondary" onAction="#goToAdd"/>
+                     </HBox>
+
+                    <HBox spacing="14">
+                        <VBox styleClass="stat-card, stat-blue" spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="Événements" styleClass="stat-label"/>
+                            <Label fx:id="kpiTotalEventsLabel" styleClass="stat-value"/>
+                            <Label text="Total actifs et passes" styleClass="stat-sub"/>
+                        </VBox>
+                        <VBox styleClass="stat-card, stat-green" spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="Cette semaine" styleClass="stat-label"/>
+                            <Label fx:id="kpiWeekEventsLabel" styleClass="stat-value"/>
+                            <Label text="Debut entre lundi et dimanche" styleClass="stat-sub"/>
+                        </VBox>
+                        <VBox styleClass="stat-card, stat-purple" spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="Avec inscrits" styleClass="stat-label"/>
+                            <Label fx:id="kpiWithParticipantsLabel" styleClass="stat-value"/>
+                            <Label text="Événements avec au moins 1 patient" styleClass="stat-sub"/>
+                        </VBox>
+                        <VBox styleClass="stat-card, stat-orange" spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="Patients inscrits" styleClass="stat-label"/>
+                            <Label fx:id="kpiTotalParticipantsLabel" styleClass="stat-value"/>
+                            <Label text="Total des inscriptions" styleClass="stat-sub"/>
+                        </VBox>
+                    </HBox>
+
+                    <VBox styleClass="card" spacing="16">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <TextField fx:id="searchField" promptText="Rechercher par titre, lieu, statut..."
+                                        HBox.hgrow="ALWAYS" styleClass="filter-field"/>
+                            <ComboBox fx:id="sortCombo" styleClass="filter-combo"/>
+                            <Button text="Réinitialiser" styleClass="btn-secondary" onAction="#handleReset"/>
+                        </HBox>
+
+                        <HBox spacing="8">
+                            <Button fx:id="filterAllBtn" text="Tous" styleClass="quick-filter-chip" onAction="#handleFilterAll"/>
+                            <Button fx:id="filterTodayBtn" text="Aujourd'hui" styleClass="quick-filter-chip" onAction="#handleFilterToday"/>
+                            <Button fx:id="filterWeekBtn" text="Cette semaine" styleClass="quick-filter-chip" onAction="#handleFilterWeek"/>
+                            <Button fx:id="filterWithParticipantsBtn" text="Avec inscrits" styleClass="quick-filter-chip" onAction="#handleFilterWithParticipants"/>
+                            <Button fx:id="filterWithoutParticipantsBtn" text="Sans inscrits" styleClass="quick-filter-chip" onAction="#handleFilterWithoutParticipants"/>
+                        </HBox>
+
+                        <TableView fx:id="eventsTable" VBox.vgrow="ALWAYS" styleClass="dashboard-table">
+                            <columns>
+                                <TableColumn fx:id="idCol" text="ID" prefWidth="60"/>
+                                <TableColumn fx:id="titreCol" text="Titre" prefWidth="220"/>
+                                <TableColumn fx:id="statutCol" text="Statut" prefWidth="120"/>
+                                <TableColumn fx:id="lieuCol" text="Lieu" prefWidth="150"/>
+                                <TableColumn fx:id="dateDebutCol" text="Debut" prefWidth="170"/>
+                                <TableColumn fx:id="dateFinCol" text="Fin" prefWidth="170"/>
+                                <TableColumn fx:id="actionsCol" text="Actions" prefWidth="270"/>
+                            </columns>
+                        </TableView>
+
+                        <VBox fx:id="emptyStateBox" styleClass="empty-state-box" spacing="10" visible="false" managed="false">
+                            <Label text="Aucun événement ne correspond à ce filtre." styleClass="empty-state-title"/>
+                            <Label text="Essaie un autre filtre ou crée ton prochain événement coach." styleClass="empty-state-subtitle"/>
+                            <Button text="+ Créer un événement" styleClass="btn-primary" onAction="#goToAdd"/>
+                        </VBox>
+
+                        <Label fx:id="countLabel" styleClass="info-label"/>
+                        <Label fx:id="errorLabel" styleClass="error-label" wrapText="true"/>
+                    </VBox>
+                </VBox>
+            </ScrollPane>
+        </VBox>
+    </center>
+
+</BorderPane>

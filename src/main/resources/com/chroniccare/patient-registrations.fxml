@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.chroniccare.controllers.PatientRegistrationsController"
+            prefWidth="1200" prefHeight="760"
+            stylesheets="@home-styles.css">
+
+    <left>
+        <VBox styleClass="sidebar" prefWidth="230" spacing="0">
+            <VBox styleClass="sidebar-brand" spacing="4">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="+" styleClass="brand-icon"/>
+                    <Label text="ChronicCare" styleClass="brand-title"/>
+                </HBox>
+                <Label text="Suivi medical intelligent" styleClass="brand-subtitle"/>
+            </VBox>
+            <VBox styleClass="sidebar-user-card" spacing="6">
+                <Label fx:id="sidebarAvatar" styleClass="sidebar-avatar"/>
+                <Label fx:id="sidebarUserName" styleClass="sidebar-user-name"/>
+                <Label text="Patient" styleClass="sidebar-role-badge"/>
+            </VBox>
+            <Separator styleClass="sidebar-sep"/>
+            <VBox styleClass="nav-section" spacing="2" VBox.vgrow="ALWAYS">
+                <Label text="NAVIGATION" styleClass="nav-section-label"/>
+                <Button text="Accueil" styleClass="nav-btn" onAction="#goToHome" maxWidth="Infinity"/>
+                <Button text="Mon Profil" styleClass="nav-btn" onAction="#goToProfile" maxWidth="Infinity"/>
+                <Label text="MES SOINS" styleClass="nav-section-label"/>
+                <Button text="Événements" styleClass="nav-btn" onAction="#goToEvents" maxWidth="Infinity"/>
+                <Button text="Mes inscriptions" styleClass="nav-btn, nav-btn-active" maxWidth="Infinity"/>
+                <Button text="Mon Suivi" styleClass="nav-btn" maxWidth="Infinity"/>
+                <Button text="Prendre RDV" styleClass="nav-btn" maxWidth="Infinity"/>
+                <Button text="Mes consultations" styleClass="nav-btn" maxWidth="Infinity"/>
+                <Button text="Nutrition" styleClass="nav-btn" maxWidth="Infinity"/>
+                <Button text="Activité Physique" styleClass="nav-btn" maxWidth="Infinity"/>
+                <Button text="Médicaments" styleClass="nav-btn" maxWidth="Infinity"/>
+                <Button text="Mes Statistiques" styleClass="nav-btn" maxWidth="Infinity"/>
+            </VBox>
+            <VBox styleClass="sidebar-bottom">
+                <Separator styleClass="sidebar-sep"/>
+                <Button text="Déconnexion" styleClass="nav-btn, nav-btn-logout"
+                        onAction="#handleLogout" maxWidth="Infinity"/>
+            </VBox>
+        </VBox>
+    </left>
+
+    <center>
+        <VBox styleClass="main-content" spacing="0">
+            <HBox styleClass="topbar" alignment="CENTER_LEFT" spacing="16">
+                <Label text="Mes inscriptions" styleClass="page-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="topbarDate" styleClass="topbar-date"/>
+                <HBox styleClass="topbar-user-pill" alignment="CENTER" spacing="8">
+                    <Label fx:id="topbarAvatar" styleClass="topbar-avatar"/>
+                    <Label fx:id="topbarUserName" styleClass="topbar-username"/>
+                </HBox>
+            </HBox>
+
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="content-scroll">
+                <VBox spacing="20" styleClass="dashboard-body">
+                    <HBox styleClass="welcome-banner" alignment="CENTER_LEFT" spacing="18">
+                        <VBox spacing="8">
+                            <Label text="Retrouve toutes tes inscriptions" styleClass="welcome-title"/>
+                            <Label text="Suis tes événements réservés et consulte les exercices prévus pour chacun."
+                                   styleClass="welcome-subtitle" wrapText="true"/>
+                        </VBox>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button text="Voir les événements" styleClass="btn-secondary" onAction="#goToEvents"/>
+                    </HBox>
+
+                    <HBox spacing="14">
+                        <VBox styleClass="stat-card, stat-blue" spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="Mes inscriptions" styleClass="stat-label"/>
+                            <Label fx:id="kpiRegistrationsLabel" styleClass="stat-value"/>
+                            <Label text="Total reserve" styleClass="stat-sub"/>
+                        </VBox>
+                        <VBox styleClass="stat-card, stat-green" spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="A venir" styleClass="stat-label"/>
+                            <Label fx:id="kpiUpcomingLabel" styleClass="stat-value"/>
+                            <Label text="Événements futurs" styleClass="stat-sub"/>
+                        </VBox>
+                        <VBox styleClass="stat-card, stat-purple" spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="Exercices lies" styleClass="stat-label"/>
+                            <Label fx:id="kpiExercisesLabel" styleClass="stat-value"/>
+                            <Label text="Total d'exercices planifies" styleClass="stat-sub"/>
+                        </VBox>
+                    </HBox>
+
+                    <VBox styleClass="card" spacing="16">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <TextField fx:id="searchField" promptText="Rechercher par titre, lieu, statut..."
+                                       HBox.hgrow="ALWAYS" styleClass="filter-field"/>
+                        </HBox>
+
+                        <HBox spacing="8">
+                            <Button fx:id="filterAllBtn" text="Toutes" styleClass="quick-filter-chip" onAction="#handleFilterAll"/>
+                            <Button fx:id="filterUpcomingBtn" text="A venir" styleClass="quick-filter-chip" onAction="#handleFilterUpcoming"/>
+                            <Button fx:id="filterTodayBtn" text="Aujourd'hui" styleClass="quick-filter-chip" onAction="#handleFilterToday"/>
+                        </HBox>
+
+                        <TableView fx:id="registrationsTable" VBox.vgrow="ALWAYS" styleClass="dashboard-table">
+                            <columns>
+                                <TableColumn fx:id="titreCol" text="Titre" prefWidth="250"/>
+                                <TableColumn fx:id="lieuCol" text="Lieu" prefWidth="180"/>
+                                <TableColumn fx:id="dateDebutCol" text="Debut" prefWidth="170"/>
+                                <TableColumn fx:id="dateFinCol" text="Fin" prefWidth="170"/>
+                                <TableColumn fx:id="statutCol" text="Statut" prefWidth="120"/>
+                            </columns>
+                        </TableView>
+
+                        <VBox fx:id="emptyStateBox" styleClass="empty-state-box" spacing="10" visible="false" managed="false">
+                            <Label text="Aucune inscription ne correspond à ce filtre." styleClass="empty-state-title"/>
+                            <Label text="Essaie un autre filtre ou inscris-toi à de nouveaux événements." styleClass="empty-state-subtitle"/>
+                        </VBox>
+
+                        <Label fx:id="countLabel" styleClass="info-label"/>
+                        <Label fx:id="messageLabel" styleClass="inline-helper-label" wrapText="true"/>
+                    </VBox>
+
+                    <VBox styleClass="card" spacing="12">
+                        <Label fx:id="detailsLabel" text="Selectionnez une inscription pour voir les exercices associes." styleClass="card-title"/>
+                        <TableView fx:id="exercisesTable" VBox.vgrow="ALWAYS" styleClass="dashboard-table, exercises-main-table">
+                            <columns>
+                                <TableColumn fx:id="exNomCol" text="Exercice" prefWidth="300"/>
+                                <TableColumn fx:id="exDureeCol" text="Duree (min)" prefWidth="140"/>
+                                <TableColumn fx:id="exRepCol" text="Repetitions" prefWidth="140"/>
+                            </columns>
+                        </TableView>
+                    </VBox>
+                </VBox>
+            </ScrollPane>
+        </VBox>
+    </center>
+
+</BorderPane>

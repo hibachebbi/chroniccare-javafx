@@ -112,6 +112,26 @@ public class ProfilePatientController {
     }
 
     @FXML
+    public void goToEvents() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/com/chroniccare/patient-events.fxml"));
+            nomField.getScene().setRoot(root);
+        } catch (Exception e) {
+            if (errorLabel != null) errorLabel.setText("Erreur : " + e.getMessage());
+        }
+    }
+
+    @FXML
+    public void goToMyRegistrations() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/com/chroniccare/patient-registrations.fxml"));
+            nomField.getScene().setRoot(root);
+        } catch (Exception e) {
+            if (errorLabel != null) errorLabel.setText("Erreur : " + e.getMessage());
+        }
+    }
+
+    @FXML
     public void handleLogout() {
         try {
             SessionManager.getInstance().logout();

@@ -22,6 +22,19 @@ public class HomeController {
     @FXML private Button btnHome;
     @FXML private Button btnProfile;
     @FXML private Button btnUsers;
+    @FXML private Button btnEvents;
+    @FXML private Button btnExercises;
+    @FXML private Button btnNutritionRdv;
+    @FXML private Button btnPatientEvents;
+    @FXML private Button btnPatientRegistrations;
+    @FXML private Label patientCareSectionLabel;
+    @FXML private Button btnPatientFollowup;
+    @FXML private Button btnPatientBookRdv;
+    @FXML private Button btnPatientConsultations;
+    @FXML private Button btnPatientNutrition;
+    @FXML private Button btnPatientActivity;
+    @FXML private Button btnPatientMedications;
+    @FXML private Button btnPatientStats;
     @FXML private Label topbarDate;
     @FXML private Label topbarAvatar;
     @FXML private Label topbarUserName;
@@ -61,12 +74,41 @@ public class HomeController {
                 ? user.getTelephone() : "-");
 
         boolean isAdmin = SessionManager.getInstance().isAdmin();
+        boolean isCoach = SessionManager.getInstance().isCoach();
+        boolean isPatient = SessionManager.getInstance().isPatient();
+        boolean isNutritionniste = SessionManager.getInstance().isNutritionniste();
         adminPanel.setVisible(isAdmin);
         adminPanel.setManaged(isAdmin);
         adminStatCard.setVisible(isAdmin);
         adminStatCard.setManaged(isAdmin);
         btnUsers.setVisible(isAdmin);
         btnUsers.setManaged(isAdmin);
+        btnEvents.setVisible(isCoach);
+        btnEvents.setManaged(isCoach);
+        btnExercises.setVisible(isCoach);
+        btnExercises.setManaged(isCoach);
+        btnNutritionRdv.setVisible(isNutritionniste);
+        btnNutritionRdv.setManaged(isNutritionniste);
+        btnPatientEvents.setVisible(isPatient);
+        btnPatientEvents.setManaged(isPatient);
+        btnPatientRegistrations.setVisible(isPatient);
+        btnPatientRegistrations.setManaged(isPatient);
+        patientCareSectionLabel.setVisible(isPatient);
+        patientCareSectionLabel.setManaged(isPatient);
+        btnPatientFollowup.setVisible(isPatient);
+        btnPatientFollowup.setManaged(isPatient);
+        btnPatientBookRdv.setVisible(isPatient);
+        btnPatientBookRdv.setManaged(isPatient);
+        btnPatientConsultations.setVisible(isPatient);
+        btnPatientConsultations.setManaged(isPatient);
+        btnPatientNutrition.setVisible(isPatient);
+        btnPatientNutrition.setManaged(isPatient);
+        btnPatientActivity.setVisible(isPatient);
+        btnPatientActivity.setManaged(isPatient);
+        btnPatientMedications.setVisible(isPatient);
+        btnPatientMedications.setManaged(isPatient);
+        btnPatientStats.setVisible(isPatient);
+        btnPatientStats.setManaged(isPatient);
 
         if (isAdmin) {
             try {
@@ -111,6 +153,49 @@ public class HomeController {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    public void goToEvents() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/com/chroniccare/coach-events.fxml"));
+            btnHome.getScene().setRoot(root);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void goToExercises() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/com/chroniccare/coach-exercises.fxml"));
+            btnHome.getScene().setRoot(root);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void goToPatientEvents() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/com/chroniccare/patient-events.fxml"));
+            btnHome.getScene().setRoot(root);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void goToPatientRegistrations() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/com/chroniccare/patient-registrations.fxml"));
+            btnHome.getScene().setRoot(root);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void goToNutritionRdv() {}
 
     @FXML
     public void goToAddUser() {

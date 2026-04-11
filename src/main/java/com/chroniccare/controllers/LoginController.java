@@ -48,8 +48,11 @@ public class LoginController {
 
             SessionManager.getInstance().setCurrentUser(user);
 
-            // Tous les utilisateurs (admin inclus) passent par la page d'accueil commune
-            String fxmlPath = "/com/chroniccare/home.fxml";
+            String fxmlPath = SessionManager.getInstance().isCoach()
+                    ? "/com/chroniccare/coach-events.fxml"
+                    : SessionManager.getInstance().isPatient()
+                    ? "/com/chroniccare/home.fxml"
+                    : "/com/chroniccare/home.fxml";
 
             Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
             emailField.getScene().setRoot(root);

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.chroniccare.controllers.CoachExercisesController"
+            prefWidth="1180" prefHeight="760"
+            stylesheets="@home-styles.css">
+
+    <left>
+        <VBox styleClass="sidebar" prefWidth="230" spacing="0">
+            <VBox styleClass="sidebar-brand" spacing="4">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="+" styleClass="brand-icon"/>
+                    <Label text="ChronicCare" styleClass="brand-title"/>
+                </HBox>
+                <Label text="Suivi medical intelligent" styleClass="brand-subtitle"/>
+            </VBox>
+            <VBox styleClass="sidebar-user-card" spacing="6">
+                <Label fx:id="sidebarAvatar" styleClass="sidebar-avatar"/>
+                <Label fx:id="sidebarUserName" styleClass="sidebar-user-name"/>
+                <Label text="Coach" styleClass="sidebar-role-badge"
+                       style="-fx-text-fill: #4ade80; -fx-background-color: #14532d;"/>
+            </VBox>
+            <Separator styleClass="sidebar-sep"/>
+            <VBox styleClass="nav-section" spacing="2" VBox.vgrow="ALWAYS">
+                <Label text="NAVIGATION" styleClass="nav-section-label"/>
+                <Button text="Événements" styleClass="nav-btn" onAction="#goToEvents" maxWidth="Infinity"/>
+                <Button text="Exercices" styleClass="nav-btn, nav-btn-active" maxWidth="Infinity"/>
+                <Button text="Mon profil" styleClass="nav-btn" onAction="#goToProfile" maxWidth="Infinity"/>
+            </VBox>
+            <VBox styleClass="sidebar-bottom">
+                <Separator styleClass="sidebar-sep"/>
+                <Button text="Déconnexion" styleClass="nav-btn, nav-btn-logout"
+                        onAction="#handleLogout" maxWidth="Infinity"/>
+            </VBox>
+        </VBox>
+    </left>
+
+    <center>
+        <VBox styleClass="main-content" spacing="0">
+            <HBox styleClass="topbar" alignment="CENTER_LEFT" spacing="16">
+                <Label text="Mes exercices" styleClass="page-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="topbarDate" styleClass="topbar-date"/>
+                <HBox styleClass="topbar-user-pill" alignment="CENTER" spacing="8">
+                    <Label fx:id="topbarAvatar" styleClass="topbar-avatar"/>
+                    <Label fx:id="topbarUserName" styleClass="topbar-username"/>
+                </HBox>
+            </HBox>
+
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="content-scroll">
+                 <VBox spacing="20" styleClass="dashboard-body">
+                     <HBox styleClass="welcome-banner" alignment="CENTER_LEFT" spacing="18">
+                        <VBox spacing="8">
+                            <Label text="Construis les routines de tes patients" styleClass="welcome-title"/>
+                            <Label text="Associe chaque exercice à un événement, trie les séances et ajuste le niveau."
+                                   styleClass="welcome-subtitle" wrapText="true"/>
+                        </VBox>
+                        <Region HBox.hgrow="ALWAYS"/>
+                         <Button text="+ Nouvel exercice" styleClass="btn-secondary" onAction="#goToAdd"/>
+                     </HBox>
+
+                    <HBox spacing="14">
+                        <VBox styleClass="stat-card, stat-blue" spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="Exercices" styleClass="stat-label"/>
+                            <Label fx:id="kpiTotalExercisesLabel" styleClass="stat-value"/>
+                            <Label text="Total cree par le coach" styleClass="stat-sub"/>
+                        </VBox>
+                        <VBox styleClass="stat-card, stat-green" spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="Duree moyenne" styleClass="stat-label"/>
+                            <Label fx:id="kpiAverageDurationLabel" styleClass="stat-value"/>
+                            <Label text="Minutes par exercice" styleClass="stat-sub"/>
+                        </VBox>
+                        <VBox styleClass="stat-card, stat-purple" spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="Événements liés" styleClass="stat-label"/>
+                            <Label fx:id="kpiLinkedEventsLabel" styleClass="stat-value"/>
+                            <Label text="Nombre d'événements avec exercices" styleClass="stat-sub"/>
+                        </VBox>
+                        <VBox styleClass="stat-card, stat-orange" spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="Repetitions planifiees" styleClass="stat-label"/>
+                            <Label fx:id="kpiTotalRepetitionsLabel" styleClass="stat-value"/>
+                            <Label text="Somme des répétitions définies" styleClass="stat-sub"/>
+                        </VBox>
+                    </HBox>
+
+                    <VBox styleClass="card" spacing="16">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label text="Tableau des exercices" styleClass="card-title"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label text="Vue coach" styleClass="status-chip, status-chip-valid"/>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <TextField fx:id="searchField" promptText="Rechercher par nom, description, événement..."
+                                        HBox.hgrow="ALWAYS" styleClass="filter-field"/>
+                            <ComboBox fx:id="sortCombo" styleClass="filter-combo"/>
+                            <Button text="Réinitialiser" styleClass="btn-secondary" onAction="#handleReset"/>
+                        </HBox>
+
+                        <HBox spacing="8">
+                            <Button fx:id="filterAllBtn" text="Tous" styleClass="quick-filter-chip" onAction="#handleFilterAll"/>
+                            <Button fx:id="filterShortBtn" text="&lt;= 30 min" styleClass="quick-filter-chip" onAction="#handleFilterShort"/>
+                            <Button fx:id="filterMediumBtn" text="31-60 min" styleClass="quick-filter-chip" onAction="#handleFilterMedium"/>
+                            <Button fx:id="filterLongBtn" text="> 60 min" styleClass="quick-filter-chip" onAction="#handleFilterLong"/>
+                            <Button fx:id="filterNoRepetitionsBtn" text="Sans répétitions" styleClass="quick-filter-chip" onAction="#handleFilterNoRepetitions"/>
+                        </HBox>
+
+                        <TableView fx:id="exercisesTable" VBox.vgrow="ALWAYS" styleClass="dashboard-table, exercises-main-table">
+                            <columns>
+                                <TableColumn fx:id="idCol" text="ID" prefWidth="70"/>
+                                <TableColumn fx:id="nomCol" text="Exercice" prefWidth="240"/>
+                                <TableColumn fx:id="evenementCol" text="Événement" prefWidth="250"/>
+                                <TableColumn fx:id="dureeCol" text="Duree (min)" prefWidth="120"/>
+                                <TableColumn fx:id="repetitionsCol" text="Repetitions" prefWidth="120"/>
+                                <TableColumn fx:id="actionsCol" text="Actions" prefWidth="210"/>
+                            </columns>
+                        </TableView>
+
+                        <VBox fx:id="emptyStateBox" styleClass="empty-state-box" spacing="10" visible="false" managed="false">
+                            <Label text="Aucun exercice ne correspond à ce filtre." styleClass="empty-state-title"/>
+                            <Label text="Ajuste les filtres ou ajoute un nouvel exercice pour tes patients." styleClass="empty-state-subtitle"/>
+                            <Button text="+ Créer un exercice" styleClass="btn-primary" onAction="#goToAdd"/>
+                        </VBox>
+
+                        <Label fx:id="countLabel" styleClass="info-label"/>
+                        <Label fx:id="errorLabel" styleClass="error-label" wrapText="true"/>
+                    </VBox>
+                </VBox>
+            </ScrollPane>
+        </VBox>
+    </center>
+
+</BorderPane>

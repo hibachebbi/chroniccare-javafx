@@ -7,7 +7,10 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -21,6 +24,7 @@ public class ProfileCoachController {
     @FXML private Label topbarAvatar;
     @FXML private Label topbarUserName;
     @FXML private Label statusLabel;
+    @FXML private Label completionLabel;
     @FXML private Label approvalLabel;
     @FXML private TextField nomField;
     @FXML private TextField prenomField;
@@ -30,7 +34,7 @@ public class ProfileCoachController {
     @FXML private Label errorLabel;
     @FXML private Label successLabel;
 
-    private UserService userService = new UserService();
+    private final UserService userService = new UserService();
     private User currentUser;
 
     @FXML
@@ -40,14 +44,14 @@ public class ProfileCoachController {
         if (currentUser == null) return;
 
         String initials = getInitials(currentUser);
-        if (sidebarAvatar != null) sidebarAvatar.setText(initials);
-        if (sidebarUserName != null) sidebarUserName.setText(currentUser.getPrenom() + " " + currentUser.getNom());
-        if (topbarAvatar != null) topbarAvatar.setText(initials);
-        if (topbarUserName != null) topbarUserName.setText(currentUser.getPrenom() + " " + currentUser.getNom());
-        if (topbarDate != null) {
-            DateTimeFormatter fmt = DateTimeFormatter.ofPattern("EEEE d MMMM yyyy", Locale.FRENCH);
-            topbarDate.setText(LocalDate.now().format(fmt));
-        }
+        sidebarAvatar.setText(initials);
+        sidebarUserName.setText(currentUser.getPrenom() + " " + currentUser.getNom());
+        topbarAvatar.setText(initials);
+        topbarUserName.setText(currentUser.getPrenom() + " " + currentUser.getNom());
+
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("EEEE d MMMM yyyy", Locale.FRENCH);
+        topbarDate.setText(LocalDate.now().format(fmt));
+
         nomField.setText(currentUser.getNom());
         prenomField.setText(currentUser.getPrenom());
         emailField.setText(currentUser.getEmail());
@@ -55,21 +59,28 @@ public class ProfileCoachController {
         genreCombo.setValue(currentUser.getGenre());
 
         String statut = currentUser.getApprovalStatus();
-        if (approvalLabel != null) { approvalLabel.setText(getStatusLabel(statut)); approvalLabel.setStyle(getStatusStyle(statut)); }
-        if (statusLabel != null) {
-            statusLabel.setText(getStatusLabel(statut));
-            statusLabel.setStyle("-fx-background-color: " + getStatusColor(statut) +
-                    "; -fx-text-fill: white; -fx-background-radius: 6; -fx-padding: 4 10; -fx-font-size: 11; -fx-font-weight: bold;");
-        }
+        approvalLabel.setText(getStatusLabel(statut));
+        approvalLabel.setStyle(getStatusStyle(statut));
+        statusLabel.setText(getStatusSimpleLabel(statut));
+        statusLabel.setStyle("-fx-text-fill: " + getStatusColor(statut) + "; -fx-font-weight: bold;");
+
+        clearMessages();
+        updateCompletionLabel();
+        nomField.textProperty().addListener((obs, oldValue, newValue) -> updateCompletionLabel());
+        prenomField.textProperty().addListener((obs, oldValue, newValue) -> updateCompletionLabel());
+        emailField.textProperty().addListener((obs, oldValue, newValue) -> updateCompletionLabel());
+        telephoneField.textProperty().addListener((obs, oldValue, newValue) -> updateCompletionLabel());
+        genreCombo.valueProperty().addListener((obs, oldValue, newValue) -> updateCompletionLabel());
     }
 
     private boolean valider() {
         StringBuilder errors = new StringBuilder();
         if (nomField.getText().trim().isEmpty()) errors.append("• Nom obligatoire\n");
-        if (prenomField.getText().trim().isEmpty()) errors.append("• Prénom obligatoire\n");
+        if (prenomField.getText().trim().isEmpty()) errors.append("• Prenom obligatoire\n");
         if (!emailField.getText().matches("^[\\w.-]+@[\\w.-]+\\.[a-z]{2,}$")) errors.append("• Email invalide\n");
-        if (!telephoneField.getText().isEmpty() && !telephoneField.getText().matches("\\d{8}"))
-            errors.append("• Téléphone : exactement 8 chiffres\n");
+        if (!telephoneField.getText().isEmpty() && !telephoneField.getText().matches("\\d{8}")) {
+            errors.append("• Telephone : exactement 8 chiffres\n");
+        }
         if (genreCombo.getValue() == null) errors.append("• Genre obligatoire\n");
         if (errors.length() > 0) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -93,21 +104,20 @@ public class ProfileCoachController {
             currentUser.setGenre(genreCombo.getValue());
             userService.update(currentUser);
             SessionManager.getInstance().setCurrentUser(currentUser);
-            if (successLabel != null) successLabel.setText("✓ Profil mis à jour avec succès !");
-            if (errorLabel != null) errorLabel.setText("");
+            showSuccess("Profil mis a jour avec succes !");
         } catch (Exception e) {
-            if (errorLabel != null) errorLabel.setText("Erreur : " + e.getMessage());
+            showError("Erreur : " + e.getMessage());
         }
     }
 
     @FXML
-    public void goToHome() {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/com/chroniccare/home.fxml"));
-            nomField.getScene().setRoot(root);
-        } catch (Exception e) {
-            if (errorLabel != null) errorLabel.setText("Erreur : " + e.getMessage());
-        }
+    public void goToEvents() {
+        navigate("/com/chroniccare/coach-events.fxml");
+    }
+
+    @FXML
+    public void goToExercises() {
+        navigate("/com/chroniccare/coach-exercises.fxml");
     }
 
     @FXML
@@ -117,8 +127,54 @@ public class ProfileCoachController {
             Parent root = FXMLLoader.load(getClass().getResource("/com/chroniccare/login.fxml"));
             nomField.getScene().setRoot(root);
         } catch (Exception e) {
-            if (errorLabel != null) errorLabel.setText("Erreur : " + e.getMessage());
+            showError("Erreur : " + e.getMessage());
         }
+    }
+
+    private void navigate(String fxmlPath) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
+            nomField.getScene().setRoot(root);
+        } catch (Exception e) {
+            showError("Erreur : " + e.getMessage());
+        }
+    }
+
+    private void updateCompletionLabel() {
+        int completed = 0;
+        if (nomField.getText() != null && !nomField.getText().trim().isEmpty()) completed++;
+        if (prenomField.getText() != null && !prenomField.getText().trim().isEmpty()) completed++;
+        if (emailField.getText() != null && !emailField.getText().trim().isEmpty()) completed++;
+        if (telephoneField.getText() != null && !telephoneField.getText().trim().isEmpty()) completed++;
+        if (genreCombo.getValue() != null && !genreCombo.getValue().trim().isEmpty()) completed++;
+        completionLabel.setText(completed + "/5");
+    }
+
+    private void clearMessages() {
+        errorLabel.setText("");
+        errorLabel.setVisible(false);
+        errorLabel.setManaged(false);
+        successLabel.setText("");
+        successLabel.setVisible(false);
+        successLabel.setManaged(false);
+    }
+
+    private void showSuccess(String message) {
+        successLabel.setText(message);
+        successLabel.setVisible(true);
+        successLabel.setManaged(true);
+        errorLabel.setText("");
+        errorLabel.setVisible(false);
+        errorLabel.setManaged(false);
+    }
+
+    private void showError(String message) {
+        errorLabel.setText(message);
+        errorLabel.setVisible(true);
+        errorLabel.setManaged(true);
+        successLabel.setText("");
+        successLabel.setVisible(false);
+        successLabel.setManaged(false);
     }
 
     private String getInitials(User user) {
@@ -126,16 +182,25 @@ public class ProfileCoachController {
         String n = (user.getNom() != null && !user.getNom().isEmpty()) ? String.valueOf(user.getNom().charAt(0)).toUpperCase() : "";
         return p + n;
     }
+
     private String getStatusLabel(String s) {
-        if ("approved".equals(s)) return "✓ Approuvé";
-        if ("pending".equals(s)) return "⏳ En attente";
-        return "✗ Rejeté";
+        if ("approved".equals(s)) return "Approuve";
+        if ("pending".equals(s)) return "En attente";
+        return "Rejete";
     }
+
+    private String getStatusSimpleLabel(String s) {
+        if ("approved".equals(s)) return "Valide";
+        if ("pending".equals(s)) return "En attente";
+        return "Rejete";
+    }
+
     private String getStatusStyle(String s) {
         if ("approved".equals(s)) return "-fx-text-fill: #16a34a; -fx-font-weight: bold; -fx-font-size: 14;";
         if ("pending".equals(s)) return "-fx-text-fill: #d97706; -fx-font-weight: bold; -fx-font-size: 14;";
         return "-fx-text-fill: #dc2626; -fx-font-weight: bold; -fx-font-size: 14;";
     }
+
     private String getStatusColor(String s) {
         if ("approved".equals(s)) return "#16a34a";
         if ("pending".equals(s)) return "#d97706";

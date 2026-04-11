@@ -341,3 +341,304 @@
     -fx-border-width: 1.5;
     -fx-border-radius: 8px;
 }
+
+.filter-field,
+.filter-combo {
+    -fx-pref-height: 40px;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: #dbe4f0;
+    -fx-border-width: 1px;
+    -fx-background-color: #f8fafc;
+    -fx-padding: 0 12;
+}
+
+.field-invalid {
+    -fx-border-color: #ef4444 !important;
+    -fx-border-width: 1.8 !important;
+    -fx-effect: dropshadow(gaussian, rgba(239,68,68,0.28), 8, 0.15, 0, 0);
+}
+
+.text-area.field-invalid {
+    -fx-border-color: #ef4444 !important;
+    -fx-border-width: 1.8 !important;
+}
+
+.text-area.field-invalid .content {
+    -fx-background-color: #fff5f5;
+}
+
+.quick-filter-chip {
+    -fx-background-color: #eef2ff;
+    -fx-text-fill: #334155;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 999px;
+    -fx-padding: 7 14;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+}
+
+.quick-filter-chip:hover {
+    -fx-background-color: #e0e7ff;
+}
+
+.quick-filter-chip-active {
+    -fx-background-color: #1d4ed8;
+    -fx-text-fill: white;
+}
+
+.dashboard-table {
+    -fx-background-color: white;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
+.dashboard-table .column-header-background {
+    -fx-background-color: #f8fafc;
+    -fx-background-radius: 10px 10px 0 0;
+}
+
+.dashboard-table .column-header,
+.dashboard-table .filler {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent #e2e8f0 transparent;
+}
+
+.dashboard-table .column-header .label {
+    -fx-text-fill: #475569;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.dashboard-table .table-row-cell {
+    -fx-border-color: transparent;
+    -fx-background-color: white;
+}
+
+.dashboard-table .table-row-cell.row-status-pending {
+    -fx-background-color: #fffef8;
+}
+
+.dashboard-table .table-row-cell.row-status-valid {
+    -fx-background-color: #f5fff7;
+}
+
+.dashboard-table .table-row-cell.row-status-cancelled {
+    -fx-background-color: #fff7f7;
+}
+
+.dashboard-table .table-row-cell:filled:selected {
+    -fx-background-color: #dbeafe;
+}
+
+.dashboard-table .table-cell {
+    -fx-text-fill: #1e293b;
+    -fx-border-color: transparent;
+    -fx-padding: 10 8;
+}
+
+.table-action-primary,
+.table-action-danger,
+.table-action-secondary {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6px;
+    -fx-cursor: hand;
+    -fx-padding: 7 10;
+}
+
+.table-action-primary {
+    -fx-background-color: #2563eb;
+    -fx-text-fill: white;
+}
+
+.table-action-danger {
+    -fx-background-color: #ef4444;
+    -fx-text-fill: white;
+}
+
+.table-action-secondary {
+    -fx-background-color: #e2e8f0;
+    -fx-text-fill: #1e293b;
+}
+
+.status-chip {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 999px;
+    -fx-padding: 4 10;
+}
+
+.status-chip-pending {
+    -fx-background-color: #fef3c7;
+    -fx-text-fill: #92400e;
+}
+
+.status-chip-valid {
+    -fx-background-color: #dcfce7;
+    -fx-text-fill: #166534;
+}
+
+.status-chip-cancelled {
+    -fx-background-color: #fee2e2;
+    -fx-text-fill: #991b1b;
+}
+
+.empty-state-box {
+    -fx-background-color: #f8fafc;
+    -fx-background-radius: 12px;
+    -fx-padding: 22;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 1;
+    -fx-border-radius: 12px;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.empty-state-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f172a;
+}
+
+.empty-state-subtitle {
+    -fx-font-size: 13px;
+    -fx-text-fill: #64748b;
+}
+
+.event-form-card {
+    -fx-padding: 26;
+}
+
+.event-form-page-title {
+    -fx-font-size: 24px;
+}
+
+.exercise-form-page-title {
+    -fx-font-size: 24px;
+}
+
+.event-form-card .card-title {
+    -fx-font-size: 20px;
+}
+
+.event-form-card .info-label {
+    -fx-font-size: 13px;
+}
+
+.event-form-card .text-field,
+.event-form-card .combo-box,
+.event-form-card .date-picker {
+    -fx-pref-height: 40px;
+    -fx-font-size: 14px;
+}
+
+.event-form-card .text-area {
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: #dbe4f0;
+    -fx-background-color: #f8fafc;
+    -fx-font-size: 14px;
+}
+
+.event-form-card .text-area .content {
+    -fx-background-color: #f8fafc;
+    -fx-background-radius: 8px;
+}
+
+.exercise-form-card .card-title {
+    -fx-font-size: 20px;
+}
+
+.exercise-form-card .info-label {
+    -fx-font-size: 13px;
+}
+
+.exercise-form-card .text-field,
+.exercise-form-card .combo-box,
+.exercise-form-card .date-picker {
+    -fx-pref-height: 40px;
+    -fx-font-size: 14px;
+}
+
+.exercise-form-card .text-area {
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: #dbe4f0;
+    -fx-background-color: #f8fafc;
+    -fx-font-size: 14px;
+}
+
+.exercise-form-card .text-area .content {
+    -fx-background-color: #f8fafc;
+    -fx-background-radius: 8px;
+}
+
+.inline-helper-label {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2563eb;
+    -fx-background-color: #eff6ff;
+    -fx-background-radius: 8px;
+    -fx-padding: 8 12;
+}
+
+.compact-table {
+    -fx-fixed-cell-size: 38px;
+}
+
+.compact-table .table-cell {
+    -fx-padding: 6 8;
+    -fx-font-size: 12px;
+}
+
+.compact-table .column-header .label {
+    -fx-font-size: 11px;
+}
+
+.compact-table .check-box-table-cell {
+    -fx-alignment: CENTER;
+}
+
+.edit-assignment-table {
+    -fx-fixed-cell-size: 42px;
+}
+
+.edit-assignment-table .table-cell {
+    -fx-font-size: 14px;
+    -fx-padding: 8 8;
+}
+
+.edit-assignment-table .column-header .label {
+    -fx-font-size: 13px;
+}
+
+.edit-assignment-table .check-box-table-cell {
+    -fx-alignment: CENTER;
+}
+
+.exercises-main-table .table-cell {
+    -fx-font-size: 13px;
+    -fx-padding: 10 8;
+}
+
+.exercises-main-table .column-header .label {
+    -fx-font-size: 12px;
+}
+
+.profile-card .text-field,
+.profile-card .combo-box {
+    -fx-pref-height: 40px;
+    -fx-font-size: 14px;
+}
+
+.profile-side-card {
+    -fx-background-color: #f0fdf4;
+}
+
+.profile-save-btn {
+    -fx-pref-height: 44px;
+    -fx-font-size: 14px;
+    -fx-pref-width: 320px;
+}

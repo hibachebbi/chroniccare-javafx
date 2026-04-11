@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.chroniccare.controllers.PatientEventDetailsController"
+            prefWidth="1200" prefHeight="760"
+            stylesheets="@home-styles.css">
+
+    <left>
+        <VBox styleClass="sidebar" prefWidth="230" spacing="0">
+            <VBox styleClass="sidebar-brand" spacing="4">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="+" styleClass="brand-icon"/>
+                    <Label text="ChronicCare" styleClass="brand-title"/>
+                </HBox>
+                <Label text="Suivi medical intelligent" styleClass="brand-subtitle"/>
+            </VBox>
+            <VBox styleClass="sidebar-user-card" spacing="6">
+                <Label fx:id="sidebarAvatar" styleClass="sidebar-avatar"/>
+                <Label fx:id="sidebarUserName" styleClass="sidebar-user-name"/>
+                <Label text="Patient" styleClass="sidebar-role-badge"/>
+            </VBox>
+            <Separator styleClass="sidebar-sep"/>
+            <VBox styleClass="nav-section" spacing="2" VBox.vgrow="ALWAYS">
+                <Label text="NAVIGATION" styleClass="nav-section-label"/>
+                <Button text="Accueil" styleClass="nav-btn" onAction="#goToHome" maxWidth="Infinity"/>
+                <Button text="Mon Profil" styleClass="nav-btn" onAction="#goToProfile" maxWidth="Infinity"/>
+                <Label text="MES SOINS" styleClass="nav-section-label"/>
+                <Button text="Événements" styleClass="nav-btn, nav-btn-active" onAction="#goToEvents" maxWidth="Infinity"/>
+                <Button text="Mes inscriptions" styleClass="nav-btn" onAction="#goToMyRegistrations" maxWidth="Infinity"/>
+                <Button text="Mon Suivi" styleClass="nav-btn" maxWidth="Infinity"/>
+                <Button text="Prendre RDV" styleClass="nav-btn" maxWidth="Infinity"/>
+                <Button text="Mes consultations" styleClass="nav-btn" maxWidth="Infinity"/>
+                <Button text="Nutrition" styleClass="nav-btn" maxWidth="Infinity"/>
+                <Button text="Activité Physique" styleClass="nav-btn" maxWidth="Infinity"/>
+                <Button text="Médicaments" styleClass="nav-btn" maxWidth="Infinity"/>
+                <Button text="Mes Statistiques" styleClass="nav-btn" maxWidth="Infinity"/>
+            </VBox>
+            <VBox styleClass="sidebar-bottom">
+                <Separator styleClass="sidebar-sep"/>
+                <Button text="Déconnexion" styleClass="nav-btn, nav-btn-logout"
+                        onAction="#handleLogout" maxWidth="Infinity"/>
+            </VBox>
+        </VBox>
+    </left>
+
+    <center>
+        <VBox styleClass="main-content" spacing="0">
+            <HBox styleClass="topbar" alignment="CENTER_LEFT" spacing="16">
+                <Label text="Détail événement" styleClass="page-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="topbarDate" styleClass="topbar-date"/>
+                <HBox styleClass="topbar-user-pill" alignment="CENTER" spacing="8">
+                    <Label fx:id="topbarAvatar" styleClass="topbar-avatar"/>
+                    <Label fx:id="topbarUserName" styleClass="topbar-username"/>
+                </HBox>
+            </HBox>
+
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="content-scroll">
+                <VBox spacing="20" styleClass="dashboard-body">
+                    <HBox styleClass="welcome-banner" alignment="CENTER_LEFT" spacing="18">
+                        <VBox spacing="8">
+                            <Label fx:id="eventTitleLabel" styleClass="welcome-title"/>
+                            <Label text="Consulte toutes les informations de cet événement avant de t'inscrire."
+                                   styleClass="welcome-subtitle" wrapText="true"/>
+                        </VBox>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button text="Retour a la liste" styleClass="btn-secondary" onAction="#goToEvents"/>
+                    </HBox>
+
+                    <HBox spacing="14">
+                        <VBox styleClass="stat-card, stat-blue" spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="Statut" styleClass="stat-label"/>
+                            <Label fx:id="statusLabel" styleClass="stat-value"/>
+                            <Label text="État actuel de l'événement" styleClass="stat-sub"/>
+                        </VBox>
+                        <VBox styleClass="stat-card, stat-green" spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="Debut" styleClass="stat-label"/>
+                            <Label fx:id="startLabel" styleClass="stat-value"/>
+                            <Label text="Date de debut" styleClass="stat-sub"/>
+                        </VBox>
+                        <VBox styleClass="stat-card, stat-purple" spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="Fin" styleClass="stat-label"/>
+                            <Label fx:id="endLabel" styleClass="stat-value"/>
+                            <Label text="Date de fin" styleClass="stat-sub"/>
+                        </VBox>
+                    </HBox>
+
+                    <VBox styleClass="card" spacing="12">
+                        <Label text="Informations generales" styleClass="card-title"/>
+                        <Label text="Lieu" styleClass="info-label"/>
+                        <Label fx:id="locationLabel" styleClass="info-value"/>
+                        <Label text="Description" styleClass="info-label"/>
+                        <Label fx:id="descriptionLabel" wrapText="true" styleClass="tip-text"/>
+                        <HBox spacing="10">
+                            <Button fx:id="registerButton" text="S'inscrire à cet événement" styleClass="btn-primary" onAction="#handleRegister"/>
+                            <Button text="Mes inscriptions" styleClass="btn-secondary" onAction="#goToMyRegistrations"/>
+                        </HBox>
+                        <Label fx:id="messageLabel" styleClass="inline-helper-label" wrapText="true"/>
+                    </VBox>
+
+                    <VBox styleClass="card" spacing="12">
+                        <Label text="Exercices de l'événement" styleClass="card-title"/>
+                        <TableView fx:id="exercisesTable" VBox.vgrow="ALWAYS" styleClass="dashboard-table, exercises-main-table">
+                            <columns>
+                                <TableColumn fx:id="exNomCol" text="Exercice" prefWidth="320"/>
+                                <TableColumn fx:id="exDureeCol" text="Duree (min)" prefWidth="160"/>
+                                <TableColumn fx:id="exRepCol" text="Repetitions" prefWidth="150"/>
+                            </columns>
+                        </TableView>
+                    </VBox>
+                </VBox>
+            </ScrollPane>
+        </VBox>
+    </center>
+
+</BorderPane>

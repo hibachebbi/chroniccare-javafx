@@ -30,15 +30,21 @@
                 <Button text="Mon Profil" styleClass="nav-btn, nav-btn-active"
                         maxWidth="Infinity"/>
                 <Label text="MES SOINS" styleClass="nav-section-label"/>
+                <Button text="Événements" styleClass="nav-btn"
+                        onAction="#goToEvents" maxWidth="Infinity"/>
+                <Button text="Mes inscriptions" styleClass="nav-btn"
+                        onAction="#goToMyRegistrations" maxWidth="Infinity"/>
                 <Button text="Mon Suivi" styleClass="nav-btn" maxWidth="Infinity"/>
+                <Button text="Prendre RDV" styleClass="nav-btn" maxWidth="Infinity"/>
+                <Button text="Mes consultations" styleClass="nav-btn" maxWidth="Infinity"/>
                 <Button text="Nutrition" styleClass="nav-btn" maxWidth="Infinity"/>
-                <Button text="Activite Physique" styleClass="nav-btn" maxWidth="Infinity"/>
-                <Button text="Medicaments" styleClass="nav-btn" maxWidth="Infinity"/>
+                <Button text="Activité Physique" styleClass="nav-btn" maxWidth="Infinity"/>
+                <Button text="Médicaments" styleClass="nav-btn" maxWidth="Infinity"/>
                 <Button text="Mes Statistiques" styleClass="nav-btn" maxWidth="Infinity"/>
             </VBox>
             <VBox styleClass="sidebar-bottom">
                 <Separator styleClass="sidebar-sep"/>
-                <Button text="Deconnexion" styleClass="nav-btn, nav-btn-logout"
+                <Button text="Déconnexion" styleClass="nav-btn, nav-btn-logout"
                         onAction="#handleLogout" maxWidth="Infinity"/>
             </VBox>
         </VBox>
@@ -76,7 +82,7 @@
                                                style="-fx-pref-height: 38; -fx-font-size: 13; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #e2e8f0; -fx-border-width: 1.5;"/>
                                 </VBox>
                                 <VBox spacing="6" HBox.hgrow="ALWAYS">
-                                    <Label text="Prenom" styleClass="info-label"/>
+                                    <Label text="Prénom" styleClass="info-label"/>
                                     <TextField fx:id="prenomField" promptText="Votre prenom"
                                                style="-fx-pref-height: 38; -fx-font-size: 13; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #e2e8f0; -fx-border-width: 1.5;"/>
                                 </VBox>
@@ -88,7 +94,7 @@
                             </VBox>
                             <HBox spacing="16">
                                 <VBox spacing="6" HBox.hgrow="ALWAYS">
-                                    <Label text="Telephone" styleClass="info-label"/>
+                                    <Label text="Téléphone" styleClass="info-label"/>
                                     <TextField fx:id="telephoneField" promptText="8 chiffres"
                                                style="-fx-pref-height: 38; -fx-font-size: 13; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #e2e8f0; -fx-border-width: 1.5;"/>
                                 </VBox>

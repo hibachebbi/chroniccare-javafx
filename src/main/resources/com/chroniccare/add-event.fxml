@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.chroniccare.controllers.AddEventController"
+            prefWidth="1180" prefHeight="760"
+            stylesheets="@home-styles.css">
+
+    <left>
+        <VBox styleClass="sidebar" prefWidth="230" spacing="0">
+            <VBox styleClass="sidebar-brand" spacing="4">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="+" styleClass="brand-icon"/>
+                    <Label text="ChronicCare" styleClass="brand-title"/>
+                </HBox>
+                <Label text="Suivi medical intelligent" styleClass="brand-subtitle"/>
+            </VBox>
+            <VBox styleClass="sidebar-user-card" spacing="6">
+                <Label fx:id="sidebarAvatar" styleClass="sidebar-avatar"/>
+                <Label fx:id="sidebarUserName" styleClass="sidebar-user-name"/>
+                <Label text="Coach" styleClass="sidebar-role-badge"
+                       style="-fx-text-fill: #4ade80; -fx-background-color: #14532d;"/>
+            </VBox>
+            <Separator styleClass="sidebar-sep"/>
+            <VBox styleClass="nav-section" spacing="2" VBox.vgrow="ALWAYS">
+                <Label text="NAVIGATION" styleClass="nav-section-label"/>
+                <Button text="Événements" styleClass="nav-btn, nav-btn-active" onAction="#goToList" maxWidth="Infinity"/>
+                <Button text="Exercices" styleClass="nav-btn" onAction="#goToExercises" maxWidth="Infinity"/>
+                <Button text="Mon profil" styleClass="nav-btn" onAction="#goToProfile" maxWidth="Infinity"/>
+            </VBox>
+            <VBox styleClass="sidebar-bottom">
+                <Separator styleClass="sidebar-sep"/>
+                <Button text="Déconnexion" styleClass="nav-btn, nav-btn-logout"
+                        onAction="#handleLogout" maxWidth="Infinity"/>
+            </VBox>
+        </VBox>
+    </left>
+
+    <center>
+        <VBox styleClass="main-content" spacing="0">
+            <HBox styleClass="topbar" alignment="CENTER_LEFT" spacing="16">
+                <Label text="Ajouter un événement" styleClass="page-title, event-form-page-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="topbarDate" styleClass="topbar-date"/>
+                <HBox styleClass="topbar-user-pill" alignment="CENTER" spacing="8">
+                    <Label fx:id="topbarAvatar" styleClass="topbar-avatar"/>
+                    <Label fx:id="topbarUserName" styleClass="topbar-username"/>
+                </HBox>
+            </HBox>
+
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="content-scroll">
+                <VBox spacing="20" styleClass="dashboard-body">
+                    <HBox styleClass="welcome-banner" alignment="CENTER_LEFT" spacing="18">
+                        <VBox spacing="8">
+                            <Label text="Crée un événement mémorisable" styleClass="welcome-title"/>
+                            <Label text="Configure les horaires, le statut et les exercices en une seule vue guidee."
+                                   styleClass="welcome-subtitle" wrapText="true"/>
+                        </VBox>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <VBox spacing="8">
+                            <Button text="Preset matin 09:00-10:00" styleClass="btn-secondary" onAction="#applyMorningPreset"/>
+                            <Button text="Preset soir 18:00-19:00" styleClass="btn-secondary" onAction="#applyEveningPreset"/>
+                        </VBox>
+                    </HBox>
+
+                    <HBox spacing="14">
+                        <VBox styleClass="stat-card, stat-blue" spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="Exercices sélectionnés" styleClass="stat-label"/>
+                            <Label fx:id="selectedExercisesInfoLabel" styleClass="stat-value"/>
+                            <Label text="Liés automatiquement à cet événement" styleClass="stat-sub"/>
+                        </VBox>
+                        <VBox styleClass="stat-card, stat-green" spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="Fenetre de session" styleClass="stat-label"/>
+                            <Label fx:id="sessionWindowInfoLabel" styleClass="stat-value"/>
+                            <Label text="Duree calculee d'apres date/heure" styleClass="stat-sub"/>
+                        </VBox>
+                    </HBox>
+
+                    <VBox styleClass="card, event-form-card" spacing="18">
+                        <Label text="Paramètres de la session" styleClass="card-title"/>
+                        <Label text="Astuce: utilise un statut En attente puis passe a Valide quand la session est confirmee."
+                               styleClass="tip-text" wrapText="true"/>
+                        <GridPane hgap="16" vgap="16">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="50"/>
+                                <ColumnConstraints percentWidth="50"/>
+                            </columnConstraints>
+
+                            <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                <Label text="Titre" styleClass="info-label"/>
+                                <TextField fx:id="titreField" promptText="Ex: Yoga matinal" styleClass="filter-field"/>
+                            </VBox>
+                            <VBox spacing="6" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                <Label text="Statut" styleClass="info-label"/>
+                                <ComboBox fx:id="statutCombo" maxWidth="Infinity" styleClass="filter-combo"/>
+                            </VBox>
+                            <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                <Label text="Lieu" styleClass="info-label"/>
+                                <TextField fx:id="lieuField" promptText="Ex: Bardo" styleClass="filter-field"/>
+                            </VBox>
+                            <VBox spacing="6" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                <Label text="Date debut" styleClass="info-label"/>
+                                <DatePicker fx:id="dateDebutPicker"/>
+                            </VBox>
+                            <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                                <Label text="Heure debut (HH:mm)" styleClass="info-label"/>
+                                <ComboBox fx:id="heureDebutCombo" promptText="Choisir l'heure" maxWidth="Infinity" styleClass="filter-combo"/>
+                            </VBox>
+                            <VBox spacing="6" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                <Label text="Date fin" styleClass="info-label"/>
+                                <DatePicker fx:id="dateFinPicker"/>
+                            </VBox>
+                            <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="3">
+                                <Label text="Heure fin (HH:mm)" styleClass="info-label"/>
+                                <ComboBox fx:id="heureFinCombo" promptText="Choisir l'heure" maxWidth="Infinity" styleClass="filter-combo"/>
+                            </VBox>
+                            <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="4" GridPane.columnSpan="2">
+                                <Label text="Description" styleClass="info-label"/>
+                                <TextArea fx:id="descriptionArea" prefRowCount="6" wrapText="true"
+                                          promptText="Decris le programme, le niveau et les consignes pour les patients."/>
+                            </VBox>
+                        </GridPane>
+
+                        <Separator/>
+                        <Label text="Selectionne les exercices existants a associer" styleClass="card-title"/>
+                        <Label text="Les exercices seront réassociés à cet événement après enregistrement."
+                               styleClass="tip-text" wrapText="true"/>
+                        <TableView fx:id="exercisesTable" prefHeight="280.0" editable="true" styleClass="dashboard-table, compact-table">
+                            <columns>
+                                <TableColumn fx:id="selectedCol" text="Choisir" prefWidth="80"/>
+                                <TableColumn fx:id="exerciseNameCol" text="Exercice" prefWidth="220"/>
+                                <TableColumn fx:id="exerciseDurationCol" text="Duree" prefWidth="90"/>
+                                <TableColumn fx:id="exerciseRepetitionsCol" text="Repetitions" prefWidth="110"/>
+                                <TableColumn fx:id="exerciseEventCol" text="Événement actuel" prefWidth="220"/>
+                            </columns>
+                        </TableView>
+
+                        <Label fx:id="formHintLabel" styleClass="inline-helper-label" wrapText="true"/>
+                        <Label fx:id="errorLabel" styleClass="error-label" wrapText="true" visible="false" managed="false"/>
+
+                        <HBox spacing="10">
+                            <Button text="Annuler" styleClass="btn-secondary" onAction="#goToList"/>
+                            <Button text="Enregistrer l'événement" styleClass="btn-primary" onAction="#handleSave"/>
+                        </HBox>
+                    </VBox>
+                </VBox>
+            </ScrollPane>
+        </VBox>
+    </center>
+
+</BorderPane>

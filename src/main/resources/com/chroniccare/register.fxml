@@ -21,7 +21,7 @@
             <Label text="ChronicCare"
                    style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: white;"/>
 
-            <Label text="Rejoignez notre communaute et prenez le controle de votre sante au quotidien."
+            <Label text="Rejoignez notre communauté et prenez le contrôle de votre santé au quotidien."
                    style="-fx-font-size: 13; -fx-text-fill: rgba(255,255,255,0.85);
                           -fx-wrap-text: true; -fx-text-alignment: center;"
                    wrapText="true"/>
@@ -38,7 +38,7 @@
                     <VBox spacing="2">
                         <Label text="Patient"
                                style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13;"/>
-                        <Label text="Suivi medical personnalise"
+                        <Label text="Suivi médical personnalisé"
                                style="-fx-text-fill: rgba(255,255,255,0.75); -fx-font-size: 11;"/>
                     </VBox>
                 </HBox>
@@ -82,7 +82,7 @@
 
                     <!-- Header -->
                     <VBox spacing="4" style="-fx-padding: 0 0 24 0;">
-                        <Label text="Creer un compte"
+                        <Label text="Créer un compte"
                                style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #0f172a;"/>
                         <Label text="Remplissez le formulaire pour rejoindre ChronicCare"
                                style="-fx-font-size: 12; -fx-text-fill: #64748b;"/>
@@ -100,7 +100,7 @@
                                               -fx-background-color: #f8fafc; -fx-padding: 0 12;"/>
                         </VBox>
                         <VBox spacing="5" HBox.hgrow="ALWAYS">
-                            <Label text="Prenom"
+                            <Label text="Prénom"
                                    style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #374151;"/>
                             <TextField fx:id="prenomField" promptText="Votre prenom"
                                        style="-fx-pref-height: 40; -fx-font-size: 13;
@@ -135,7 +135,7 @@
                     <!-- Telephone + Genre -->
                     <HBox spacing="12" style="-fx-pref-width: 400; -fx-padding: 0 0 14 0;">
                         <VBox spacing="5" HBox.hgrow="ALWAYS">
-                            <Label text="Telephone"
+                            <Label text="Téléphone"
                                    style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #374151;"/>
                             <TextField fx:id="telephoneField" promptText="8 chiffres"
                                        style="-fx-pref-height: 40; -fx-font-size: 13;
@@ -171,7 +171,7 @@
                                   -fx-pref-width: 400; -fx-padding: 4 0 8 0;"/>
 
                     <!-- Register button -->
-                    <Button text="Creer mon compte"
+                    <Button text="Créer mon compte"
                             onAction="#handleRegister"
                             style="-fx-pref-width: 400; -fx-pref-height: 44;
                                    -fx-background-color: #2563eb; -fx-text-fill: white;

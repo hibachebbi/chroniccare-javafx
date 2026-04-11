@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.control.*?>
 <?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.chroniccare.controllers.HomeController"
@@ -12,10 +12,10 @@
         <VBox fx:id="sidebar" styleClass="sidebar" prefWidth="230" spacing="0">
             <VBox styleClass="sidebar-brand" spacing="4">
                 <HBox alignment="CENTER_LEFT" spacing="10">
-                    <Label text="✚" styleClass="brand-icon"/>
+                    <Label text="+" styleClass="brand-icon"/>
                     <Label text="ChronicCare" styleClass="brand-title"/>
                 </HBox>
-                <Label text="Suivi médical intelligent" styleClass="brand-subtitle"/>
+                <Label text="Suivi medical intelligent" styleClass="brand-subtitle"/>
             </VBox>
             <VBox styleClass="sidebar-user-card" spacing="6">
                 <Label fx:id="sidebarAvatar" styleClass="sidebar-avatar"/>
@@ -25,25 +25,45 @@
             <Separator styleClass="sidebar-sep"/>
             <VBox styleClass="nav-section" spacing="2" VBox.vgrow="ALWAYS">
                 <Label text="NAVIGATION" styleClass="nav-section-label"/>
-                <Button fx:id="btnHome" text="🏠  Accueil"
+                <Button fx:id="btnHome" text="Accueil"
                         styleClass="nav-btn, nav-btn-active"
                         onAction="#showHome" maxWidth="Infinity"/>
-                <Button fx:id="btnProfile" text="👤  Mon Profil"
+                <Button fx:id="btnProfile" text="Mon profil"
                         styleClass="nav-btn"
                         onAction="#goToProfile" maxWidth="Infinity"/>
-                <Button fx:id="btnUsers" text="👥  Gestion Utilisateurs"
+                <Button fx:id="btnNutritionRdv" text="RDV"
+                        styleClass="nav-btn"
+                        onAction="#goToNutritionRdv" maxWidth="Infinity"
+                        visible="false" managed="false"/>
+                <Button fx:id="btnEvents" text="Événements"
+                        styleClass="nav-btn"
+                        onAction="#goToEvents" maxWidth="Infinity"
+                        visible="false" managed="false"/>
+                <Button fx:id="btnExercises" text="Exercices"
+                        styleClass="nav-btn"
+                        onAction="#goToExercises" maxWidth="Infinity"
+                        visible="false" managed="false"/>
+                <Button fx:id="btnUsers" text="Gestion utilisateurs"
                         styleClass="nav-btn"
                         onAction="#goToUsers" maxWidth="Infinity"/>
-                <Label text="MES SOINS" styleClass="nav-section-label"/>
-                <Button text="📋  Mon Suivi" styleClass="nav-btn" maxWidth="Infinity"/>
-                <Button text="🥗  Nutrition" styleClass="nav-btn" maxWidth="Infinity"/>
-                <Button text="🏃  Activité Physique" styleClass="nav-btn" maxWidth="Infinity"/>
-                <Button text="💊  Médicaments" styleClass="nav-btn" maxWidth="Infinity"/>
-                <Button text="📊  Mes Statistiques" styleClass="nav-btn" maxWidth="Infinity"/>
+                <Label fx:id="patientCareSectionLabel" text="MES SOINS" styleClass="nav-section-label"/>
+                <Button fx:id="btnPatientEvents" text="Événements" styleClass="nav-btn"
+                        onAction="#goToPatientEvents" maxWidth="Infinity"
+                        visible="false" managed="false"/>
+                <Button fx:id="btnPatientRegistrations" text="Mes inscriptions" styleClass="nav-btn"
+                        onAction="#goToPatientRegistrations" maxWidth="Infinity"
+                        visible="false" managed="false"/>
+                <Button fx:id="btnPatientFollowup" text="Mon suivi" styleClass="nav-btn" maxWidth="Infinity"/>
+                <Button fx:id="btnPatientBookRdv" text="Prendre RDV" styleClass="nav-btn" maxWidth="Infinity"/>
+                <Button fx:id="btnPatientConsultations" text="Mes consultations" styleClass="nav-btn" maxWidth="Infinity"/>
+                <Button fx:id="btnPatientNutrition" text="Nutrition" styleClass="nav-btn" maxWidth="Infinity"/>
+                <Button fx:id="btnPatientActivity" text="Activité physique" styleClass="nav-btn" maxWidth="Infinity"/>
+                <Button fx:id="btnPatientMedications" text="Médicaments" styleClass="nav-btn" maxWidth="Infinity"/>
+                <Button fx:id="btnPatientStats" text="Mes statistiques" styleClass="nav-btn" maxWidth="Infinity"/>
             </VBox>
             <VBox styleClass="sidebar-bottom">
                 <Separator styleClass="sidebar-sep"/>
-                <Button text="⏻  Déconnexion"
+                <Button text="Déconnexion"
                         styleClass="nav-btn, nav-btn-logout"
                         onAction="#handleLogout" maxWidth="Infinity"/>
             </VBox>
@@ -71,21 +91,19 @@
                             <Label fx:id="welcomeSubtitle" styleClass="welcome-subtitle"/>
                         </VBox>
                         <Region HBox.hgrow="ALWAYS"/>
-                        <Label text="🩺" styleClass="banner-emoji"/>
+                        <Label text="+" styleClass="banner-emoji"/>
                     </HBox>
 
                     <HBox spacing="16">
                         <VBox styleClass="stat-card, stat-blue" spacing="8" HBox.hgrow="ALWAYS">
                             <HBox alignment="CENTER_LEFT" spacing="10">
-                                <Label text="📅" styleClass="stat-icon"/>
-                                <Label text="Prochain RDV" styleClass="stat-label"/>
+                                <Label text="Agenda" styleClass="stat-label"/>
                             </HBox>
-                            <Label fx:id="statRdv" text="—" styleClass="stat-value"/>
+                            <Label fx:id="statRdv" text="-" styleClass="stat-value"/>
                             <Label text="Aucun rendez-vous planifié" styleClass="stat-sub"/>
                         </VBox>
                         <VBox styleClass="stat-card, stat-green" spacing="8" HBox.hgrow="ALWAYS">
                             <HBox alignment="CENTER_LEFT" spacing="10">
-                                <Label text="💊" styleClass="stat-icon"/>
                                 <Label text="Médicaments du jour" styleClass="stat-label"/>
                             </HBox>
                             <Label text="0" styleClass="stat-value"/>
@@ -93,18 +111,16 @@
                         </VBox>
                         <VBox styleClass="stat-card, stat-purple" spacing="8" HBox.hgrow="ALWAYS">
                             <HBox alignment="CENTER_LEFT" spacing="10">
-                                <Label text="📊" styleClass="stat-icon"/>
-                                <Label text="Score d'activité" styleClass="stat-label"/>
+                                <Label text="Score activite" styleClass="stat-label"/>
                             </HBox>
                             <Label fx:id="statActivity" text="0" styleClass="stat-value"/>
                             <Label text="Points cette semaine" styleClass="stat-sub"/>
                         </VBox>
                         <VBox fx:id="adminStatCard" styleClass="stat-card, stat-orange" spacing="8" HBox.hgrow="ALWAYS">
                             <HBox alignment="CENTER_LEFT" spacing="10">
-                                <Label text="👥" styleClass="stat-icon"/>
                                 <Label text="Utilisateurs" styleClass="stat-label"/>
                             </HBox>
-                            <Label fx:id="statUsers" text="—" styleClass="stat-value"/>
+                            <Label fx:id="statUsers" text="-" styleClass="stat-value"/>
                             <Label text="Membres inscrits" styleClass="stat-sub"/>
                         </VBox>
                     </HBox>
@@ -112,50 +128,48 @@
                     <HBox spacing="16">
                         <VBox styleClass="card" spacing="16" HBox.hgrow="ALWAYS">
                             <HBox alignment="CENTER_LEFT" spacing="10">
-                                <Label text="📋" styleClass="card-icon"/>
-                                <Label text="Mon état de santé" styleClass="card-title"/>
+                            <Label text="Mon état de santé" styleClass="card-title"/>
                             </HBox>
                             <Separator/>
                             <HBox spacing="24" alignment="CENTER_LEFT">
                                 <VBox spacing="6">
-                                    <Label text="Condition médicale" styleClass="info-label"/>
-                                    <Label fx:id="infoMedical" text="—" styleClass="info-value"/>
+                                    <Label text="Condition medicale" styleClass="info-label"/>
+                                    <Label fx:id="infoMedical" text="-" styleClass="info-value"/>
                                 </VBox>
                             </HBox>
                             <HBox spacing="24" alignment="CENTER_LEFT">
                                 <VBox spacing="6">
                                     <Label text="Genre" styleClass="info-label"/>
-                                    <Label fx:id="infoGenre" text="—" styleClass="info-value"/>
+                                    <Label fx:id="infoGenre" text="-" styleClass="info-value"/>
                                 </VBox>
                                 <VBox spacing="6">
                                     <Label text="Téléphone" styleClass="info-label"/>
-                                    <Label fx:id="infoTel" text="—" styleClass="info-value"/>
+                                    <Label fx:id="infoTel" text="-" styleClass="info-value"/>
                                 </VBox>
                             </HBox>
-                            <Button text="✏️  Modifier mon profil"
+                            <Button text="Modifier mon profil"
                                     styleClass="btn-primary"
                                     onAction="#goToProfile"/>
                         </VBox>
 
                         <VBox styleClass="card, card-tips" spacing="16" prefWidth="320">
                             <HBox alignment="CENTER_LEFT" spacing="10">
-                                <Label text="💡" styleClass="card-icon"/>
                                 <Label text="Conseils du jour" styleClass="card-title"/>
                             </HBox>
                             <Separator/>
                             <VBox styleClass="tip-item" spacing="6">
-                                <Label text="🥤  Hydratation" styleClass="tip-title"/>
-                                <Label text="Buvez au moins 1,5L d'eau par jour pour maintenir une bonne santé rénale."
+                                <Label text="Hydratation" styleClass="tip-title"/>
+                                <Label text="Bois au moins 1,5L d'eau par jour pour garder un bon rythme."
                                        styleClass="tip-text" wrapText="true"/>
                             </VBox>
                             <VBox styleClass="tip-item" spacing="6">
-                                <Label text="🚶  Activité" styleClass="tip-title"/>
-                                <Label text="30 minutes de marche quotidienne réduisent les risques cardiovasculaires."
+                                <Label text="Activité" styleClass="tip-title"/>
+                                <Label text="30 minutes de marche quotidienne restent une base simple et efficace."
                                        styleClass="tip-text" wrapText="true"/>
                             </VBox>
                             <VBox styleClass="tip-item" spacing="6">
-                                <Label text="😴  Sommeil" styleClass="tip-title"/>
-                                <Label text="Un sommeil régulier de 7-9h améliore la gestion des maladies chroniques."
+                                <Label text="Sommeil" styleClass="tip-title"/>
+                                <Label text="Un sommeil regulier aide a mieux gerer l'energie et la recuperation."
                                        styleClass="tip-text" wrapText="true"/>
                             </VBox>
                         </VBox>
@@ -163,17 +177,16 @@
 
                     <VBox fx:id="adminPanel" styleClass="card, admin-panel" spacing="16">
                         <HBox alignment="CENTER_LEFT" spacing="10">
-                            <Label text="⚙️" styleClass="card-icon"/>
                             <Label text="Panneau Administrateur" styleClass="card-title"/>
                             <Region HBox.hgrow="ALWAYS"/>
                             <Label text="ADMIN" styleClass="admin-badge"/>
                         </HBox>
                         <Separator/>
                         <HBox spacing="12">
-                            <Button text="👥  Gérer les utilisateurs"
+                            <Button text="Gerer les utilisateurs"
                                     styleClass="btn-primary"
                                     onAction="#goToUsers"/>
-                            <Button text="➕  Ajouter un utilisateur"
+                            <Button text="Ajouter un utilisateur"
                                     styleClass="btn-secondary"
                                     onAction="#goToAddUser"/>
                         </HBox>
