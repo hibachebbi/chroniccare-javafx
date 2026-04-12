@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.chroniccare.controllers.NutritionRdvController"
+            prefWidth="1200" prefHeight="760"
+            stylesheets="@home-styles.css">
+
+    <left>
+        <VBox styleClass="sidebar" prefWidth="230" spacing="0">
+            <VBox styleClass="sidebar-brand" spacing="4">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="+" styleClass="brand-icon"/>
+                    <Label text="ChronicCare" styleClass="brand-title"/>
+                </HBox>
+                <Label text="Suivi medical intelligent" styleClass="brand-subtitle"/>
+            </VBox>
+            <VBox styleClass="sidebar-user-card" spacing="6">
+                <Label fx:id="sidebarAvatar" styleClass="sidebar-avatar"/>
+                <Label fx:id="sidebarUserName" styleClass="sidebar-user-name"/>
+                <Label text="Nutritionniste" styleClass="sidebar-role-badge"
+                       style="-fx-text-fill: #fbbf24; -fx-background-color: #78350f;"/>
+            </VBox>
+            <Separator styleClass="sidebar-sep"/>
+            <VBox styleClass="nav-section" spacing="2" VBox.vgrow="ALWAYS">
+                <Label text="NAVIGATION" styleClass="nav-section-label"/>
+                <Button text="Accueil" styleClass="nav-btn" onAction="#goToHome" maxWidth="Infinity"/>
+                <Button text="Mon profil" styleClass="nav-btn" onAction="#goToProfile" maxWidth="Infinity"/>
+                <Button text="RDV" styleClass="nav-btn, nav-btn-active" onAction="#goToRdv" maxWidth="Infinity"/>
+            </VBox>
+            <VBox styleClass="sidebar-bottom">
+                <Separator styleClass="sidebar-sep"/>
+                <Button text="Deconnexion" styleClass="nav-btn, nav-btn-logout" onAction="#handleLogout" maxWidth="Infinity"/>
+            </VBox>
+        </VBox>
+    </left>
+
+    <center>
+        <VBox styleClass="main-content" spacing="0">
+            <HBox styleClass="topbar" alignment="CENTER_LEFT" spacing="16">
+                <Label text="Gestion des rendez-vous" styleClass="page-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="topbarDate" styleClass="topbar-date"/>
+                <HBox styleClass="topbar-user-pill" alignment="CENTER" spacing="8">
+                    <Label fx:id="topbarAvatar" styleClass="topbar-avatar"/>
+                    <Label fx:id="topbarUserName" styleClass="topbar-username"/>
+                </HBox>
+            </HBox>
+
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="content-scroll">
+                <VBox spacing="20" styleClass="dashboard-body">
+                    <VBox styleClass="card" spacing="16">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label text="File des demandes patients" styleClass="card-title"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label text="Les rendez-vous en attente sont tries en premier." styleClass="stat-sub"/>
+                        </HBox>
+                        <Separator/>
+                        <TableView fx:id="appointmentTable" styleClass="dashboard-table" prefHeight="260">
+                            <columns>
+                                <TableColumn fx:id="colPatient" text="Patient" prefWidth="190"/>
+                                <TableColumn fx:id="colMotif" text="Motif" prefWidth="300"/>
+                                <TableColumn fx:id="colRequested" text="Creneau demande" prefWidth="180"/>
+                                <TableColumn fx:id="colUrgency" text="Urgence" prefWidth="130"/>
+                                <TableColumn fx:id="colStatus" text="Statut" prefWidth="170"/>
+                            </columns>
+                        </TableView>
+                    </VBox>
+
+                    <HBox spacing="18">
+                        <VBox styleClass="card" spacing="16" HBox.hgrow="ALWAYS">
+                            <Label text="Contexte patient" styleClass="card-title"/>
+                            <Separator/>
+                            <HBox spacing="24">
+                                <VBox spacing="6">
+                                    <Label text="Patient" styleClass="info-label"/>
+                                    <Label fx:id="patientLabel" styleClass="info-value"/>
+                                </VBox>
+                                <VBox spacing="6">
+                                    <Label text="Type de suivi" styleClass="info-label"/>
+                                    <Label fx:id="followUpLabel" styleClass="info-value"/>
+                                </VBox>
+                                <VBox spacing="6">
+                                    <Label text="Statut" styleClass="info-label"/>
+                                    <Label fx:id="statusLabel" styleClass="info-value"/>
+                                </VBox>
+                            </HBox>
+                            <VBox spacing="6">
+                                <Label text="Condition / contexte medical" styleClass="info-label"/>
+                                <Label fx:id="medicalContextLabel" wrapText="true" styleClass="info-value"/>
+                            </VBox>
+                            <VBox spacing="6">
+                                <Label text="Motif de la demande" styleClass="info-label"/>
+                                <TextArea fx:id="motifArea" editable="false" wrapText="true" prefRowCount="5"/>
+                            </VBox>
+                        </VBox>
+
+                        <VBox styleClass="card, card-tips" spacing="16" prefWidth="340">
+                            <Label text="Decision" styleClass="card-title"/>
+                            <Separator/>
+                            <HBox spacing="12">
+                                <VBox spacing="6" HBox.hgrow="ALWAYS">
+                                    <Label text="Date retenue" styleClass="info-label"/>
+                                    <DatePicker fx:id="decisionDatePicker" maxWidth="Infinity"/>
+                                </VBox>
+                                <VBox spacing="6" HBox.hgrow="ALWAYS">
+                                    <Label text="Heure" styleClass="info-label"/>
+                                    <ComboBox fx:id="decisionTimeCombo" maxWidth="Infinity" styleClass="filter-combo"/>
+                                </VBox>
+                            </HBox>
+                            <VBox spacing="6">
+                                <Label text="Message au patient" styleClass="info-label"/>
+                                <TextArea fx:id="responseArea" wrapText="true" prefRowCount="7"/>
+                            </VBox>
+                            <HBox spacing="10">
+                                <Button fx:id="acceptButton" text="Accepter" styleClass="btn-primary" onAction="#handleAccept"/>
+                                <Button fx:id="proposeButton" text="Proposer un autre creneau" styleClass="btn-secondary" onAction="#handleProposeAnotherSlot"/>
+                            </HBox>
+                            <HBox spacing="10">
+                                <Button fx:id="refuseButton" text="Refuser" styleClass="btn-secondary" onAction="#handleRefuse"/>
+                                <Button fx:id="openConsultationButton" text="Ouvrir consultation" styleClass="btn-primary" onAction="#handleOpenConsultation"/>
+                            </HBox>
+                            <Label fx:id="errorLabel" styleClass="error-label" wrapText="true"/>
+                            <Label fx:id="successLabel" styleClass="success-label" wrapText="true"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+            </ScrollPane>
+        </VBox>
+    </center>
+</BorderPane>

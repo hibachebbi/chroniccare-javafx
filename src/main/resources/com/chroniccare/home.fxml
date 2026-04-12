@@ -53,9 +53,12 @@
                 <Button fx:id="btnPatientRegistrations" text="Mes inscriptions" styleClass="nav-btn"
                         onAction="#goToPatientRegistrations" maxWidth="Infinity"
                         visible="false" managed="false"/>
-                <Button fx:id="btnPatientFollowup" text="Mon suivi" styleClass="nav-btn" maxWidth="Infinity"/>
-                <Button fx:id="btnPatientBookRdv" text="Prendre RDV" styleClass="nav-btn" maxWidth="Infinity"/>
-                <Button fx:id="btnPatientConsultations" text="Mes consultations" styleClass="nav-btn" maxWidth="Infinity"/>
+                <Button fx:id="btnPatientFollowup" text="Mon suivi" styleClass="nav-btn"
+                        onAction="#goToPatientFollowup" maxWidth="Infinity"/>
+                <Button fx:id="btnPatientBookRdv" text="Prendre RDV" styleClass="nav-btn"
+                        onAction="#goToPatientBookRdv" maxWidth="Infinity"/>
+                <Button fx:id="btnPatientConsultations" text="Mes consultations" styleClass="nav-btn"
+                        onAction="#goToPatientConsultations" maxWidth="Infinity"/>
                 <Button fx:id="btnPatientNutrition" text="Nutrition" styleClass="nav-btn" maxWidth="Infinity"/>
                 <Button fx:id="btnPatientActivity" text="Activité physique" styleClass="nav-btn" maxWidth="Infinity"/>
                 <Button fx:id="btnPatientMedications" text="Médicaments" styleClass="nav-btn" maxWidth="Infinity"/>

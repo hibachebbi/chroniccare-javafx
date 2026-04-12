@@ -96,7 +96,7 @@ public class ProfileNutritionnnisteController {
 
     @FXML
     public void goToRdv() {
-        navigate("/com/chroniccare/home.fxml");
+        navigate("/com/chroniccare/nutrition-rdv.fxml");
     }
 
     @FXML

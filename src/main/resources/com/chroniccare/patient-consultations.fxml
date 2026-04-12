@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.chroniccare.controllers.PatientConsultationsController"
+            prefWidth="1200" prefHeight="760"
+            stylesheets="@home-styles.css">
+
+    <left>
+        <VBox styleClass="sidebar" prefWidth="230" spacing="0">
+            <VBox styleClass="sidebar-brand" spacing="4">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="+" styleClass="brand-icon"/>
+                    <Label text="ChronicCare" styleClass="brand-title"/>
+                </HBox>
+                <Label text="Suivi medical intelligent" styleClass="brand-subtitle"/>
+            </VBox>
+            <VBox styleClass="sidebar-user-card" spacing="6">
+                <Label fx:id="sidebarAvatar" styleClass="sidebar-avatar"/>
+                <Label fx:id="sidebarUserName" styleClass="sidebar-user-name"/>
+                <Label text="Patient" styleClass="sidebar-role-badge"/>
+            </VBox>
+            <Separator styleClass="sidebar-sep"/>
+            <VBox styleClass="nav-section" spacing="2" VBox.vgrow="ALWAYS">
+                <Label text="NAVIGATION" styleClass="nav-section-label"/>
+                <Button text="Accueil" styleClass="nav-btn" onAction="#goToHome" maxWidth="Infinity"/>
+                <Button text="Mon profil" styleClass="nav-btn" onAction="#goToProfile" maxWidth="Infinity"/>
+                <Label text="MES SOINS" styleClass="nav-section-label"/>
+                <Button text="Evenements" styleClass="nav-btn" onAction="#goToPatientEvents" maxWidth="Infinity"/>
+                <Button text="Mes inscriptions" styleClass="nav-btn" onAction="#goToPatientRegistrations" maxWidth="Infinity"/>
+                <Button text="Prendre RDV" styleClass="nav-btn" onAction="#goToPatientBookRdv" maxWidth="Infinity"/>
+                <Button text="Mes consultations" styleClass="nav-btn, nav-btn-active" onAction="#goToPatientConsultations" maxWidth="Infinity"/>
+            </VBox>
+            <VBox styleClass="sidebar-bottom">
+                <Separator styleClass="sidebar-sep"/>
+                <Button text="Deconnexion" styleClass="nav-btn, nav-btn-logout" onAction="#handleLogout" maxWidth="Infinity"/>
+            </VBox>
+        </VBox>
+    </left>
+
+    <center>
+        <VBox styleClass="main-content" spacing="0">
+            <HBox styleClass="topbar" alignment="CENTER_LEFT" spacing="16">
+                <Label text="Mes consultations" styleClass="page-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="topbarDate" styleClass="topbar-date"/>
+                <HBox styleClass="topbar-user-pill" alignment="CENTER" spacing="8">
+                    <Label fx:id="topbarAvatar" styleClass="topbar-avatar"/>
+                    <Label fx:id="topbarUserName" styleClass="topbar-username"/>
+                </HBox>
+            </HBox>
+
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="content-scroll">
+                <VBox spacing="20" styleClass="dashboard-body">
+                    <VBox styleClass="card" spacing="16">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label text="Historique des consultations" styleClass="card-title"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Button fx:id="markAsReadButton" text="Marquer lu" styleClass="btn-secondary" onAction="#handleMarkAsRead"/>
+                            <Button fx:id="exportButton" text="Exporter" styleClass="btn-primary" onAction="#handleExport"/>
+                        </HBox>
+                        <Separator/>
+                        <TableView fx:id="consultationTable" styleClass="dashboard-table" prefHeight="240">
+                            <columns>
+                                <TableColumn fx:id="colDate" text="Date" prefWidth="170"/>
+                                <TableColumn fx:id="colNutritionist" text="Nutritionniste" prefWidth="230"/>
+                                <TableColumn fx:id="colStatus" text="Statut" prefWidth="160"/>
+                                <TableColumn fx:id="colTheme" text="Theme" prefWidth="320"/>
+                            </columns>
+                        </TableView>
+                    </VBox>
+
+                    <VBox styleClass="card" spacing="16">
+                        <Label text="Detail de la consultation" styleClass="card-title"/>
+                        <Separator/>
+                        <HBox spacing="24">
+                            <VBox spacing="6">
+                                <Label text="Date" styleClass="info-label"/>
+                                <Label fx:id="detailDateLabel" styleClass="info-value"/>
+                            </VBox>
+                            <VBox spacing="6">
+                                <Label text="Nutritionniste" styleClass="info-label"/>
+                                <Label fx:id="detailNutritionistLabel" styleClass="info-value"/>
+                            </VBox>
+                            <VBox spacing="6">
+                                <Label text="Statut" styleClass="info-label"/>
+                                <Label fx:id="detailStatusLabel" styleClass="info-value"/>
+                            </VBox>
+                            <VBox spacing="6">
+                                <Label text="Theme" styleClass="info-label"/>
+                                <Label fx:id="detailThemeLabel" styleClass="info-value"/>
+                            </VBox>
+                            <VBox spacing="6">
+                                <Label text="Suivi" styleClass="info-label"/>
+                                <Label fx:id="detailFollowUpLabel" styleClass="info-value"/>
+                            </VBox>
+                            <VBox spacing="6">
+                                <Label text="Lecture" styleClass="info-label"/>
+                                <Label fx:id="detailReadLabel" styleClass="info-value"/>
+                            </VBox>
+                        </HBox>
+                        <HBox spacing="16">
+                            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                                <Label text="Resume" styleClass="info-label"/>
+                                <TextArea fx:id="summaryArea" editable="false" wrapText="true" prefRowCount="5"/>
+                            </VBox>
+                            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                                <Label text="Recommandations" styleClass="info-label"/>
+                                <TextArea fx:id="recommendationsArea" editable="false" wrapText="true" prefRowCount="5"/>
+                            </VBox>
+                        </HBox>
+                        <HBox spacing="16">
+                            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                                <Label text="Plan alimentaire / objectifs" styleClass="info-label"/>
+                                <TextArea fx:id="mealPlanArea" editable="false" wrapText="true" prefRowCount="5"/>
+                            </VBox>
+                            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                                <Label text="Objectifs" styleClass="info-label"/>
+                                <TextArea fx:id="objectivesArea" editable="false" wrapText="true" prefRowCount="5"/>
+                            </VBox>
+                        </HBox>
+                        <VBox spacing="6">
+                            <Label text="Notes liees a ma condition medicale" styleClass="info-label"/>
+                            <TextArea fx:id="medicalNotesArea" editable="false" wrapText="true" prefRowCount="4"/>
+                        </VBox>
+                        <Label fx:id="errorLabel" styleClass="error-label" wrapText="true"/>
+                        <Label fx:id="successLabel" styleClass="success-label" wrapText="true"/>
+                    </VBox>
+                </VBox>
+            </ScrollPane>
+        </VBox>
+    </center>
+</BorderPane>

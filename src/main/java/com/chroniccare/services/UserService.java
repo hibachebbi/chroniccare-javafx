@@ -14,8 +14,8 @@ public class UserService {
     public void insert(User u) throws SQLException {
         String sql = "INSERT INTO users (nom, prenom, email, password, " +
                 "roles, telephone, genre, created_at, " +
-                "approval_status, is_active) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), ?, ?)";
+                "approval_status, medical_condition, is_active) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), ?, ?, ?)";
 
         PreparedStatement ps = conn.prepareStatement(sql);
         ps.setString(1, u.getNom());
@@ -26,7 +26,8 @@ public class UserService {
         ps.setString(6, u.getTelephone());
         ps.setString(7, u.getGenre());
         ps.setString(8, u.getApprovalStatus());
-        ps.setBoolean(9, u.isActive());
+        ps.setString(9, u.getMedicalCondition());
+        ps.setBoolean(10, u.isActive());
         ps.executeUpdate();
 
         System.out.println("Utilisateur ajouté !");

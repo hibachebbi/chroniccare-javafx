@@ -1,6 +1,7 @@
 package com.chroniccare.controllers;
 
 import com.chroniccare.models.User;
+import com.chroniccare.services.AppointmentService;
 import com.chroniccare.services.UserService;
 import com.chroniccare.utils.SessionManager;
 import javafx.fxml.FXML;
@@ -40,6 +41,7 @@ public class HomeController {
     @FXML private Label topbarUserName;
     @FXML private Label welcomeTitle;
     @FXML private Label welcomeSubtitle;
+    @FXML private Label statRdv;
     @FXML private Label statUsers;
     @FXML private VBox adminStatCard;
     @FXML private Label infoMedical;
@@ -48,6 +50,7 @@ public class HomeController {
     @FXML private VBox adminPanel;
 
     private final UserService userService = new UserService();
+    private final AppointmentService appointmentService = new AppointmentService();
 
     @FXML
     public void initialize() {
@@ -116,6 +119,17 @@ public class HomeController {
             } catch (Exception e) {
                 statUsers.setText("-");
             }
+        }
+        try {
+            if (isPatient) {
+                statRdv.setText(String.valueOf(appointmentService.countUpcomingForPatient(user.getId())));
+            } else if (isNutritionniste) {
+                statRdv.setText(String.valueOf(appointmentService.countPendingForNutritionist(user.getId())));
+            } else {
+                statRdv.setText("-");
+            }
+        } catch (Exception e) {
+            statRdv.setText("-");
         }
     }
 
@@ -195,7 +209,44 @@ public class HomeController {
     }
 
     @FXML
-    public void goToNutritionRdv() {}
+    public void goToNutritionRdv() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/com/chroniccare/nutrition-rdv.fxml"));
+            btnHome.getScene().setRoot(root);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void goToPatientFollowup() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/com/chroniccare/patient-rdv.fxml"));
+            btnHome.getScene().setRoot(root);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void goToPatientBookRdv() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/com/chroniccare/patient-rdv.fxml"));
+            btnHome.getScene().setRoot(root);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void goToPatientConsultations() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/com/chroniccare/patient-consultations.fxml"));
+            btnHome.getScene().setRoot(root);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @FXML
     public void goToAddUser() {

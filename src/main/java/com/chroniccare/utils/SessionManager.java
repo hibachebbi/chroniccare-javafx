@@ -5,6 +5,7 @@ import com.chroniccare.models.User;
 public class SessionManager {
     private static SessionManager instance;
     private User currentUser;
+    private Integer selectedAppointmentId;
 
     private SessionManager() {}
 
@@ -17,7 +18,12 @@ public class SessionManager {
 
     public User getCurrentUser() { return currentUser; }
     public void setCurrentUser(User user) { this.currentUser = user; }
-    public void logout() { this.currentUser = null; }
+    public Integer getSelectedAppointmentId() { return selectedAppointmentId; }
+    public void setSelectedAppointmentId(Integer selectedAppointmentId) { this.selectedAppointmentId = selectedAppointmentId; }
+    public void logout() {
+        this.currentUser = null;
+        this.selectedAppointmentId = null;
+    }
 
     public boolean isAdmin() {
         return currentUser != null &&
