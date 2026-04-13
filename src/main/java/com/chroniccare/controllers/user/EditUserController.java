@@ -1,4 +1,4 @@
-package com.chroniccare.controllers;
+package com.chroniccare.controllers.user;
 
 import com.chroniccare.entities.User;
 import com.chroniccare.services.UserService;

@@ -23,24 +23,6 @@ public final class CartService {
         return Collections.unmodifiableMap(items);
     }
 
-    /**
-     * Quantité déjà présente dans le panier (stock "réservé" côté UI).
-     */
-    public int getReservedQty(int produitId) {
-        CartItem item = items.get(produitId);
-        return item == null ? 0 : item.getQuantity();
-    }
-
-    /**
-     * Stock disponible = stock total produit - stock réservé dans le panier.
-     */
-    public int getAvailableStock(Produit produit) {
-        if (produit == null) {
-            return 0;
-        }
-        return Math.max(0, produit.getStock() - getReservedQty(produit.getId()));
-    }
-
     public void add(Produit produit, int qty) {
         if (produit == null) {
             throw new IllegalArgumentException("produit is null");
@@ -49,22 +31,11 @@ public final class CartService {
             return;
         }
 
-        // Empêche de dépasser le stock (en tenant compte du stock déjà réservé dans le panier)
-        int available = getAvailableStock(produit);
-        if (qty > available) {
-            qty = available;
-        }
-        if (qty <= 0) {
-            return;
-        }
-
         CartItem existing = items.get(produit.getId());
         if (existing == null) {
-            // qty est déjà clamp à "available" donc <= stock
             items.put(produit.getId(), new CartItem(produit, qty));
         } else {
-            // Ajouts successifs: re-clamp vs stock total
-            setQuantity(produit.getId(), existing.getQuantity() + qty);
+            existing.setQuantity(existing.getQuantity() + qty);
         }
     }
 
@@ -75,9 +46,7 @@ public final class CartService {
         }
         CartItem existing = items.get(produitId);
         if (existing != null) {
-            // Clamp vs stock total du produit pour éviter de réserver plus que le stock
-            int max = existing.getProduit() == null ? qty : Math.max(0, existing.getProduit().getStock());
-            existing.setQuantity(Math.min(qty, max));
+            existing.setQuantity(qty);
         }
     }
 

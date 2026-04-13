@@ -1,4 +1,4 @@
-package com.chroniccare.controllers;
+package com.chroniccare.controllers.user;
 
 import com.chroniccare.entities.User;
 import com.chroniccare.services.UserService;
@@ -13,20 +13,20 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
-public class ProfileCoachController {
+public class ProfilePatientController {
 
     @FXML private Label sidebarAvatar;
     @FXML private Label sidebarUserName;
     @FXML private Label topbarDate;
     @FXML private Label topbarAvatar;
     @FXML private Label topbarUserName;
-    @FXML private Label statusLabel;
-    @FXML private Label approvalLabel;
+    @FXML private Label statusBadge;
     @FXML private TextField nomField;
     @FXML private TextField prenomField;
     @FXML private TextField emailField;
     @FXML private TextField telephoneField;
     @FXML private ComboBox<String> genreCombo;
+    @FXML private TextField medicalField;
     @FXML private Label errorLabel;
     @FXML private Label successLabel;
 
@@ -48,19 +48,19 @@ public class ProfileCoachController {
             DateTimeFormatter fmt = DateTimeFormatter.ofPattern("EEEE d MMMM yyyy", Locale.FRENCH);
             topbarDate.setText(LocalDate.now().format(fmt));
         }
+        if (statusBadge != null) {
+            String s = currentUser.getApprovalStatus();
+            statusBadge.setText("approved".equals(s) ? "✓ Approuvé" : "pending".equals(s) ? "⏳ En attente" : "✗ Rejeté");
+            statusBadge.setStyle("-fx-background-color: " +
+                    ("approved".equals(s) ? "#22c55e" : "pending".equals(s) ? "#f97316" : "#ef4444") +
+                    "; -fx-text-fill: white; -fx-background-radius: 6; -fx-padding: 4 10; -fx-font-size: 11; -fx-font-weight: bold;");
+        }
         nomField.setText(currentUser.getNom());
         prenomField.setText(currentUser.getPrenom());
         emailField.setText(currentUser.getEmail());
         telephoneField.setText(currentUser.getTelephone() != null ? currentUser.getTelephone() : "");
         genreCombo.setValue(currentUser.getGenre());
-
-        String statut = currentUser.getApprovalStatus();
-        if (approvalLabel != null) { approvalLabel.setText(getStatusLabel(statut)); approvalLabel.setStyle(getStatusStyle(statut)); }
-        if (statusLabel != null) {
-            statusLabel.setText(getStatusLabel(statut));
-            statusLabel.setStyle("-fx-background-color: " + getStatusColor(statut) +
-                    "; -fx-text-fill: white; -fx-background-radius: 6; -fx-padding: 4 10; -fx-font-size: 11; -fx-font-weight: bold;");
-        }
+        medicalField.setText(currentUser.getMedicalCondition() != null ? currentUser.getMedicalCondition() : "");
     }
 
     private boolean valider() {
@@ -91,6 +91,7 @@ public class ProfileCoachController {
             currentUser.setEmail(emailField.getText().trim());
             currentUser.setTelephone(telephoneField.getText().trim());
             currentUser.setGenre(genreCombo.getValue());
+            currentUser.setMedicalCondition(medicalField.getText().trim());
             userService.update(currentUser);
             SessionManager.getInstance().setCurrentUser(currentUser);
             if (successLabel != null) successLabel.setText("✓ Profil mis à jour avec succès !");
@@ -122,23 +123,10 @@ public class ProfileCoachController {
     }
 
     private String getInitials(User user) {
-        String p = (user.getPrenom() != null && !user.getPrenom().isEmpty()) ? String.valueOf(user.getPrenom().charAt(0)).toUpperCase() : "";
-        String n = (user.getNom() != null && !user.getNom().isEmpty()) ? String.valueOf(user.getNom().charAt(0)).toUpperCase() : "";
+        String p = (user.getPrenom() != null && !user.getPrenom().isEmpty())
+                ? String.valueOf(user.getPrenom().charAt(0)).toUpperCase() : "";
+        String n = (user.getNom() != null && !user.getNom().isEmpty())
+                ? String.valueOf(user.getNom().charAt(0)).toUpperCase() : "";
         return p + n;
-    }
-    private String getStatusLabel(String s) {
-        if ("approved".equals(s)) return "✓ Approuvé";
-        if ("pending".equals(s)) return "⏳ En attente";
-        return "✗ Rejeté";
-    }
-    private String getStatusStyle(String s) {
-        if ("approved".equals(s)) return "-fx-text-fill: #16a34a; -fx-font-weight: bold; -fx-font-size: 14;";
-        if ("pending".equals(s)) return "-fx-text-fill: #d97706; -fx-font-weight: bold; -fx-font-size: 14;";
-        return "-fx-text-fill: #dc2626; -fx-font-weight: bold; -fx-font-size: 14;";
-    }
-    private String getStatusColor(String s) {
-        if ("approved".equals(s)) return "#16a34a";
-        if ("pending".equals(s)) return "#d97706";
-        return "#dc2626";
     }
 }

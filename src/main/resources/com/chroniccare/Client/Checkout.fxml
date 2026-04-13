@@ -6,13 +6,14 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx/17"
+<VBox fx:id="root" xmlns="http://javafx.com/javafx/17"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="controllers.Client.CheckoutController"
+      fx:controller="com.chroniccare.controllers.Client.CheckoutController"
       spacing="16.0"
       styleClass="dashboard-page">
 
@@ -45,9 +46,27 @@
 
         <Label fx:id="infoLabel" text="" styleClass="muted"/>
 
+        <!-- Section livraison (affichee apres confirmation) -->
+        <VBox fx:id="deliverySection" spacing="10.0" visible="false" managed="false">
+            <Separator/>
+            <Label text="Informations de livraison" styleClass="section-title"/>
+
+            <HBox spacing="12.0">
+                <Label text="Mode de livraison:"/>
+                <ComboBox fx:id="livraisonModeCombo" prefWidth="220.0"/>
+            </HBox>
+
+            <HBox spacing="12.0">
+                <Label text="Ville:"/>
+                <TextField fx:id="villeField" prefWidth="220.0"/>
+                <Label text="Code postal:"/>
+                <TextField fx:id="codePostalField" prefWidth="120.0"/>
+            </HBox>
+        </VBox>
+
         <HBox spacing="10.0">
             <Button text="Annuler" onAction="#annuler"/>
-            <Button text="Confirmer" onAction="#confirmerCommande" styleClass="cc-btn"/>
+            <Button fx:id="confirmButton" text="Confirmer" onAction="#confirmerCommande" styleClass="cc-btn"/>
         </HBox>
     </children>
 </VBox>

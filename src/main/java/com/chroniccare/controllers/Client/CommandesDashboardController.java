@@ -3,12 +3,14 @@ package com.chroniccare.controllers.Client;
 import com.chroniccare.entities.Commande;
 import com.chroniccare.entities.User;
 import com.chroniccare.services.CommandeService;
+import com.chroniccare.utils.FxNavigator;
 import com.chroniccare.utils.SessionManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -24,6 +26,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class CommandesDashboardController {
+
+    @FXML private Node root;
 
     @FXML private TableView<Commande> ordersTable;
     @FXML private TableColumn<Commande, String> statutCol;
@@ -57,7 +61,10 @@ public class CommandesDashboardController {
             private final HBox box = new HBox(5, btnCheckout);
             {
                 btnCheckout.setStyle("-fx-background-color: #2563eb; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5;");
-                btnCheckout.setOnAction(e -> navigate("/com/chroniccare/Client/Checkout.fxml"));
+                btnCheckout.setOnAction(e -> {
+                    Commande commande = getTableView().getItems().get(getIndex());
+                    goToCheckout(commande);
+                });
             }
 
             @Override
@@ -68,6 +75,19 @@ public class CommandesDashboardController {
         });
 
         loadCommandes();
+    }
+
+    private void goToCheckout(Commande commande) {
+        if (commande == null) return;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/chroniccare/Client/Checkout.fxml"));
+            Parent root = loader.load();
+            CheckoutController controller = loader.getController();
+            controller.setCommande(commande);
+            anchor().getScene().setRoot(root);
+        } catch (Exception e) {
+            showError("Navigation echouee", e.getMessage());
+        }
     }
 
     private void loadCommandes() {
@@ -110,16 +130,19 @@ public class CommandesDashboardController {
 
     @FXML
     public void handleSearch() {
-        // Pas de recherche par identifiants (id / numero)
+        String keyword = searchField.getText() == null ? "" : searchField.getText().trim().toLowerCase();
         String statut = statutFilter.getValue();
 
         List<Commande> result = allCommandes.stream()
                 .filter(c -> {
+                    boolean matchKeyword = keyword.isEmpty()
+                            || (c.getNumeroCommande() != null && c.getNumeroCommande().toLowerCase().contains(keyword));
+
                     boolean matchStatut = statut == null
                             || statut.equals("Tous")
                             || (c.getStatut() != null && c.getStatut().equalsIgnoreCase(statut));
 
-                    return matchStatut;
+                    return matchKeyword && matchStatut;
                 })
                 .collect(Collectors.toList());
 
@@ -156,32 +179,29 @@ public class CommandesDashboardController {
 
     @FXML
     public void goToHome() {
-        navigate("/com/chroniccare/home.fxml");
+        FxNavigator.go(anchor(), "/com/chroniccare/home.fxml");
     }
 
     @FXML
     public void goToProduits() {
-        navigate("/com/chroniccare/Client/ProduitsDashboard.fxml");
+        FxNavigator.go(anchor(), "/com/chroniccare/Client/ProduitsDashboard.fxml");
     }
 
     @FXML
     public void goToPanier() {
-        navigate("/com/chroniccare/Client/Panier.fxml");
+        FxNavigator.go(anchor(), "/com/chroniccare/Client/Panier.fxml");
     }
 
     @FXML
     public void goToLogin() {
         SessionManager.getInstance().logout();
-        navigate("/com/chroniccare/login.fxml");
+        FxNavigator.go(anchor(), "/com/chroniccare/login.fxml");
     }
 
-    private void navigate(String fxml) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource(fxml));
-            ordersTable.getScene().setRoot(root);
-        } catch (Exception e) {
-            showError("Navigation echouee", e.getMessage());
-        }
+    private Node anchor() {
+        if (root != null) return root;
+        // fallback (au cas où root n'est pas injecté)
+        return ordersTable;
     }
 
     private void showError(String header, String message) {
@@ -192,4 +212,3 @@ public class CommandesDashboardController {
         alert.showAndWait();
     }
 }
-

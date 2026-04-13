@@ -18,7 +18,7 @@
 
     <VBox spacing="5" style="-fx-pref-width: 380;">
         <Label text="Categorie" style="-fx-font-size: 13; -fx-font-weight: bold;"/>
-        <TextField fx:id="categorieField" promptText="Categorie" style="-fx-pref-height: 38; -fx-font-size: 13;"/>
+        <ComboBox fx:id="categorieCombo" promptText="Categorie" style="-fx-pref-width: 380; -fx-pref-height: 38;"/>
     </VBox>
 
     <VBox spacing="5" style="-fx-pref-width: 380;">

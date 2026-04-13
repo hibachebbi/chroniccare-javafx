@@ -4,7 +4,7 @@
 <?import javafx.geometry.*?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.chroniccare.controllers.HomeController"
+            fx:controller="com.chroniccare.controllers.user.HomeController"
             prefWidth="1100" prefHeight="700"
             stylesheets="@home-styles.css">
 

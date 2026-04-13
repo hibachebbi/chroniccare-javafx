@@ -1,15 +1,14 @@
-package com.chroniccare.controllers;
+package com.chroniccare.controllers.user;
 
 import com.chroniccare.entities.User;
 import com.chroniccare.services.UserService;
-import com.chroniccare.utils.SessionManager;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 
-public class AddUserController {
+public class RegisterController {
 
     @FXML private TextField nomField;
     @FXML private TextField prenomField;
@@ -18,29 +17,21 @@ public class AddUserController {
     @FXML private TextField telephoneField;
     @FXML private ComboBox<String> genreCombo;
     @FXML private ComboBox<String> rolesCombo;
-    @FXML private TextField medicalField;
     @FXML private Label errorLabel;
 
-    private final UserService userService = new UserService();
+    private UserService userService = new UserService();
 
     @FXML
     public void initialize() {
-        if (!SessionManager.getInstance().isAdmin()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Accès refusé");
-            alert.setHeaderText(null);
-            alert.setContentText("Seul l'administrateur peut ajouter un utilisateur.");
-            alert.showAndWait();
-            return;
-        }
-
         genreCombo.setItems(FXCollections.observableArrayList("Homme", "Femme"));
         rolesCombo.setItems(FXCollections.observableArrayList(
-                "ROLE_ADMIN", "ROLE_PATIENT", "ROLE_COACH", "ROLE_NUTRITIONNISTE"
+                "ROLE_PATIENT", "ROLE_COACH", "ROLE_NUTRITIONNISTE"
         ));
     }
 
-    private boolean valider() {
+    @FXML
+    public void handleRegister() {
+        // Validation
         StringBuilder errors = new StringBuilder();
 
         if (nomField.getText().trim().isEmpty())
@@ -49,7 +40,7 @@ public class AddUserController {
         if (prenomField.getText().trim().isEmpty())
             errors.append("• Prénom obligatoire\n");
 
-        if (!emailField.getText().matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$"))
+        if (!emailField.getText().matches("^[\\w.-]+@[\\w.-]+\\.[a-z]{2,}$"))
             errors.append("• Email invalide\n");
 
         if (passwordField.getText().length() < 8)
@@ -70,54 +61,43 @@ public class AddUserController {
             alert.setHeaderText("Veuillez corriger les erreurs suivantes :");
             alert.setContentText(errors.toString());
             alert.show();
-            return false;
+            return;
         }
-        return true;
-    }
 
-    @FXML
-    public void handleAdd() {
-        if (!valider()) return;
-
+        // Création de l'utilisateur
         try {
             User u = new User(
                     nomField.getText().trim(),
                     prenomField.getText().trim(),
-                    emailField.getText().trim(),
+                    emailField.getText().trim().toLowerCase(),
                     passwordField.getText(),
                     "[\"" + rolesCombo.getValue() + "\"]",
                     telephoneField.getText().trim(),
                     genreCombo.getValue()
             );
 
-            u.setMedicalCondition(medicalField.getText().trim());
-            u.setApprovalStatus("approved");
-            u.setActive(true);
-
             userService.insert(u);
 
             Alert success = new Alert(Alert.AlertType.INFORMATION);
             success.setTitle("Succès");
-            success.setHeaderText(null);
-            success.setContentText("Utilisateur ajouté avec succès !");
-            success.showAndWait();
+            success.setContentText("Compte créé avec succès !");
+            success.show();
 
-            goToList();
+            // Retour au login
+            goToLogin();
 
         } catch (Exception e) {
-            e.printStackTrace();
             errorLabel.setText("Erreur : " + e.getMessage());
         }
     }
 
     @FXML
-    public void goToList() {
+    public void goToLogin() {
         try {
             Parent root = FXMLLoader.load(
-                    getClass().getResource("/com/chroniccare/list-users.fxml"));
+                    getClass().getResource("/com/chroniccare/login.fxml"));
             nomField.getScene().setRoot(root);
         } catch (Exception e) {
-            e.printStackTrace();
             errorLabel.setText("Erreur navigation : " + e.getMessage());
         }
     }

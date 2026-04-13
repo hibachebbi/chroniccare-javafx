@@ -1,11 +1,13 @@
-package com.chroniccare.controllers;
+package com.chroniccare.controllers.user;
 
 import com.chroniccare.entities.User;
 import com.chroniccare.services.UserService;
+import com.chroniccare.utils.FxNavigator;
 import com.chroniccare.utils.SessionManager;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
@@ -124,7 +126,7 @@ public class HomeController {
         String fxml = SessionManager.getInstance().isAdmin()
                 ? "/com/chroniccare/Admin/ProduitsDashboard.fxml"
                 : "/com/chroniccare/Client/ProduitsDashboard.fxml";
-        navigate(btnProduits, fxml);
+        safeGo(btnProduits, fxml);
     }
 
     @FXML
@@ -132,7 +134,7 @@ public class HomeController {
         if (SessionManager.getInstance().isAdmin()) {
             return;
         }
-        navigate(btnPanier, "/com/chroniccare/Client/Panier.fxml");
+        safeGo(btnPanier, "/com/chroniccare/Client/Panier.fxml");
     }
 
     @FXML
@@ -140,7 +142,19 @@ public class HomeController {
         String fxml = SessionManager.getInstance().isAdmin()
                 ? "/com/chroniccare/Admin/CommandesDashboard.fxml"
                 : "/com/chroniccare/Client/CommandesDashboard.fxml";
-        navigate(btnCommandes, fxml);
+        safeGo(btnCommandes, fxml);
+    }
+
+    private void safeGo(Button source, String fxml) {
+        try {
+            FxNavigator.go(source, fxml);
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("ChronicCare");
+            alert.setHeaderText("Navigation echouee");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
     }
 
     @FXML

@@ -2,7 +2,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
 
-<VBox xmlns:fx="http://javafx.com/fxml"
+<VBox fx:id="root" xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.chroniccare.controllers.Client.CommandesDashboardController"
       spacing="15"
       style="-fx-padding: 30; -fx-background-color: #f0f4ff;">

@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.chroniccare.controllers.ProfileNutritionnnisteController"
+            fx:controller="com.chroniccare.controllers.user.ProfileNutritionnnisteController"
             prefWidth="1100" prefHeight="700"
             stylesheets="@home-styles.css">
 

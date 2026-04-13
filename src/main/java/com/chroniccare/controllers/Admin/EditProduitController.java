@@ -2,21 +2,24 @@ package com.chroniccare.controllers.Admin;
 
 import com.chroniccare.entities.Produit;
 import com.chroniccare.services.ProduitsService;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class EditProduitController {
 
     @FXML private TextField nomField;
-    @FXML private TextField categorieField;
+    @FXML private ComboBox<String> categorieCombo;
     @FXML private TextField prixField;
     @FXML private TextField stockField;
     @FXML private TextArea descriptionField;
@@ -26,6 +29,20 @@ public class EditProduitController {
     private final ProduitsService service = new ProduitsService();
     private Produit currentProduit;
 
+    @FXML
+    public void initialize() {
+        // Liste déroulante (tu peux ajuster les catégories à ton domaine)
+        List<String> categories = List.of(
+                "Compléments",
+                "Matériel médical",
+                "Alimentation",
+                "Bien-être",
+                "Hygiène",
+                "Autres"
+        );
+        categorieCombo.setItems(FXCollections.observableArrayList(categories));
+    }
+
     public void setProduit(Produit produit) {
         this.currentProduit = produit;
         if (produit == null) {
@@ -33,7 +50,15 @@ public class EditProduitController {
         }
 
         nomField.setText(produit.getNom());
-        categorieField.setText(produit.getCategorie());
+        if (produit.getCategorie() != null && !produit.getCategorie().isBlank()) {
+            // Si la catégorie n'est pas dans la liste, on l'ajoute pour préserver les données existantes.
+            if (!categorieCombo.getItems().contains(produit.getCategorie())) {
+                categorieCombo.getItems().add(produit.getCategorie());
+            }
+            categorieCombo.setValue(produit.getCategorie());
+        } else {
+            categorieCombo.getSelectionModel().clearSelection();
+        }
         prixField.setText(String.valueOf(produit.getPrix()));
         stockField.setText(String.valueOf(produit.getStock()));
         descriptionField.setText(produit.getDescription() == null ? "" : produit.getDescription());
@@ -47,7 +72,7 @@ public class EditProduitController {
         try {
             Produit produit = (currentProduit == null) ? new Produit() : currentProduit;
             produit.setNom(nomField.getText().trim());
-            produit.setCategorie(categorieField.getText().trim());
+            produit.setCategorie(categorieCombo.getValue().trim());
             produit.setPrix(parseDouble(prixField.getText(), "Prix invalide"));
             produit.setStock(parseInt(stockField.getText(), "Stock invalide"));
             produit.setDescription(descriptionField.getText() == null ? "" : descriptionField.getText().trim());
@@ -79,7 +104,7 @@ public class EditProduitController {
             errors.append("• Nom obligatoire\n");
         }
 
-        if (categorieField.getText() == null || categorieField.getText().trim().isEmpty()) {
+        if (categorieCombo.getValue() == null || categorieCombo.getValue().trim().isEmpty()) {
             errors.append("• Categorie obligatoire\n");
         }
 
@@ -101,7 +126,7 @@ public class EditProduitController {
             errors.append("• Stock invalide\n");
         }
 
-        if (errors.length() > 0) {
+        if (!errors.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erreurs de saisie");
             alert.setHeaderText("Veuillez corriger les erreurs suivantes :");

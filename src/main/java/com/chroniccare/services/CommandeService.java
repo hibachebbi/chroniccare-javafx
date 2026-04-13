@@ -173,11 +173,76 @@ public class CommandeService {
         }
     }
 
-    public void delete(int id) throws SQLException {
-        String sql = "DELETE FROM commande WHERE id = ?";
+    /**
+     * Update minimaliste pour l'administration : ne modifie que le statut et la méthode de paiement.
+     * Permet d'éviter d'écraser des champs sensibles (numero, total, utilisateur_id, etc.).
+     */
+    public void updateAdminStatusAndPayment(int commandeId, String statut, String methodePaiement) throws SQLException {
+        if (commandeId <= 0) {
+            throw new IllegalArgumentException("commandeId invalide");
+        }
+        if (statut == null || statut.isBlank()) {
+            throw new IllegalArgumentException("statut obligatoire");
+        }
+        if (methodePaiement == null || methodePaiement.isBlank()) {
+            throw new IllegalArgumentException("methodePaiement obligatoire");
+        }
+
+        String sql = "UPDATE commande SET statut = ?, methode_paiement = ? WHERE id = ?";
         try (PreparedStatement ps = connection().prepareStatement(sql)) {
-            ps.setInt(1, id);
-            ps.executeUpdate();
+            ps.setString(1, statut.trim());
+            ps.setString(2, methodePaiement.trim());
+            ps.setInt(3, commandeId);
+            int updated = ps.executeUpdate();
+            if (updated != 1) {
+                throw new SQLException("Commande introuvable (id=" + commandeId + ")");
+            }
+        }
+    }
+
+    public void delete(int id) throws SQLException {
+        if (id <= 0) {
+            throw new IllegalArgumentException("id commande invalide");
+        }
+
+        Connection conn = connection();
+        boolean oldAutoCommit = conn.getAutoCommit();
+        try {
+            conn.setAutoCommit(false);
+
+            // 1) Supprimer les dépendances (FK) si elles existent
+            // ligne_commande -> commande
+            try (PreparedStatement ps = conn.prepareStatement("DELETE FROM ligne_commande WHERE commande_id = ?")) {
+                ps.setInt(1, id);
+                ps.executeUpdate();
+            }
+
+            // livraison -> commande (si la table existe dans votre schéma)
+            try (PreparedStatement ps = conn.prepareStatement("DELETE FROM livraison WHERE commande_id = ?")) {
+                ps.setInt(1, id);
+                ps.executeUpdate();
+            }
+
+            // 2) Supprimer la commande
+            try (PreparedStatement ps = conn.prepareStatement("DELETE FROM commande WHERE id = ?")) {
+                ps.setInt(1, id);
+                int deleted = ps.executeUpdate();
+                if (deleted != 1) {
+                    throw new SQLException("Commande introuvable (id=" + id + ")");
+                }
+            }
+
+            conn.commit();
+        } catch (SQLException ex) {
+            conn.rollback();
+            // Message plus explicite si contrainte FK
+            String msg = ex.getMessage() == null ? "" : ex.getMessage().toLowerCase();
+            if (msg.contains("foreign key") || msg.contains("constraint")) {
+                throw new SQLException("Impossible de supprimer cette commande car elle est liée à d'autres données (lignes de commande / livraison).", ex);
+            }
+            throw ex;
+        } finally {
+            conn.setAutoCommit(oldAutoCommit);
         }
     }
 

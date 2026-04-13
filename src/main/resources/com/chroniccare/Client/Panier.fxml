@@ -8,9 +8,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx/17"
+<VBox fx:id="root" xmlns="http://javafx.com/javafx/17"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="controllers.Client.PanierController"
+      fx:controller="com.chroniccare.controllers.Client.PanierController"
       spacing="16.0"
       styleClass="dashboard-page">
 
