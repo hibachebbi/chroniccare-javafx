@@ -34,6 +34,11 @@
                 <Button fx:id="btnUsers" text="👥  Gestion Utilisateurs"
                         styleClass="nav-btn"
                         onAction="#goToUsers" maxWidth="Infinity"/>
+                <Label text="FORUM" styleClass="nav-section-label"/>
+                <Button text="💬  Forum"
+                        styleClass="nav-btn"
+                        onAction="#goToForum"
+                        maxWidth="Infinity"/>
                 <Label text="MES SOINS" styleClass="nav-section-label"/>
                 <Button text="📋  Mon Suivi" styleClass="nav-btn" maxWidth="Infinity"/>
                 <Button text="🥗  Nutrition" styleClass="nav-btn" maxWidth="Infinity"/>

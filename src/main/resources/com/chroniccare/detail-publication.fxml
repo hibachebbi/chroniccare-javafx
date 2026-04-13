@@ -1,14 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="$CONTROLLER_NAME$"
-            prefHeight="400.0" prefWidth="600.0" >
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.chroniccare.controllers.DetailPublicationController"
+      prefWidth="650" prefHeight="600" spacing="0"
+      style="-fx-background-color:#f1f5f9;"
+      stylesheets="@styles.css, @home-styles.css">
 
-</AnchorPane>
+    <!-- HEADER -->
+    <HBox style="-fx-background-color:white; -fx-padding:16 24;"
+          alignment="CENTER_LEFT" spacing="12">
+        <Button text="← Retour" styleClass="btn-secondary" onAction="#fermer"/>
+        <Label fx:id="labelTitrePublication" styleClass="page-title"/>
+    </HBox>
+
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="content-scroll">
+        <VBox spacing="20" style="-fx-padding:24;">
+
+            <!-- CARD PUBLICATION -->
+            <VBox styleClass="card" spacing="12">
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label fx:id="badgeCategorie"
+                           style="-fx-background-color:#dbeafe; -fx-text-fill:#1d4ed8;
+                                  -fx-background-radius:6px; -fx-padding:4 10;
+                                  -fx-font-size:11px; -fx-font-weight:bold;"/>
+                    <Label fx:id="badgeStatut"
+                           style="-fx-background-color:#dcfce7; -fx-text-fill:#16a34a;
+                                  -fx-background-radius:6px; -fx-padding:4 10;
+                                  -fx-font-size:11px; -fx-font-weight:bold;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="labelDate"
+                           style="-fx-text-fill:#94a3b8; -fx-font-size:12px;"/>
+                </HBox>
+                <Label fx:id="labelContenu" wrapText="true"
+                       style="-fx-font-size:14px; -fx-text-fill:#374151; -fx-line-spacing:4;"/>
+                <HBox spacing="16" alignment="CENTER_LEFT">
+                    <Button fx:id="btnLikerPublication" text="❤️ Liker"
+                            styleClass="btn-secondary" onAction="#likerPublication"/>
+                    <Label fx:id="labelLikes"
+                           style="-fx-text-fill:#64748b; -fx-font-size:13px;"/>
+                </HBox>
+            </VBox>
+
+            <!-- COMMENTAIRES -->
+            <VBox styleClass="card" spacing="14">
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <Label text="💬" styleClass="card-icon"/>
+                    <Label text="Commentaires" styleClass="card-title"/>
+                    <Label fx:id="nbCommentaires"
+                           style="-fx-background-color:#e0e7ff; -fx-text-fill:#3730a3;
+                                  -fx-background-radius:10px; -fx-padding:2 8;
+                                  -fx-font-size:11px; -fx-font-weight:bold;"/>
+                </HBox>
+                <Separator/>
+
+                <!-- LISTE COMMENTAIRES -->
+                <VBox fx:id="listeCommentaires" spacing="10"/>
+
+                <!-- AJOUTER COMMENTAIRE -->
+                <Separator/>
+                <Label text="Ajouter un commentaire" styleClass="info-label"/>
+                <TextArea fx:id="fieldCommentaire" prefHeight="80"
+                          promptText="Votre commentaire..." wrapText="true"
+                          style="-fx-background-radius:8px; -fx-border-radius:8px;
+                                 -fx-border-color:#d1d5db; -fx-padding:10;"/>
+                <Label fx:id="erreurCommentaire" styleClass="error-label"
+                       visible="false" managed="false"/>
+                <CheckBox fx:id="checkAnonymous" text="Publier anonymement"
+                          style="-fx-font-size:13px; -fx-text-fill:#374151;"/>
+                <HBox alignment="CENTER_RIGHT">
+                    <Button text="Envoyer" styleClass="btn-primary"
+                            onAction="#ajouterCommentaire"/>
+                </HBox>
+            </VBox>
+
+        </VBox>
+    </ScrollPane>
+</VBox>

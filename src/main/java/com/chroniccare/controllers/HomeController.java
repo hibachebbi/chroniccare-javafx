@@ -9,7 +9,9 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
-
+import javafx.scene.Scene;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -165,5 +167,24 @@ public class HomeController {
     private String capitalize(String s) {
         if (s == null || s.isEmpty()) return s;
         return Character.toUpperCase(s.charAt(0)) + s.substring(1).toLowerCase();
+    }
+    @FXML
+    private void goToForum() {
+        try {
+            // Admin → back office tableau
+            // Coach / Nutri / Patient → front office cards
+            String fxml = SessionManager.getInstance().isAdmin()
+                    ? "/com/chroniccare/forum.fxml"
+                    : "/com/chroniccare/forum-front.fxml";
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxml));
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Forum ChronicCare");
+            stage.setScene(new Scene(loader.load(), 1100, 700));
+            stage.show();
+        } catch (Exception e) {
+            System.err.println("Erreur navigation forum : " + e.getMessage());
+        }
     }
 }
