@@ -1,6 +1,6 @@
 package com.chroniccare.controllers;
 
-import com.chroniccare.models.User;
+import com.chroniccare.entities.User;
 import com.chroniccare.services.UserService;
 import com.chroniccare.utils.SessionManager;
 import javafx.fxml.FXML;
@@ -12,6 +12,9 @@ import javafx.scene.control.TextField;
 
 public class LoginController {
 
+    private static final String STATIC_ADMIN_EMAIL = "admin@chronic.com";
+    private static final String STATIC_ADMIN_PASSWORD = "admin123";
+
     @FXML private TextField emailField;
     @FXML private PasswordField passwordField;
     @FXML private Label errorLabel;
@@ -20,7 +23,7 @@ public class LoginController {
 
     @FXML
     public void handleLogin() {
-        String email = emailField.getText().trim();
+        String email = emailField.getText().trim().toLowerCase();
         String password = passwordField.getText();
 
         if (email.isEmpty() || password.isEmpty()) {
@@ -34,6 +37,22 @@ public class LoginController {
         }
 
         try {
+            // Login statique admin (bypass DB)
+            if (STATIC_ADMIN_EMAIL.equalsIgnoreCase(email)
+                    && STATIC_ADMIN_PASSWORD.equals(password)) {
+                User admin = new User();
+                admin.setNom("Admin");
+                admin.setPrenom("Super");
+                admin.setEmail(STATIC_ADMIN_EMAIL);
+                admin.setRoles("[\"ROLE_ADMIN\"]");
+                admin.setActive(true);
+
+                SessionManager.getInstance().setCurrentUser(admin);
+                Parent root = FXMLLoader.load(getClass().getResource("/com/chroniccare/home.fxml"));
+                emailField.getScene().setRoot(root);
+                return;
+            }
+
             User user = userService.checkLogin(email, password);
 
             if (user == null) {

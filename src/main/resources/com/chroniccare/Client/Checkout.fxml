@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="controllers.Client.CheckoutController"
+      spacing="16.0"
+      styleClass="dashboard-page">
+
+    <padding>
+        <Insets top="18.0" right="24.0" bottom="24.0" left="24.0"/>
+    </padding>
+
+    <children>
+        <HBox spacing="10.0" alignment="CENTER_RIGHT">
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="⌂ Accueil" onAction="#goToHome" style="-fx-background-color: #0f172a; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 8;"/>
+            <Button text="📄 Commandes" onAction="#goToCommandes" style="-fx-background-color: #2563eb; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 8;"/>
+            <Button text="🧺 Panier" onAction="#goToPanier" style="-fx-background-color: #2563eb; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 8;"/>
+            <Button text="🛍 Catalogue" onAction="#goToCatalogue" style="-fx-background-color: #2563eb; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 8;"/>
+            <Button text="Deconnexion" onAction="#goToLogin" style="-fx-background-color: #ef4444; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 8;"/>
+        </HBox>
+
+        <Label text="Valider ma commande" styleClass="page-title"/>
+
+        <Label text="Adresse de livraison" styleClass="section-title"/>
+        <TextArea fx:id="adresseArea" wrapText="true" prefRowCount="4" promptText="Ex: Rue..., Ville..., Code postal..."/>
+
+        <Separator/>
+
+        <HBox spacing="12.0">
+            <Label text="Methode de paiement:"/>
+            <ComboBox fx:id="paiementCombo" prefWidth="220.0"/>
+            <Label fx:id="totalLabel" text="Total: 0.00" styleClass="section-title"/>
+        </HBox>
+
+        <Label fx:id="infoLabel" text="" styleClass="muted"/>
+
+        <HBox spacing="10.0">
+            <Button text="Annuler" onAction="#annuler"/>
+            <Button text="Confirmer" onAction="#confirmerCommande" styleClass="cc-btn"/>
+        </HBox>
+    </children>
+</VBox>
+

@@ -1,4 +1,4 @@
-package com.chroniccare.models;
+package com.chroniccare.entities;
 
 public class User {
     private int id;

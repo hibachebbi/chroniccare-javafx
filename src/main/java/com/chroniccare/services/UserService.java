@@ -1,6 +1,6 @@
 package com.chroniccare.services;
 
-import com.chroniccare.models.User;
+import com.chroniccare.entities.User;
 import com.chroniccare.utils.MyDatabase;
 
 import java.sql.*;
@@ -92,19 +92,16 @@ public class UserService {
 
     // -------- LOGIN --------
     public User checkLogin(String email, String password) throws SQLException {
-        String sql = "SELECT * FROM users WHERE email=?";
+        String sql = "SELECT * FROM users " +
+                "WHERE LOWER(TRIM(email)) = LOWER(TRIM(?)) AND password = ? " +
+                "LIMIT 1";
         PreparedStatement ps = conn.prepareStatement(sql);
         ps.setString(1, email);
+        ps.setString(2, password);
 
         ResultSet rs = ps.executeQuery();
-
         if (rs.next()) {
-            String dbPassword = rs.getString("password");
-
-            // Cas simple : mot de passe stocké en clair
-            if (dbPassword != null && dbPassword.equals(password)) {
-                return mapResultSetToUser(rs);
-            }
+            return mapResultSetToUser(rs);
         }
 
         return null;

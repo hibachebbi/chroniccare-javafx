@@ -1,6 +1,6 @@
 package com.chroniccare.controllers;
 
-import com.chroniccare.models.User;
+import com.chroniccare.entities.User;
 import com.chroniccare.services.UserService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

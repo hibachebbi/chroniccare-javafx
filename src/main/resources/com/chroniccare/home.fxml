@@ -36,9 +36,15 @@
                         onAction="#goToUsers" maxWidth="Infinity"/>
                 <Label text="MES SOINS" styleClass="nav-section-label"/>
                 <Button text="📋  Mon Suivi" styleClass="nav-btn" maxWidth="Infinity"/>
-                <Button text="🥗  Nutrition" styleClass="nav-btn" maxWidth="Infinity"/>
-                <Button text="🏃  Activité Physique" styleClass="nav-btn" maxWidth="Infinity"/>
-                <Button text="💊  Médicaments" styleClass="nav-btn" maxWidth="Infinity"/>
+                <Button fx:id="btnProduits" text="🛍️  Produits"
+                        styleClass="nav-btn"
+                        onAction="#goToProduits" maxWidth="Infinity"/>
+                <Button fx:id="btnPanier" text="🧺  Panier"
+                        styleClass="nav-btn"
+                        onAction="#goToPanier" maxWidth="Infinity"/>
+                <Button fx:id="btnCommandes" text="🧾  Commandes"
+                        styleClass="nav-btn"
+                        onAction="#goToCommandes" maxWidth="Infinity"/>
                 <Button text="📊  Mes Statistiques" styleClass="nav-btn" maxWidth="Infinity"/>
             </VBox>
             <VBox styleClass="sidebar-bottom">

@@ -1,6 +1,6 @@
 package com.chroniccare.utils;
 
-import com.chroniccare.models.User;
+import com.chroniccare.entities.User;
 
 public class SessionManager {
     private static SessionManager instance;

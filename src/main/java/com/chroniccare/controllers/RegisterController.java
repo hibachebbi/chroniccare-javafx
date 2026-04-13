@@ -1,6 +1,6 @@
 package com.chroniccare.controllers;
 
-import com.chroniccare.models.User;
+import com.chroniccare.entities.User;
 import com.chroniccare.services.UserService;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -69,7 +69,7 @@ public class RegisterController {
             User u = new User(
                     nomField.getText().trim(),
                     prenomField.getText().trim(),
-                    emailField.getText().trim(),
+                    emailField.getText().trim().toLowerCase(),
                     passwordField.getText(),
                     "[\"" + rolesCombo.getValue() + "\"]",
                     telephoneField.getText().trim(),

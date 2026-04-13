@@ -1,6 +1,6 @@
 package com.chroniccare.controllers;
 
-import com.chroniccare.models.User;
+import com.chroniccare.entities.User;
 import com.chroniccare.services.UserService;
 import com.chroniccare.utils.SessionManager;
 import javafx.fxml.FXML;
@@ -22,6 +22,9 @@ public class HomeController {
     @FXML private Button btnHome;
     @FXML private Button btnProfile;
     @FXML private Button btnUsers;
+    @FXML private Button btnProduits;
+    @FXML private Button btnPanier;
+    @FXML private Button btnCommandes;
     @FXML private Label topbarDate;
     @FXML private Label topbarAvatar;
     @FXML private Label topbarUserName;
@@ -75,6 +78,10 @@ public class HomeController {
                 statUsers.setText("-");
             }
         }
+
+        // Panier = uniquement pour Client (pas pour Admin)
+        btnPanier.setVisible(!isAdmin);
+        btnPanier.setManaged(!isAdmin);
     }
 
     @FXML
@@ -110,6 +117,30 @@ public class HomeController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    public void goToProduits() {
+        String fxml = SessionManager.getInstance().isAdmin()
+                ? "/com/chroniccare/Admin/ProduitsDashboard.fxml"
+                : "/com/chroniccare/Client/ProduitsDashboard.fxml";
+        navigate(btnProduits, fxml);
+    }
+
+    @FXML
+    public void goToPanier() {
+        if (SessionManager.getInstance().isAdmin()) {
+            return;
+        }
+        navigate(btnPanier, "/com/chroniccare/Client/Panier.fxml");
+    }
+
+    @FXML
+    public void goToCommandes() {
+        String fxml = SessionManager.getInstance().isAdmin()
+                ? "/com/chroniccare/Admin/CommandesDashboard.fxml"
+                : "/com/chroniccare/Client/CommandesDashboard.fxml";
+        navigate(btnCommandes, fxml);
     }
 
     @FXML
@@ -165,5 +196,14 @@ public class HomeController {
     private String capitalize(String s) {
         if (s == null || s.isEmpty()) return s;
         return Character.toUpperCase(s.charAt(0)) + s.substring(1).toLowerCase();
+    }
+
+    private void navigate(Button sourceButton, String fxml) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource(fxml));
+            sourceButton.getScene().setRoot(root);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
