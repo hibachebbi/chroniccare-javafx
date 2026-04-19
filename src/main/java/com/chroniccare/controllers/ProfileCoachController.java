@@ -8,7 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-
+import com.chroniccare.services.SecurityService;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -31,6 +31,7 @@ public class ProfileCoachController {
     @FXML private Label successLabel;
 
     private UserService userService = new UserService();
+    private SecurityService securityService = new SecurityService();
     private User currentUser;
 
     @FXML

@@ -7,6 +7,19 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.UUID;
+import javafx.scene.layout.VBox;
+import com.chroniccare.services.PatientMedicalRecordService;
+
 
 public class RegisterController {
 
@@ -18,8 +31,13 @@ public class RegisterController {
     @FXML private ComboBox<String> genreCombo;
     @FXML private ComboBox<String> rolesCombo;
     @FXML private Label errorLabel;
+    @FXML private ImageView photoPreview;
+    @FXML private VBox patientMedicalSection;
+    @FXML private TextField medicalConditionField;
 
-    private UserService userService = new UserService();
+    private final UserService userService = new UserService();
+    private final PatientMedicalRecordService patientMedicalRecordService = new PatientMedicalRecordService();
+    private File selectedPhotoFile;
 
     @FXML
     public void initialize() {
@@ -27,11 +45,37 @@ public class RegisterController {
         rolesCombo.setItems(FXCollections.observableArrayList(
                 "ROLE_PATIENT", "ROLE_COACH", "ROLE_NUTRITIONNISTE"
         ));
+
+        rolesCombo.valueProperty().addListener((obs, oldValue, newValue) -> {
+            boolean isPatient = "ROLE_PATIENT".equals(newValue);
+            patientMedicalSection.setVisible(isPatient);
+            patientMedicalSection.setManaged(isPatient);
+
+            if (!isPatient) {
+                medicalConditionField.clear();
+            }
+        });
+    }
+
+
+    @FXML
+    public void handleChoosePhoto() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choisir une photo de profil");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg")
+        );
+
+        File file = fileChooser.showOpenDialog(nomField.getScene().getWindow());
+
+        if (file != null) {
+            selectedPhotoFile = file;
+            photoPreview.setImage(new Image(file.toURI().toString()));
+        }
     }
 
     @FXML
     public void handleRegister() {
-        // Validation
         StringBuilder errors = new StringBuilder();
 
         if (nomField.getText().trim().isEmpty())
@@ -55,6 +99,11 @@ public class RegisterController {
         if (rolesCombo.getValue() == null)
             errors.append("• Rôle obligatoire\n");
 
+        if ("ROLE_PATIENT".equals(rolesCombo.getValue())
+                && (medicalConditionField.getText() == null || medicalConditionField.getText().trim().isEmpty())) {
+            errors.append("• Maladie principale obligatoire\n");
+        }
+
         if (errors.length() > 0) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erreurs de saisie");
@@ -64,7 +113,7 @@ public class RegisterController {
             return;
         }
 
-        // Création de l'utilisateur
+
         try {
             User u = new User(
                     nomField.getText().trim(),
@@ -75,20 +124,58 @@ public class RegisterController {
                     telephoneField.getText().trim(),
                     genreCombo.getValue()
             );
+            if ("ROLE_PATIENT".equals(rolesCombo.getValue())) {
+                u.setMedicalCondition(medicalConditionField.getText().trim());
+            }
+
+            if (selectedPhotoFile != null) {
+                String photoPath = savePhoto(selectedPhotoFile);
+                u.setPhotoProfil(photoPath);
+            }
 
             userService.insert(u);
 
+            if (u.getRoles() != null && u.getRoles().contains("ROLE_PATIENT")) {
+                User savedUser = userService.findByEmail(u.getEmail());
+                if (savedUser != null) {
+                    patientMedicalRecordService.createInitialRecord(savedUser.getId(), u.getMedicalCondition());
+                }
+            }
+
             Alert success = new Alert(Alert.AlertType.INFORMATION);
             success.setTitle("Succès");
+            success.setHeaderText(null);
             success.setContentText("Compte créé avec succès !");
-            success.show();
+            success.showAndWait();
 
-            // Retour au login
             goToLogin();
 
         } catch (Exception e) {
+            e.printStackTrace();
             errorLabel.setText("Erreur : " + e.getMessage());
         }
+    }
+
+    private String savePhoto(File photoFile) throws IOException {
+        File uploadDir = new File("uploads/profile");
+        if (!uploadDir.exists()) {
+            uploadDir.mkdirs();
+        }
+
+        String originalName = photoFile.getName();
+        String extension = "";
+
+        int dotIndex = originalName.lastIndexOf('.');
+        if (dotIndex >= 0) {
+            extension = originalName.substring(dotIndex);
+        }
+
+        String uniqueName = UUID.randomUUID() + extension;
+        Path destination = Paths.get(uploadDir.getPath(), uniqueName);
+
+        Files.copy(photoFile.toPath(), destination, StandardCopyOption.REPLACE_EXISTING);
+
+        return destination.toString();
     }
 
     @FXML

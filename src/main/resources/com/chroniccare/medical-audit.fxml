@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.chroniccare.controllers.MedicalAuditController"
+            prefWidth="1100" prefHeight="700"
+            stylesheets="@home-styles.css">
+
+    <left>
+        <VBox styleClass="sidebar" prefWidth="230" spacing="0">
+            <VBox styleClass="sidebar-brand" spacing="4">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="+" styleClass="brand-icon"/>
+                    <Label text="ChronicCare" styleClass="brand-title"/>
+                </HBox>
+                <Label text="Audit médical" styleClass="brand-subtitle"/>
+            </VBox>
+
+            <VBox styleClass="sidebar-user-card" spacing="6">
+                <Label fx:id="sidebarAvatar" styleClass="sidebar-avatar"/>
+                <Label fx:id="sidebarUserName" styleClass="sidebar-user-name"/>
+                <Label fx:id="sidebarRoleBadge" text="Administrateur" styleClass="sidebar-role-badge"/>
+            </VBox>
+
+            <Separator styleClass="sidebar-sep"/>
+
+            <VBox styleClass="nav-section" spacing="2" VBox.vgrow="ALWAYS">
+                <Label text="NAVIGATION" styleClass="nav-section-label"/>
+
+                <Button text="🏠  Accueil"
+                        styleClass="nav-btn"
+                        onAction="#goToHome"
+                        maxWidth="Infinity"/>
+
+                <Button text="👤  Mon Profil"
+                        styleClass="nav-btn"
+                        onAction="#goToProfile"
+                        maxWidth="Infinity"/>
+
+                <Button text="👥  Gestion Utilisateurs"
+                        styleClass="nav-btn"
+                        onAction="#goToUsers"
+                        maxWidth="Infinity"/>
+
+                <Button text="🔒  Comptes bloqués"
+                        styleClass="nav-btn"
+                        onAction="#goToBlockedAccounts"
+                        maxWidth="Infinity"/>
+
+                <Button text="📝  Audit médical"
+                        styleClass="nav-btn, nav-btn-active"
+                        onAction="#goToMedicalAudit"
+                        maxWidth="Infinity"/>
+
+                <Button text="📊  Statistiques"
+                        styleClass="nav-btn"
+                        onAction="#goToStats"
+                        maxWidth="Infinity"/>
+            </VBox>
+
+            <VBox styleClass="sidebar-bottom">
+                <Separator styleClass="sidebar-sep"/>
+                <Button text="⏻  Déconnexion"
+                        styleClass="nav-btn, nav-btn-logout"
+                        onAction="#handleLogout"
+                        maxWidth="Infinity"/>
+            </VBox>
+        </VBox>
+    </left>
+
+    <center>
+        <VBox styleClass="main-content" spacing="0">
+            <HBox styleClass="topbar" alignment="CENTER_LEFT" spacing="16">
+                <Label text="Audit médical" styleClass="page-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="topbarDate" styleClass="topbar-date"/>
+                <HBox styleClass="topbar-user-pill" alignment="CENTER" spacing="8">
+                    <Label fx:id="topbarAvatar" styleClass="topbar-avatar"/>
+                    <Label fx:id="topbarUserName" styleClass="topbar-username"/>
+                </HBox>
+            </HBox>
+
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="content-scroll">
+                <VBox spacing="20" styleClass="dashboard-body">
+
+                    <VBox styleClass="card" spacing="14">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label text="Journal des consultations et modifications" styleClass="card-title"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Button text="Rafraîchir" styleClass="btn-secondary" onAction="#refresh"/>
+                        </HBox>
+                        <Separator/>
+
+                        <TableView fx:id="auditTable" styleClass="modern-table" VBox.vgrow="ALWAYS">
+                            <columns>
+                                <TableColumn fx:id="dateCol" text="Date" prefWidth="160"/>
+                                <TableColumn fx:id="actorCol" text="Acteur" prefWidth="160"/>
+                                <TableColumn fx:id="roleCol" text="Rôle" prefWidth="130"/>
+                                <TableColumn fx:id="actionCol" text="Action" prefWidth="170"/>
+                                <TableColumn fx:id="targetCol" text="Patient" prefWidth="160"/>
+                                <TableColumn fx:id="detailsCol" text="Détails" prefWidth="280"/>
+                            </columns>
+                        </TableView>
+                    </VBox>
+
+                    <Label fx:id="errorLabel" styleClass="error-label" wrapText="true"/>
+                </VBox>
+            </ScrollPane>
+        </VBox>
+    </center>
+
+</BorderPane>
+

@@ -1,6 +1,7 @@
 package com.chroniccare.controllers;
 
 import com.chroniccare.models.User;
+import com.chroniccare.services.SecurityService;
 import com.chroniccare.services.UserService;
 import com.chroniccare.utils.SessionManager;
 import javafx.fxml.FXML;
@@ -17,6 +18,7 @@ public class LoginController {
     @FXML private Label errorLabel;
 
     private final UserService userService = new UserService();
+    private final SecurityService securityService = new SecurityService();
 
     @FXML
     public void handleLogin() {
@@ -29,14 +31,24 @@ public class LoginController {
         }
 
         if (!email.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
+            securityService.logInvalidEmailFormat(email);
             errorLabel.setText("Email invalide.");
             return;
         }
 
         try {
+            User existingUser = userService.findByEmail(email);
+
+            if (existingUser != null && securityService.isAccountLocked(existingUser)) {
+                securityService.logBlockedLogin(existingUser, email);
+                errorLabel.setText(securityService.getRemainingLockMessage(existingUser));
+                return;
+            }
+
             User user = userService.checkLogin(email, password);
 
             if (user == null) {
+                securityService.handleFailedLogin(existingUser, email);
                 errorLabel.setText("Email ou mot de passe incorrect.");
                 return;
             }
@@ -46,12 +58,12 @@ public class LoginController {
                 return;
             }
 
-            SessionManager.getInstance().setCurrentUser(user);
+            securityService.handleSuccessfulLogin(user);
 
-            // Tous les utilisateurs (admin inclus) passent par la page d'accueil commune
-            String fxmlPath = "/com/chroniccare/home.fxml";
+            User refreshedUser = userService.findByEmail(email);
+            SessionManager.getInstance().setCurrentUser(refreshedUser != null ? refreshedUser : user);
 
-            Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
+            Parent root = FXMLLoader.load(getClass().getResource("/com/chroniccare/home.fxml"));
             emailField.getScene().setRoot(root);
 
         } catch (Exception e) {
@@ -63,8 +75,7 @@ public class LoginController {
     @FXML
     public void goToRegister() {
         try {
-            Parent root = FXMLLoader.load(
-                    getClass().getResource("/com/chroniccare/register.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/com/chroniccare/register.fxml"));
             emailField.getScene().setRoot(root);
         } catch (Exception e) {
             e.printStackTrace();

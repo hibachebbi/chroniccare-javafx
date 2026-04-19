@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.geometry.*?>
 
 <StackPane xmlns:fx="http://javafx.com/fxml"
            fx:controller="com.chroniccare.controllers.RegisterController"
@@ -164,12 +166,55 @@
                                          -fx-background-radius: 8; -fx-border-radius: 8;
                                          -fx-border-color: #e2e8f0;"/>
                     </VBox>
+                    <VBox spacing="8" style="-fx-pref-width: 400; -fx-padding: 0 0 12 0;">
+                        <Label text="Photo de profil"
+                               style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #374151;"/>
 
+                        <HBox spacing="12" alignment="CENTER_LEFT">
+                            <ImageView fx:id="photoPreview"
+                                       fitWidth="72"
+                                       fitHeight="72"
+                                       preserveRatio="true"
+                                       style="-fx-background-color: #f8fafc;
+                          -fx-border-color: #e2e8f0;
+                          -fx-border-radius: 10;
+                          -fx-background-radius: 10;"/>
+
+                            <VBox spacing="8">
+                                <Button text="Choisir une photo"
+                                        onAction="#handleChoosePhoto"
+                                        style="-fx-background-color: white;
+                           -fx-text-fill: #2563eb;
+                           -fx-font-size: 12;
+                           -fx-font-weight: bold;
+                           -fx-cursor: hand;
+                           -fx-background-radius: 8;
+                           -fx-border-color: #bfdbfe;
+                           -fx-border-radius: 8;
+                           -fx-padding: 8 14;"/>
+
+                                <Label text="PNG, JPG ou JPEG"
+                                       style="-fx-font-size: 11; -fx-text-fill: #64748b;"/>
+                            </VBox>
+                        </HBox>
+                    </VBox>
                     <!-- Error -->
                     <Label fx:id="errorLabel"
                            style="-fx-text-fill: #dc2626; -fx-font-size: 12;
                                   -fx-pref-width: 400; -fx-padding: 4 0 8 0;"/>
-
+                    <VBox fx:id="patientMedicalSection" spacing="0" visible="false" managed="false"
+                          style="-fx-pref-width: 400; -fx-padding: 0 0 14 0;">
+                        <VBox spacing="5">
+                            <Label text="Maladie principale"
+                                   style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                            <TextField fx:id="medicalConditionField"
+                                       promptText="Ex: diabète, hypertension, asthme..."
+                                       style="-fx-pref-height: 40; -fx-font-size: 13;
+                                              -fx-background-radius: 8; -fx-border-radius: 8;
+                                              -fx-border-color: #e2e8f0; -fx-border-width: 1.5;
+                                              -fx-background-color: #f8fafc; -fx-padding: 0 12;"/>
+                        </VBox>
+                    </VBox>
                     <!-- Register button -->
                     <Button text="Creer mon compte"
                             onAction="#handleRegister"

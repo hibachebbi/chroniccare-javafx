@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.chroniccare.controllers.StatsController"
+            prefWidth="1100" prefHeight="700"
+            stylesheets="@home-styles.css">
+
+    <left>
+        <VBox fx:id="sidebar" styleClass="sidebar" prefWidth="230" spacing="0">
+            <VBox styleClass="sidebar-brand" spacing="4">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="✚" styleClass="brand-icon"/>
+                    <Label text="ChronicCare" styleClass="brand-title"/>
+                </HBox>
+                <Label text="Suivi médical intelligent" styleClass="brand-subtitle"/>
+            </VBox>
+            <VBox styleClass="sidebar-user-card" spacing="6">
+                <Label fx:id="sidebarAvatar" styleClass="sidebar-avatar"/>
+                <Label fx:id="sidebarUserName" styleClass="sidebar-user-name"/>
+                <Label fx:id="sidebarRoleBadge" styleClass="sidebar-role-badge"/>
+            </VBox>
+            <Separator styleClass="sidebar-sep"/>
+            <VBox styleClass="nav-section" spacing="2" VBox.vgrow="ALWAYS">
+                <Label text="NAVIGATION" styleClass="nav-section-label"/>
+                <Button text="🏠  Accueil"
+                        styleClass="nav-btn"
+                        onAction="#goToHome" maxWidth="Infinity"/>
+                <Button text="👤  Mon Profil"
+                        styleClass="nav-btn"
+                        onAction="#goToProfile" maxWidth="Infinity"/>
+                <Button fx:id="btnUsers" text="👥  Gestion Utilisateurs"
+                        styleClass="nav-btn"
+                        onAction="#goToUsers" maxWidth="Infinity"/>
+                <Button text="🔒 Comptes bloqués"
+                        styleClass="nav-btn"
+                        onAction="#goToBlockedAccounts"
+                        maxWidth="Infinity"/>
+                <Button text="📝  Audit médical"
+                        styleClass="nav-btn"
+                        onAction="#goToMedicalAudit"
+                        maxWidth="Infinity"/>
+                <Button text="📊  Statistiques"
+                        styleClass="nav-btn, nav-btn-active" maxWidth="Infinity"/>
+            </VBox>
+            <VBox styleClass="sidebar-bottom">
+                <Separator styleClass="sidebar-sep"/>
+                <Button text="⏻  Déconnexion"
+                        styleClass="nav-btn, nav-btn-logout"
+                        onAction="#handleLogout" maxWidth="Infinity"/>
+            </VBox>
+        </VBox>
+    </left>
+
+    <center>
+        <VBox styleClass="main-content" spacing="0">
+            <HBox styleClass="topbar" alignment="CENTER_LEFT" spacing="16">
+                <Label text="Statistiques" styleClass="page-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="topbarDate" styleClass="topbar-date"/>
+                <HBox styleClass="topbar-user-pill" alignment="CENTER" spacing="8">
+                    <Label fx:id="topbarAvatar" styleClass="topbar-avatar"/>
+                    <Label fx:id="topbarUserName" styleClass="topbar-username"/>
+                </HBox>
+            </HBox>
+
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="content-scroll">
+                <VBox spacing="24" styleClass="dashboard-body">
+
+                    <!-- Cartes résumé -->
+                    <HBox spacing="16">
+                        <VBox styleClass="stat-card, stat-blue" spacing="8" HBox.hgrow="ALWAYS">
+                            <Label text="👥  Total utilisateurs" styleClass="stat-label"/>
+                            <Label fx:id="statTotal" text="—" styleClass="stat-value"/>
+                        </VBox>
+                        <VBox styleClass="stat-card, stat-green" spacing="8" HBox.hgrow="ALWAYS">
+                            <Label text="🧑  Hommes" styleClass="stat-label"/>
+                            <Label fx:id="statHommes" text="—" styleClass="stat-value"/>
+                        </VBox>
+                        <VBox styleClass="stat-card, stat-purple" spacing="8" HBox.hgrow="ALWAYS">
+                            <Label text="👩  Femmes" styleClass="stat-label"/>
+                            <Label fx:id="statFemmes" text="—" styleClass="stat-value"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Deux graphiques côte à côte -->
+                    <HBox spacing="16" alignment="TOP_LEFT">
+
+                        <!-- Camembert rôles -->
+                        <VBox styleClass="card" spacing="16" HBox.hgrow="ALWAYS">
+                            <HBox alignment="CENTER_LEFT" spacing="10">
+                                <Label text="🎭" styleClass="card-icon"/>
+                                <Label text="Répartition par rôle" styleClass="card-title"/>
+                            </HBox>
+                            <Separator/>
+                            <Canvas fx:id="canvasRoles" width="380" height="280"/>
+                            <VBox fx:id="legendeRoles" spacing="6"/>
+                        </VBox>
+
+                        <!-- Camembert genre -->
+                        <VBox styleClass="card" spacing="16" HBox.hgrow="ALWAYS">
+                            <HBox alignment="CENTER_LEFT" spacing="10">
+                                <Label text="⚧" styleClass="card-icon"/>
+                                <Label text="Répartition par genre" styleClass="card-title"/>
+                            </HBox>
+                            <Separator/>
+                            <Canvas fx:id="canvasGenre" width="380" height="280"/>
+                            <VBox fx:id="legendeGenre" spacing="6"/>
+                        </VBox>
+
+                    </HBox>
+                </VBox>
+            </ScrollPane>
+        </VBox>
+    </center>
+
+</BorderPane>

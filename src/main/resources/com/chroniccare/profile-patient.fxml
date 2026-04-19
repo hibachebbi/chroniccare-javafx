@@ -17,12 +17,15 @@
                 </HBox>
                 <Label text="Suivi médical intelligent" styleClass="brand-subtitle"/>
             </VBox>
+
             <VBox styleClass="sidebar-user-card" spacing="6">
                 <Label fx:id="sidebarAvatar" styleClass="sidebar-avatar"/>
                 <Label fx:id="sidebarUserName" styleClass="sidebar-user-name"/>
                 <Label text="Patient" styleClass="sidebar-role-badge"/>
             </VBox>
+
             <Separator styleClass="sidebar-sep"/>
+
             <VBox styleClass="nav-section" spacing="2" VBox.vgrow="ALWAYS">
                 <Label text="NAVIGATION" styleClass="nav-section-label"/>
                 <Button text="Accueil" styleClass="nav-btn"
@@ -36,6 +39,7 @@
                 <Button text="Medicaments" styleClass="nav-btn" maxWidth="Infinity"/>
                 <Button text="Mes Statistiques" styleClass="nav-btn" maxWidth="Infinity"/>
             </VBox>
+
             <VBox styleClass="sidebar-bottom">
                 <Separator styleClass="sidebar-sep"/>
                 <Button text="Deconnexion" styleClass="nav-btn, nav-btn-logout"
@@ -69,6 +73,7 @@
                         <VBox styleClass="card" spacing="16" HBox.hgrow="ALWAYS">
                             <Label text="Informations personnelles" styleClass="card-title"/>
                             <Separator/>
+
                             <HBox spacing="16">
                                 <VBox spacing="6" HBox.hgrow="ALWAYS">
                                     <Label text="Nom" styleClass="info-label"/>
@@ -81,11 +86,13 @@
                                                style="-fx-pref-height: 38; -fx-font-size: 13; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #e2e8f0; -fx-border-width: 1.5;"/>
                                 </VBox>
                             </HBox>
+
                             <VBox spacing="6">
                                 <Label text="Email" styleClass="info-label"/>
                                 <TextField fx:id="emailField" promptText="Votre email"
                                            style="-fx-pref-height: 38; -fx-font-size: 13; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #e2e8f0; -fx-border-width: 1.5;"/>
                             </VBox>
+
                             <HBox spacing="16">
                                 <VBox spacing="6" HBox.hgrow="ALWAYS">
                                     <Label text="Telephone" styleClass="info-label"/>
@@ -103,12 +110,14 @@
                         <VBox styleClass="card, card-tips" spacing="16" prefWidth="300">
                             <Label text="Informations medicales" styleClass="card-title"/>
                             <Separator/>
+
                             <VBox spacing="6">
                                 <Label text="Condition medicale" styleClass="info-label"/>
                                 <TextField fx:id="medicalField"
                                            promptText="Ex: hypertension, diabete..."
                                            style="-fx-pref-height: 38; -fx-font-size: 13; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #fde68a; -fx-border-width: 1.5;"/>
                             </VBox>
+
                             <VBox spacing="6">
                                 <Label text="Conseil" styleClass="tip-title"/>
                                 <Label text="Maintenir vos informations medicales a jour permet a votre equipe soignante de mieux vous accompagner."
@@ -116,6 +125,84 @@
                             </VBox>
                         </VBox>
                     </HBox>
+
+                    <VBox styleClass="card" spacing="16">
+                        <Label text="Dossier medical intelligent" styleClass="card-title"/>
+                        <Separator/>
+
+                        <VBox spacing="10">
+                            <Label text="Questionnaire selon la maladie" styleClass="info-label"/>
+                            <HBox spacing="10">
+                                <Button text="Charger questionnaire"
+                                        onAction="#loadQuestionnaire"
+                                        styleClass="btn-primary"/>
+                                <Button text="Generer dossier IA"
+                                        onAction="#handleGenerateAI"
+                                        styleClass="btn-primary"/>
+                            </HBox>
+                        </VBox>
+
+                        <VBox fx:id="questionnaireBox" spacing="10" visible="false" managed="false"/>
+
+                        <Separator/>
+
+                        <VBox spacing="10">
+                            <Label text="Dossier médical" styleClass="info-label"/>
+                            <TabPane fx:id="recordTabs"
+                                     prefHeight="260"
+                                     styleClass="record-tabs"
+                                     style="-fx-background-color: transparent;">
+                                <tabs>
+                                    <Tab text="Aperçu" closable="false">
+                                        <content>
+                                            <ScrollPane fitToWidth="true"
+                                                        style="-fx-background-color: transparent; -fx-background: transparent;">
+                                                <VBox fx:id="recordPreviewBox"
+                                                      spacing="10"
+                                                      style="-fx-padding: 8;"/>
+                                            </ScrollPane>
+                                        </content>
+                                    </Tab>
+                                    <Tab text="Édition" closable="false">
+                                        <content>
+                                            <TextArea fx:id="aiResultArea"
+                                                      prefHeight="220"
+                                                      wrapText="true"
+                                                      promptText="Le dossier médical généré par IA apparaîtra ici..."/>
+                                        </content>
+                                    </Tab>
+                                </tabs>
+                            </TabPane>
+                        </VBox>
+
+                        <HBox spacing="10">
+                            <Button text="Importer PDF"
+                                    onAction="#handleImportPdf"
+                                    styleClass="btn-primary"/>
+                            <Button text="Exporter PDF"
+                                    onAction="#handleExportPdf"
+                                    styleClass="btn-primary"/>
+                        </HBox>
+
+                        <Separator/>
+
+                        <VBox spacing="10">
+                            <Label text="Ajouter une maladie secondaire" styleClass="info-label"/>
+                            <HBox spacing="10">
+                                <TextField fx:id="newConditionField"
+                                           promptText="Nouvelle maladie"
+                                           HBox.hgrow="ALWAYS"/>
+                                <Button text="Ajouter maladie"
+                                        onAction="#handleAddCondition"
+                                        styleClass="btn-primary"/>
+                            </HBox>
+                        </VBox>
+
+                        <VBox spacing="10">
+                            <Label text="Maladies secondaires" styleClass="info-label"/>
+                            <VBox fx:id="secondaryConditionsBox" spacing="8"/>
+                        </VBox>
+                    </VBox>
 
                     <Label fx:id="errorLabel" styleClass="error-label" wrapText="true"/>
                     <Label fx:id="successLabel" styleClass="success-label" wrapText="true"/>

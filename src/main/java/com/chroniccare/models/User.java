@@ -1,5 +1,7 @@
 package com.chroniccare.models;
 
+import java.sql.Timestamp;
+
 public class User {
     private int id;
     private String nom;
@@ -13,6 +15,19 @@ public class User {
     private String medicalCondition;
     private String photoProfil;
     private boolean isActive;
+    private int activityScore;
+    private boolean mostActive;
+    private String activityBadge;
+    private String activityReward;
+
+    private int failedLoginCount;
+    private Timestamp lastFailedLoginAt;
+    private Timestamp securityBlockedUntil;
+
+    private String securityBlockReason;
+    private boolean securityManualLocked;
+    private Timestamp securityLockedAt;
+    private Integer securityLockedByAdmin;
 
     public User() {}
 
@@ -65,4 +80,37 @@ public class User {
 
     public boolean isActive() { return isActive; }
     public void setActive(boolean active) { isActive = active; }
+
+    public int getActivityScore() { return activityScore; }
+    public void setActivityScore(int activityScore) { this.activityScore = activityScore; }
+
+    public boolean isMostActive() { return mostActive; }
+    public void setMostActive(boolean mostActive) { this.mostActive = mostActive; }
+
+    public String getActivityBadge() { return activityBadge; }
+    public void setActivityBadge(String activityBadge) { this.activityBadge = activityBadge; }
+
+    public String getActivityReward() { return activityReward; }
+    public void setActivityReward(String activityReward) { this.activityReward = activityReward; }
+
+    public int getFailedLoginCount() { return failedLoginCount; }
+    public void setFailedLoginCount(int failedLoginCount) { this.failedLoginCount = failedLoginCount; }
+
+    public Timestamp getLastFailedLoginAt() { return lastFailedLoginAt; }
+    public void setLastFailedLoginAt(Timestamp lastFailedLoginAt) { this.lastFailedLoginAt = lastFailedLoginAt; }
+
+    public Timestamp getSecurityBlockedUntil() { return securityBlockedUntil; }
+    public void setSecurityBlockedUntil(Timestamp securityBlockedUntil) { this.securityBlockedUntil = securityBlockedUntil; }
+
+    public String getSecurityBlockReason() { return securityBlockReason; }
+    public void setSecurityBlockReason(String securityBlockReason) { this.securityBlockReason = securityBlockReason; }
+
+    public boolean isSecurityManualLocked() { return securityManualLocked; }
+    public void setSecurityManualLocked(boolean securityManualLocked) { this.securityManualLocked = securityManualLocked; }
+
+    public Timestamp getSecurityLockedAt() { return securityLockedAt; }
+    public void setSecurityLockedAt(Timestamp securityLockedAt) { this.securityLockedAt = securityLockedAt; }
+
+    public Integer getSecurityLockedByAdmin() { return securityLockedByAdmin; }
+    public void setSecurityLockedByAdmin(Integer securityLockedByAdmin) { this.securityLockedByAdmin = securityLockedByAdmin; }
 }
