@@ -438,6 +438,24 @@ public class ListUsersController {
         }
     }
 
+    @FXML
+    public void goToPatientSegmentation() {
+        if (!SessionManager.getInstance().isAdmin()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Accès refusé");
+            alert.setHeaderText(null);
+            alert.setContentText("Seul l'administrateur peut accéder à la segmentation patients.");
+            alert.showAndWait();
+            return;
+        }
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/com/chroniccare/patient-segmentation.fxml"));
+            usersTable.getScene().setRoot(root);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private String formatRole(String role) {
         if (role == null) return "Utilisateur";
         if (role.contains("ROLE_ADMIN")) return "Admin";

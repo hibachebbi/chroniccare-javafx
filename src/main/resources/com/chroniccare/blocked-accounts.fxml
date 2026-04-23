@@ -17,6 +17,7 @@
                 <Button text="👥 Gestion Utilisateurs" styleClass="nav-btn" onAction="#goToUsers" maxWidth="Infinity"/>
                 <Button text="🔒 Comptes bloqués" styleClass="nav-btn nav-btn-active" onAction="#goToBlockedAccounts" maxWidth="Infinity"/>
                 <Button text="📝 Audit médical" styleClass="nav-btn" onAction="#goToMedicalAudit" maxWidth="Infinity"/>
+                <Button text="🧩 Segmentation patients" styleClass="nav-btn" onAction="#goToPatientSegmentation" maxWidth="Infinity"/>
                 <Button text="📊 Statistiques" styleClass="nav-btn" onAction="#goToStats" maxWidth="Infinity"/>
             </VBox>
 

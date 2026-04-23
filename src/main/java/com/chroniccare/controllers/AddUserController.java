@@ -2,6 +2,7 @@ package com.chroniccare.controllers;
 
 import com.chroniccare.models.User;
 import com.chroniccare.services.UserService;
+import com.chroniccare.utils.PasswordUtils;
 import com.chroniccare.utils.SessionManager;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -84,7 +85,7 @@ public class AddUserController {
                     nomField.getText().trim(),
                     prenomField.getText().trim(),
                     emailField.getText().trim(),
-                    passwordField.getText(),
+                    PasswordUtils.hash(passwordField.getText()),
                     "[\"" + rolesCombo.getValue() + "\"]",
                     telephoneField.getText().trim(),
                     genreCombo.getValue()

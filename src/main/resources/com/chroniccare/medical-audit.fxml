@@ -54,6 +54,11 @@
                         onAction="#goToMedicalAudit"
                         maxWidth="Infinity"/>
 
+                <Button text="🧩  Segmentation patients"
+                        styleClass="nav-btn"
+                        onAction="#goToPatientSegmentation"
+                        maxWidth="Infinity"/>
+
                 <Button text="📊  Statistiques"
                         styleClass="nav-btn"
                         onAction="#goToStats"
@@ -112,4 +117,3 @@
     </center>
 
 </BorderPane>
-

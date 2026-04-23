@@ -1,0 +1,13 @@
+# Copiez ce fichier en `google-oauth.properties` (même dossier que `pom.xml`)
+# et remplacez les valeurs ci-dessous.
+#
+# IMPORTANT : ne versionnez pas `google-oauth.properties` (il est ignoré par .gitignore).
+#
+# Étapes (résumé) :
+# 1) Google Cloud Console -> APIs & Services -> Credentials -> Create credentials -> OAuth client ID
+# 2) Type : Desktop app
+# 3) Copiez le Client ID + Client secret ici
+
+GOOGLE_CLIENT_ID=VOTRE_CLIENT_ID.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=VOTRE_CLIENT_SECRET
+

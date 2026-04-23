@@ -267,6 +267,20 @@ public class StatsController {
         naviguer("/com/chroniccare/medical-audit.fxml");
     }
 
+    @FXML
+    public void goToPatientSegmentation() {
+        if (!SessionManager.getInstance().isAdmin()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Accès refusé");
+            alert.setHeaderText(null);
+            alert.setContentText("Seul l'administrateur peut accéder à la segmentation patients.");
+            alert.show();
+            Platform.runLater(this::goToHome);
+            return;
+        }
+        naviguer("/com/chroniccare/patient-segmentation.fxml");
+    }
+
 
     @FXML
     public void handleLogout() {

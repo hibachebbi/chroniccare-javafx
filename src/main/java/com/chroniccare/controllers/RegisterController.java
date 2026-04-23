@@ -19,6 +19,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 import javafx.scene.layout.VBox;
 import com.chroniccare.services.PatientMedicalRecordService;
+import com.chroniccare.utils.PasswordUtils;
 
 
 public class RegisterController {
@@ -119,7 +120,7 @@ public class RegisterController {
                     nomField.getText().trim(),
                     prenomField.getText().trim(),
                     emailField.getText().trim(),
-                    passwordField.getText(),
+                    PasswordUtils.hash(passwordField.getText()),
                     "[\"" + rolesCombo.getValue() + "\"]",
                     telephoneField.getText().trim(),
                     genreCombo.getValue()

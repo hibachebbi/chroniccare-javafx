@@ -60,6 +60,10 @@
                         styleClass="nav-btn"
                         onAction="#goToMedicalAudit"
                         maxWidth="Infinity"/>
+                <Button fx:id="btnPatientSegmentation" text="🧩  Segmentation patients"
+                        styleClass="nav-btn"
+                        onAction="#goToPatientSegmentation"
+                        maxWidth="Infinity"/>
             </VBox>
             <VBox styleClass="sidebar-bottom">
                 <Separator styleClass="sidebar-sep"/>

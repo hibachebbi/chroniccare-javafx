@@ -103,8 +103,16 @@
                                       -fx-padding: 0 14; -fx-background-color: #f8fafc;"/>
             </VBox>
 
+            <!-- Forgot password -->
+            <HBox alignment="CENTER_RIGHT" style="-fx-pref-width: 360; -fx-padding: 0 0 8 0;">
+                <Hyperlink text="Mot de passe oublié ?"
+                           onAction="#goToForgotPassword"
+                           style="-fx-font-size: 12; -fx-text-fill: #2563eb; -fx-border-width: 0;"/>
+            </HBox>
+
             <!-- Error -->
             <Label fx:id="errorLabel"
+                   wrapText="true"
                    style="-fx-text-fill: #dc2626; -fx-font-size: 12;
                           -fx-pref-width: 360; -fx-padding: 4 0 8 0;"/>
 
@@ -123,6 +131,18 @@
                 <Label text="ou" style="-fx-text-fill: #94a3b8; -fx-font-size: 12;"/>
                 <Separator HBox.hgrow="ALWAYS"/>
             </HBox>
+
+            <!-- Google button -->
+            <Button text="Continuer avec Google"
+                    onAction="#handleGoogleLogin"
+                    style="-fx-pref-width: 360; -fx-pref-height: 44;
+                           -fx-background-color: white; -fx-text-fill: #0f172a;
+                           -fx-font-size: 13; -fx-font-weight: bold;
+                           -fx-cursor: hand; -fx-background-radius: 10;
+                           -fx-border-color: #e2e8f0; -fx-border-width: 1.5;"/>
+
+            <Label text=""
+                   style="-fx-pref-height: 10;"/>
 
             <!-- Register link -->
             <VBox alignment="CENTER" spacing="4">

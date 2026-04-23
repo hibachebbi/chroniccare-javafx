@@ -209,6 +209,11 @@ public class BlockedAccountsController {
     }
 
     @FXML
+    public void goToPatientSegmentation() {
+        navigate("/com/chroniccare/patient-segmentation.fxml");
+    }
+
+    @FXML
     public void goToBlockedAccounts() {
     }
 

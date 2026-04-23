@@ -134,6 +134,11 @@ public class MedicalAuditController {
     }
 
     @FXML
+    public void goToPatientSegmentation() {
+        navigate("/com/chroniccare/patient-segmentation.fxml");
+    }
+
+    @FXML
     public void goToProfile() {
         navigate("/com/chroniccare/list-users.fxml");
     }
@@ -161,4 +166,3 @@ public class MedicalAuditController {
         return p + n;
     }
 }
-

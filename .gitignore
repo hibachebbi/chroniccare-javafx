@@ -8,10 +8,18 @@ target/
 .idea/modules.xml
 .idea/jarRepositories.xml
 .idea/compiler.xml
+.idea/workspace.xml
 .idea/libraries/
+.idea/runConfigurations/
 *.iws
 *.iml
 *.ipr
+
+### Local secrets ###
+smtp.properties
+google-oauth.properties
+.env
+*.env
 
 ### Eclipse ###
 .apt_generated

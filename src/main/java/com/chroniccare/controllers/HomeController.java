@@ -34,6 +34,7 @@ public class HomeController {
     @FXML private Button btnStats;
     @FXML private Button btnBlockedAccounts;
     @FXML private Button btnMedicalAudit;
+    @FXML private Button btnPatientSegmentation;
 
     @FXML private Label topbarDate;
     @FXML private Label topbarAvatar;
@@ -97,6 +98,10 @@ public class HomeController {
         if (btnMedicalAudit != null) {
             btnMedicalAudit.setVisible(isAdmin);
             btnMedicalAudit.setManaged(isAdmin);
+        }
+        if (btnPatientSegmentation != null) {
+            btnPatientSegmentation.setVisible(isAdmin);
+            btnPatientSegmentation.setManaged(isAdmin);
         }
 
         if (isAdmin) {
@@ -204,6 +209,24 @@ public class HomeController {
         }
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/com/chroniccare/medical-audit.fxml"));
+            btnHome.getScene().setRoot(root);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void goToPatientSegmentation() {
+        if (!SessionManager.getInstance().isAdmin()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Accès refusé");
+            alert.setHeaderText(null);
+            alert.setContentText("Seul l'administrateur peut accéder à la segmentation patients.");
+            alert.showAndWait();
+            return;
+        }
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/com/chroniccare/patient-segmentation.fxml"));
             btnHome.getScene().setRoot(root);
         } catch (Exception e) {
             e.printStackTrace();
