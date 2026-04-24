@@ -58,6 +58,7 @@
                             <TextField fx:id="searchField" promptText="Rechercher un participant..."
                                        HBox.hgrow="ALWAYS" styleClass="filter-field"/>
                             <Button text="Rechercher" styleClass="btn-primary" onAction="#handleSearch"/>
+                            <Button fx:id="exportCsvButton" text="Exporter CSV" styleClass="btn-secondary" onAction="#handleExportCsv"/>
                             <Button text="Réinitialiser" styleClass="btn-secondary" onAction="#handleReset"/>
                             <Button text="Retour aux événements" styleClass="btn-secondary" onAction="#goToEvents"/>
                         </HBox>

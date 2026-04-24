@@ -352,6 +352,7 @@ public class CoachExercisesController {
 
     private void navigate(String fxmlPath) {
         try {
+            releaseViewMemory();
             Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
             exercisesTable.getScene().setRoot(root);
         } catch (Exception e) {
@@ -373,5 +374,11 @@ public class CoachExercisesController {
         String nom = user.getNom() != null && !user.getNom().isEmpty()
                 ? String.valueOf(user.getNom().charAt(0)).toUpperCase() : "";
         return prenom + nom;
+    }
+
+    private void releaseViewMemory() {
+        exercisesTable.setItems(FXCollections.emptyObservableList());
+        displayedExercises.clear();
+        allExercises.clear();
     }
 }

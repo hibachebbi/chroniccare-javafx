@@ -30,6 +30,83 @@ public class ExerciseService {
         return exercises;
     }
 
+    public List<Exercise> getByCoachId(int coachId, int limit) throws SQLException {
+        if (limit <= 0) {
+            return getByCoachId(coachId);
+        }
+
+        String sql = "SELECT ex.*, ev.titre AS evenement_titre " +
+                "FROM exercice ex " +
+                "JOIN evenement ev ON ev.id = ex.evenement_id " +
+                "WHERE ev.coach_id=? " +
+                "ORDER BY ex.id DESC " +
+                "LIMIT ?";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, coachId);
+        ps.setInt(2, limit);
+
+        ResultSet rs = ps.executeQuery();
+        List<Exercise> exercises = new ArrayList<>();
+        while (rs.next()) {
+            exercises.add(mapExercise(rs));
+        }
+        return exercises;
+    }
+
+    public List<Exercise> getByCoachIdForSelection(int coachId) throws SQLException {
+        String sql = "SELECT ex.id, ex.nom, ex.duree, ex.repetitions, ev.titre AS evenement_titre " +
+                "FROM exercice ex " +
+                "JOIN evenement ev ON ev.id = ex.evenement_id " +
+                "WHERE ev.coach_id=? " +
+                "ORDER BY ex.id DESC";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, coachId);
+
+        ResultSet rs = ps.executeQuery();
+        List<Exercise> exercises = new ArrayList<>();
+        while (rs.next()) {
+            Exercise exercise = new Exercise();
+            exercise.setId(rs.getInt("id"));
+            exercise.setNom(rs.getString("nom"));
+            exercise.setDuree(rs.getInt("duree"));
+            int repetitions = rs.getInt("repetitions");
+            exercise.setRepetitions(rs.wasNull() ? null : repetitions);
+            exercise.setEvenementTitre(rs.getString("evenement_titre"));
+            exercises.add(exercise);
+        }
+        return exercises;
+    }
+
+    public List<Exercise> getByCoachIdForSelection(int coachId, int limit) throws SQLException {
+        if (limit <= 0) {
+            return getByCoachIdForSelection(coachId);
+        }
+
+        String sql = "SELECT ex.id, ex.nom, ex.duree, ex.repetitions, ev.titre AS evenement_titre " +
+                "FROM exercice ex " +
+                "JOIN evenement ev ON ev.id = ex.evenement_id " +
+                "WHERE ev.coach_id=? " +
+                "ORDER BY ex.id DESC " +
+                "LIMIT ?";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, coachId);
+        ps.setInt(2, limit);
+
+        ResultSet rs = ps.executeQuery();
+        List<Exercise> exercises = new ArrayList<>();
+        while (rs.next()) {
+            Exercise exercise = new Exercise();
+            exercise.setId(rs.getInt("id"));
+            exercise.setNom(rs.getString("nom"));
+            exercise.setDuree(rs.getInt("duree"));
+            int repetitions = rs.getInt("repetitions");
+            exercise.setRepetitions(rs.wasNull() ? null : repetitions);
+            exercise.setEvenementTitre(rs.getString("evenement_titre"));
+            exercises.add(exercise);
+        }
+        return exercises;
+    }
+
     public List<Exercise> getByEventId(int eventId, int coachId) throws SQLException {
         String sql = "SELECT ex.*, ev.titre AS evenement_titre " +
                 "FROM exercice ex " +

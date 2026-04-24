@@ -5,12 +5,15 @@ import com.chroniccare.models.Exercise;
 import com.chroniccare.models.User;
 import com.chroniccare.services.EventService;
 import com.chroniccare.services.ExerciseService;
+import com.chroniccare.services.OpenAiSuggestionService;
 import com.chroniccare.utils.FormValidationUtils;
 import com.chroniccare.utils.SessionManager;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
@@ -37,10 +40,13 @@ public class EditExerciseController {
     @FXML private TextField repetitionsField;
     @FXML private ComboBox<Event> eventCombo;
     @FXML private TextArea descriptionArea;
+    @FXML private Button suggestDescriptionButton;
+    @FXML private Label aiSuggestionLabel;
     @FXML private Label errorLabel;
 
     private final ExerciseService exerciseService = new ExerciseService();
     private final EventService eventService = new EventService();
+    private final OpenAiSuggestionService openAiSuggestionService = new OpenAiSuggestionService();
     private User currentUser;
     private Exercise currentExercise;
 
@@ -93,6 +99,41 @@ public class EditExerciseController {
         } catch (Exception e) {
             showError("Erreur enregistrement : " + e.getMessage());
         }
+    }
+
+    @FXML
+    public void handleSuggestDescription() {
+        String nom = nomField.getText() == null ? "" : nomField.getText().trim();
+        if (nom.isEmpty()) {
+            setAiSuggestionState(false, "Renseigne au moins le nom de l'exercice avant la suggestion.");
+            return;
+        }
+
+        setAiSuggestionState(true, "Generation IA en cours...");
+        String duration = dureeField.getText() == null ? "" : dureeField.getText().trim();
+        String reps = repetitionsField.getText() == null ? "" : repetitionsField.getText().trim();
+        Event selectedEvent = eventCombo.getValue();
+        String eventTitle = selectedEvent != null ? selectedEvent.getTitre() : "";
+
+        Thread aiThread = new Thread(() -> {
+            try {
+                String suggestion = openAiSuggestionService.suggestExerciseDescription(
+                        nom,
+                        duration,
+                        reps,
+                        eventTitle
+                );
+                Platform.runLater(() -> {
+                    descriptionArea.setText(suggestion);
+                    setAiSuggestionState(false, "Description suggeree. Tu peux la modifier.");
+                    refreshValidationFeedback();
+                });
+            } catch (Exception e) {
+                Platform.runLater(() -> setAiSuggestionState(false, "IA indisponible : " + e.getMessage()));
+            }
+        });
+        aiThread.setDaemon(true);
+        aiThread.start();
     }
 
     @FXML
@@ -227,6 +268,15 @@ public class EditExerciseController {
     private void refreshValidationFeedback() {
         if (errorLabel.isVisible()) {
             validateForm();
+        }
+    }
+
+    private void setAiSuggestionState(boolean loading, String message) {
+        if (suggestDescriptionButton != null) {
+            suggestDescriptionButton.setDisable(loading);
+        }
+        if (aiSuggestionLabel != null) {
+            aiSuggestionLabel.setText(message);
         }
     }
 

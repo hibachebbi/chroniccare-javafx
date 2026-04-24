@@ -93,10 +93,13 @@
                             <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="1">
                                 <Label text="Lieu" styleClass="info-label"/>
                                 <TextField fx:id="lieuField" styleClass="filter-field"/>
+                                <Label fx:id="locationApiLabel" styleClass="location-preview-label" wrapText="true" text="📍 Saisissez un lieu tunisien"/>
+                                <Label fx:id="weatherPreviewLabel" styleClass="weather-preview-label" wrapText="true" text="📍 Saisissez un lieu"/>
                             </VBox>
                             <VBox spacing="6" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                 <Label text="Date debut" styleClass="info-label"/>
                                 <DatePicker fx:id="dateDebutPicker"/>
+                                <Label fx:id="holidayInfoLabel" styleClass="holiday-preview-label" wrapText="true" text="📅 Sélectionnez une date"/>
                             </VBox>
                             <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="2">
                                 <Label text="Heure debut (HH:mm)" styleClass="info-label"/>
@@ -113,6 +116,12 @@
                             <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="4" GridPane.columnSpan="2">
                                 <Label text="Description" styleClass="info-label"/>
                                 <TextArea fx:id="descriptionArea" prefRowCount="6" wrapText="true"/>
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <Button fx:id="suggestDescriptionButton" text="Suggérer via IA" styleClass="btn-ai"
+                                            onAction="#handleSuggestDescription"/>
+                                    <Label fx:id="aiSuggestionLabel" styleClass="ai-helper-label" wrapText="true"
+                                           text="L'IA peut reformuler la description selon les champs saisis."/>
+                                </HBox>
                             </VBox>
                         </GridPane>
 

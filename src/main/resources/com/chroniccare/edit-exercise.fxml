@@ -88,6 +88,12 @@
                             <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.columnSpan="2">
                                 <Label text="Description" styleClass="info-label"/>
                                 <TextArea fx:id="descriptionArea" prefRowCount="6" wrapText="true"/>
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <Button fx:id="suggestDescriptionButton" text="Suggérer via IA" styleClass="btn-ai"
+                                            onAction="#handleSuggestDescription"/>
+                                    <Label fx:id="aiSuggestionLabel" styleClass="ai-helper-label" wrapText="true"
+                                           text="L'IA peut proposer une nouvelle description."/>
+                                </HBox>
                             </VBox>
                         </GridPane>
 

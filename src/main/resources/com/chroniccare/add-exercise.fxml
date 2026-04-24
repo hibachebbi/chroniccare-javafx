@@ -91,6 +91,12 @@
                                 <Label text="Description" styleClass="info-label"/>
                                 <TextArea fx:id="descriptionArea" prefRowCount="6" wrapText="true"
                                           promptText="Precise le niveau, les consignes et les objectifs de l'exercice."/>
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <Button fx:id="suggestDescriptionButton" text="Suggérer via IA" styleClass="btn-ai"
+                                            onAction="#handleSuggestDescription"/>
+                                    <Label fx:id="aiSuggestionLabel" styleClass="ai-helper-label" wrapText="true"
+                                           text="L'IA peut proposer une description de l'exercice."/>
+                                </HBox>
                             </VBox>
                         </GridPane>
 

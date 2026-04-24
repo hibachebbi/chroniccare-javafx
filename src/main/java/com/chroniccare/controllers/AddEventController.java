@@ -1,28 +1,29 @@
 package com.chroniccare.controllers;
 
 import com.chroniccare.models.Event;
-import com.chroniccare.models.Exercise;
-import com.chroniccare.models.ExerciseSelectionRow;
+import com.chroniccare.models.Weather;
 import com.chroniccare.models.User;
 import com.chroniccare.services.EventService;
-import com.chroniccare.services.ExerciseService;
+import com.chroniccare.services.HolidayService;
+import com.chroniccare.services.LocationService;
+import com.chroniccare.services.OpenAiSuggestionService;
+import com.chroniccare.services.WeatherService;
 import com.chroniccare.utils.FormValidationUtils;
 import com.chroniccare.utils.SessionManager;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.CheckBoxTableCell;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.StringConverter;
 
 import java.time.Duration;
@@ -35,10 +36,10 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Set;
 
 public class AddEventController {
-
     @FXML private Label sidebarAvatar;
     @FXML private Label sidebarUserName;
     @FXML private Label topbarDate;
@@ -47,38 +48,34 @@ public class AddEventController {
     @FXML private TextField titreField;
     @FXML private ComboBox<String> statutCombo;
     @FXML private TextField lieuField;
+    @FXML private Label locationApiLabel;
+    @FXML private Label weatherPreviewLabel;
+    @FXML private Label holidayInfoLabel;
     @FXML private DatePicker dateDebutPicker;
     @FXML private ComboBox<String> heureDebutCombo;
     @FXML private DatePicker dateFinPicker;
     @FXML private ComboBox<String> heureFinCombo;
     @FXML private TextArea descriptionArea;
-    @FXML private TableView<ExerciseSelectionRow> exercisesTable;
-    @FXML private TableColumn<ExerciseSelectionRow, Boolean> selectedCol;
-    @FXML private TableColumn<ExerciseSelectionRow, String> exerciseNameCol;
-    @FXML private TableColumn<ExerciseSelectionRow, Integer> exerciseDurationCol;
-    @FXML private TableColumn<ExerciseSelectionRow, String> exerciseRepetitionsCol;
-    @FXML private TableColumn<ExerciseSelectionRow, String> exerciseEventCol;
-    @FXML private Label selectedExercisesInfoLabel;
+    @FXML private Button suggestDescriptionButton;
+    @FXML private Label aiSuggestionLabel;
     @FXML private Label sessionWindowInfoLabel;
     @FXML private Label formHintLabel;
     @FXML private Label errorLabel;
 
     private final EventService eventService = new EventService();
-    private final ExerciseService exerciseService = new ExerciseService();
-    private final ObservableList<ExerciseSelectionRow> selectableExercises = FXCollections.observableArrayList();
+    private final OpenAiSuggestionService openAiSuggestionService = new OpenAiSuggestionService();
     private static final DateTimeFormatter INPUT_TIME_FORMATTER = DateTimeFormatter.ofPattern("H:mm");
     private static final DateTimeFormatter DISPLAY_TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
     private User currentUser;
+    private volatile int locationRequestSeq = 0;
 
     @FXML
     public void initialize() {
         currentUser = SessionManager.getInstance().getCurrentUser();
         populateHeader();
         configureStatusCombo();
-        setupExercisesTable();
         setupFormExperience();
         clearError();
-        loadSelectableExercises();
     }
 
     @FXML
@@ -90,8 +87,7 @@ public class AddEventController {
             }
             Event event = buildEvent();
             int eventId = eventService.insertAndReturnId(event);
-            assignSelectedExercises(eventId);
-            goToList();
+            promptExerciseAssignment(eventId);
         } catch (Exception e) {
             showError("Erreur enregistrement : " + e.getMessage());
         }
@@ -134,6 +130,7 @@ public class AddEventController {
         heureDebutCombo.setValue("09:00");
         heureFinCombo.setValue("10:00");
         refreshSessionWindowSummary();
+        refreshHolidayInfo();
         formHintLabel.setText("Preset applique : session matinale configuree.");
     }
 
@@ -148,22 +145,44 @@ public class AddEventController {
         heureDebutCombo.setValue("18:00");
         heureFinCombo.setValue("19:00");
         refreshSessionWindowSummary();
+        refreshHolidayInfo();
         formHintLabel.setText("Preset applique : session du soir configuree.");
     }
 
-    private void setupExercisesTable() {
-        selectedCol.setCellValueFactory(cell -> cell.getValue().selectedProperty());
-        selectedCol.setCellFactory(CheckBoxTableCell.forTableColumn(selectedCol));
+    @FXML
+    public void handleSuggestDescription() {
+        String titre = titreField.getText() == null ? "" : titreField.getText().trim();
+        String lieu = lieuField.getText() == null ? "" : lieuField.getText().trim();
+        if (titre.isEmpty() || lieu.isEmpty()) {
+            setAiSuggestionState(false, "Renseigne au moins le titre et le lieu avant la suggestion.");
+            return;
+        }
 
-        exerciseNameCol.setCellValueFactory(new PropertyValueFactory<>("nom"));
-        exerciseDurationCol.setCellValueFactory(new PropertyValueFactory<>("duree"));
-        exerciseRepetitionsCol.setCellValueFactory(new PropertyValueFactory<>("repetitionsDisplay"));
-        exerciseEventCol.setCellValueFactory(new PropertyValueFactory<>("evenementTitreDisplay"));
+        setAiSuggestionState(true, "Generation IA en cours...");
+        LocalDateTime start = parseOptionalDateTime(dateDebutPicker.getValue(), heureDebutCombo.getValue());
+        LocalDateTime end = parseOptionalDateTime(dateFinPicker.getValue(), heureFinCombo.getValue());
+        String status = statutCombo.getValue();
 
-        exercisesTable.setItems(selectableExercises);
-        exercisesTable.setEditable(true);
-        exercisesTable.setOnMouseClicked(event -> refreshSelectionSummary());
-        exercisesTable.setOnKeyReleased(event -> refreshSelectionSummary());
+        Thread aiThread = new Thread(() -> {
+            try {
+                String suggestion = openAiSuggestionService.suggestEventDescription(
+                        titre,
+                        status,
+                        lieu,
+                        start,
+                        end
+                );
+                Platform.runLater(() -> {
+                    descriptionArea.setText(suggestion);
+                    setAiSuggestionState(false, "Description suggeree. Tu peux la modifier.");
+                    refreshValidationFeedback();
+                });
+            } catch (Exception e) {
+                Platform.runLater(() -> setAiSuggestionState(false, "IA indisponible : " + e.getMessage()));
+            }
+        });
+        aiThread.setDaemon(true);
+        aiThread.start();
     }
 
     private void configureStatusCombo() {
@@ -201,11 +220,15 @@ public class AddEventController {
         heureDebutCombo.setValue("09:00");
         heureFinCombo.setValue("10:00");
 
-        selectedExercisesInfoLabel.setText("0");
-        formHintLabel.setText("Selectionne les exercices utiles puis ajuste le statut et les horaires.");
+        formHintLabel.setText("Etape 1/2 : cree l'evenement. Tu pourras associer les exercices ensuite.");
         refreshSessionWindowSummary();
+        refreshHolidayInfo();
+        refreshLocationHint();
 
-        dateDebutPicker.valueProperty().addListener((obs, oldVal, newVal) -> refreshSessionWindowSummary());
+        dateDebutPicker.valueProperty().addListener((obs, oldVal, newVal) -> {
+            refreshSessionWindowSummary();
+            refreshHolidayInfo();
+        });
         dateFinPicker.valueProperty().addListener((obs, oldVal, newVal) -> refreshSessionWindowSummary());
         heureDebutCombo.valueProperty().addListener((obs, oldVal, newVal) -> refreshSessionWindowSummary());
         heureFinCombo.valueProperty().addListener((obs, oldVal, newVal) -> refreshSessionWindowSummary());
@@ -216,6 +239,8 @@ public class AddEventController {
         lieuField.textProperty().addListener((obs, oldVal, newVal) -> {
             updateHint();
             refreshValidationFeedback();
+            refreshLocationHint();
+            refreshWeatherPreview();
         });
         descriptionArea.textProperty().addListener((obs, oldVal, newVal) -> refreshValidationFeedback());
         statutCombo.valueProperty().addListener((obs, oldVal, newVal) -> refreshValidationFeedback());
@@ -223,30 +248,6 @@ public class AddEventController {
         dateFinPicker.valueProperty().addListener((obs, oldVal, newVal) -> refreshValidationFeedback());
         heureDebutCombo.valueProperty().addListener((obs, oldVal, newVal) -> refreshValidationFeedback());
         heureFinCombo.valueProperty().addListener((obs, oldVal, newVal) -> refreshValidationFeedback());
-    }
-
-    private void loadSelectableExercises() {
-        if (currentUser == null) {
-            return;
-        }
-
-        try {
-            List<Exercise> exercises = exerciseService.getByCoachId(currentUser.getId());
-            selectableExercises.setAll(exercises.stream().map(exercise -> {
-                return new ExerciseSelectionRow(exercise);
-            }).toList());
-            refreshSelectionSummary();
-        } catch (Exception e) {
-            showError("Erreur chargement exercices : " + e.getMessage());
-        }
-    }
-
-    private void assignSelectedExercises(int eventId) throws Exception {
-        for (ExerciseSelectionRow row : selectableExercises) {
-            if (row.isSelected()) {
-                exerciseService.assignExerciseToEvent(row.getExercise().getId(), eventId, currentUser.getId());
-            }
-        }
     }
 
     private Event buildEvent() {
@@ -354,12 +355,6 @@ public class AddEventController {
         }
     }
 
-    private void refreshSelectionSummary() {
-        long selected = selectableExercises.stream().filter(ExerciseSelectionRow::isSelected).count();
-        selectedExercisesInfoLabel.setText(String.valueOf(selected));
-        updateHint();
-    }
-
     private void refreshSessionWindowSummary() {
         LocalDateTime start = parseOptionalDateTime(dateDebutPicker.getValue(), heureDebutCombo.getValue());
         LocalDateTime end = parseOptionalDateTime(dateFinPicker.getValue(), heureFinCombo.getValue());
@@ -450,6 +445,15 @@ public class AddEventController {
         }
     }
 
+    private void setAiSuggestionState(boolean loading, String message) {
+        if (suggestDescriptionButton != null) {
+            suggestDescriptionButton.setDisable(loading);
+        }
+        if (aiSuggestionLabel != null) {
+            aiSuggestionLabel.setText(message);
+        }
+    }
+
     private void markInvalid(Control control, String message, Set<String> errors) {
         if (!control.getStyleClass().contains("field-invalid")) {
             control.getStyleClass().add("field-invalid");
@@ -468,11 +472,131 @@ public class AddEventController {
         descriptionArea.getStyleClass().remove("field-invalid");
     }
 
+    private void promptExerciseAssignment(int eventId) throws Exception {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Evenement cree");
+        alert.setHeaderText("Evenement enregistre.");
+        alert.setContentText("Souhaites-tu associer des exercices maintenant ?");
+
+        ButtonType assignNow = new ButtonType("Assigner maintenant");
+        ButtonType finishNow = new ButtonType("Terminer");
+        alert.getButtonTypes().setAll(assignNow, finishNow);
+
+        alert.showAndWait().ifPresent(choice -> {
+            try {
+                if (choice == assignNow) {
+                    goToExerciseAssignment(eventId);
+                } else {
+                    goToList();
+                }
+            } catch (Exception e) {
+                showError("Erreur navigation : " + e.getMessage());
+            }
+        });
+    }
+
+    private void goToExerciseAssignment(int eventId) throws Exception {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/chroniccare/edit-event.fxml"));
+        Parent root = loader.load();
+        EditEventController controller = loader.getController();
+        Event createdEvent = eventService.getById(eventId);
+        if (createdEvent == null) {
+            throw new IllegalStateException("Evenement cree introuvable.");
+        }
+        controller.setEvent(createdEvent);
+        titreField.getScene().setRoot(root);
+    }
+
     private String getInitials(User user) {
         String prenom = user.getPrenom() != null && !user.getPrenom().isEmpty()
                 ? String.valueOf(user.getPrenom().charAt(0)).toUpperCase() : "";
         String nom = user.getNom() != null && !user.getNom().isEmpty()
                 ? String.valueOf(user.getNom().charAt(0)).toUpperCase() : "";
         return prenom + nom;
+    }
+
+    private void refreshHolidayInfo() {
+        if (holidayInfoLabel == null) {
+            return;
+        }
+        LocalDate selectedDate = dateDebutPicker.getValue();
+        if (selectedDate == null) {
+            holidayInfoLabel.setText("📅 Sélectionnez une date");
+            return;
+        }
+
+        Optional<String> holidayName = HolidayService.getHolidayName(selectedDate);
+        if (holidayName.isPresent()) {
+            holidayInfoLabel.setText("🎉 Jour férié en Tunisie : " + holidayName.get());
+        } else {
+            holidayInfoLabel.setText("📅 Pas de jour férié officiel à cette date");
+        }
+    }
+
+    private void refreshLocationHint() {
+        if (locationApiLabel == null) {
+            return;
+        }
+
+        String location = lieuField.getText();
+        if (location == null || location.trim().isEmpty()) {
+            locationApiLabel.setText("📍 Saisissez un lieu tunisien");
+            return;
+        }
+        if (location.trim().length() < 2) {
+            locationApiLabel.setText("📍 Continuez à saisir...");
+            return;
+        }
+
+        final int requestId = ++locationRequestSeq;
+        locationApiLabel.setText("⏳ Vérification du lieu...");
+
+        new Thread(() -> {
+            Optional<LocationService.LocationSuggestion> suggestion =
+                    LocationService.findBestMatchInTunisia(location);
+            Platform.runLater(() -> {
+                if (requestId != locationRequestSeq) {
+                    return;
+                }
+                if (suggestion.isPresent()) {
+                    String name = suggestion.get().name();
+                    if (name != null && !name.isBlank() && name.equalsIgnoreCase(location.trim())) {
+                        locationApiLabel.setText("✅ Lieu reconnu en Tunisie");
+                    } else if (name != null && !name.isBlank()) {
+                        locationApiLabel.setText("✅ Suggestion Tunisie : " + name);
+                    } else {
+                        locationApiLabel.setText("✅ Lieu trouvé en Tunisie");
+                    }
+                } else {
+                    locationApiLabel.setText("⚠️ Lieu non trouvé en Tunisie");
+                }
+            });
+        }).start();
+    }
+
+    private void refreshWeatherPreview() {
+        if (weatherPreviewLabel == null) {
+            return;
+        }
+
+        String location = lieuField.getText();
+        if (location == null || location.trim().isEmpty()) {
+            weatherPreviewLabel.setText("📍 Saisissez un lieu");
+            return;
+        }
+
+        weatherPreviewLabel.setText("⏳ Chargement météo...");
+        
+        new Thread(() -> {
+            Optional<Weather> weather = WeatherService.getWeatherByCity(location);
+            Platform.runLater(() -> {
+                if (weather.isPresent()) {
+                    Weather w = weather.get();
+                    weatherPreviewLabel.setText(w.getPreviewDisplay());
+                } else {
+                    weatherPreviewLabel.setText("⚠️ Météo indisponible pour " + location);
+                }
+            });
+        }).start();
     }
 }

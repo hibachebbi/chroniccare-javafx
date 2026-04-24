@@ -47,6 +47,7 @@ public class PatientRegistrationsController {
     @FXML private TableColumn<Event, String> dateDebutCol;
     @FXML private TableColumn<Event, String> dateFinCol;
     @FXML private TableColumn<Event, String> statutCol;
+    @FXML private Button cancelRegistrationButton;
     @FXML private Label detailsLabel;
     @FXML private TableView<Exercise> exercisesTable;
     @FXML private TableColumn<Exercise, String> exNomCol;
@@ -63,6 +64,7 @@ public class PatientRegistrationsController {
     private final ObservableList<Exercise> exercises = FXCollections.observableArrayList();
     private User currentUser;
     private String activeQuickFilter = "all";
+    private Event selectedRegistration;
 
     @FXML
     public void initialize() {
@@ -120,6 +122,9 @@ public class PatientRegistrationsController {
             }
         });
         registrationsTable.setItems(displayedRegistrations);
+        if (cancelRegistrationButton != null) {
+            cancelRegistrationButton.setDisable(true);
+        }
 
         exNomCol.setCellValueFactory(new PropertyValueFactory<>("nom"));
         exDureeCol.setCellValueFactory(new PropertyValueFactory<>("duree"));
@@ -169,12 +174,19 @@ public class PatientRegistrationsController {
     }
 
     private void onRegistrationSelected(Event event) {
+        selectedRegistration = event;
         exercises.clear();
         if (event == null) {
             detailsLabel.setText("Selectionnez une inscription pour voir les exercices associes.");
+            if (cancelRegistrationButton != null) {
+                cancelRegistrationButton.setDisable(true);
+            }
             return;
         }
         detailsLabel.setText("Exercices de : " + event.getTitre());
+        if (cancelRegistrationButton != null) {
+            cancelRegistrationButton.setDisable(!eventService.canCancelRegistration(event));
+        }
         try {
             exercises.setAll(exerciseService.getByEventIdPublic(event.getId()));
         } catch (Exception e) {
@@ -213,6 +225,33 @@ public class PatientRegistrationsController {
     public void handleFilterToday() {
         setActiveQuickFilter("today");
         applyFilters();
+    }
+
+    @FXML
+    public void handleCancelRegistration() {
+        if (selectedRegistration == null) {
+            messageLabel.setText("Selectionnez d'abord une inscription.");
+            return;
+        }
+
+        try {
+            boolean removed = eventService.cancelPatientRegistration(selectedRegistration.getId(), currentUser.getEmail());
+            if (!removed) {
+                messageLabel.setText("Aucune inscription active a annuler.");
+                return;
+            }
+
+            messageLabel.setText("Inscription annulee avec succes.");
+            exercises.clear();
+            selectedRegistration = null;
+            detailsLabel.setText("Selectionnez une inscription pour voir les exercices associes.");
+            if (cancelRegistrationButton != null) {
+                cancelRegistrationButton.setDisable(true);
+            }
+            loadRegistrations();
+        } catch (Exception e) {
+            messageLabel.setText("Erreur annulation : " + e.getMessage());
+        }
     }
 
     @FXML

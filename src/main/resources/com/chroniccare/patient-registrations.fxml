@@ -119,7 +119,11 @@
                     </VBox>
 
                     <VBox styleClass="card" spacing="12">
-                        <Label fx:id="detailsLabel" text="Selectionnez une inscription pour voir les exercices associes." styleClass="card-title"/>
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label fx:id="detailsLabel" text="Selectionnez une inscription pour voir les exercices associes." styleClass="card-title"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Button fx:id="cancelRegistrationButton" text="Annuler l'inscription" styleClass="btn-secondary" onAction="#handleCancelRegistration"/>
+                        </HBox>
                         <TableView fx:id="exercisesTable" VBox.vgrow="ALWAYS" styleClass="dashboard-table, exercises-main-table">
                             <columns>
                                 <TableColumn fx:id="exNomCol" text="Exercice" prefWidth="300"/>

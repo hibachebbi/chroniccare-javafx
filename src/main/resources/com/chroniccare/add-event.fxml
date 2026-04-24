@@ -65,11 +65,6 @@
                     </HBox>
 
                     <HBox spacing="14">
-                        <VBox styleClass="stat-card, stat-blue" spacing="6" HBox.hgrow="ALWAYS">
-                            <Label text="Exercices sélectionnés" styleClass="stat-label"/>
-                            <Label fx:id="selectedExercisesInfoLabel" styleClass="stat-value"/>
-                            <Label text="Liés automatiquement à cet événement" styleClass="stat-sub"/>
-                        </VBox>
                         <VBox styleClass="stat-card, stat-green" spacing="6" HBox.hgrow="ALWAYS">
                             <Label text="Fenetre de session" styleClass="stat-label"/>
                             <Label fx:id="sessionWindowInfoLabel" styleClass="stat-value"/>
@@ -98,10 +93,13 @@
                             <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="1">
                                 <Label text="Lieu" styleClass="info-label"/>
                                 <TextField fx:id="lieuField" promptText="Ex: Bardo" styleClass="filter-field"/>
+                                <Label fx:id="locationApiLabel" styleClass="location-preview-label" wrapText="true" text="📍 Saisissez un lieu tunisien"/>
+                                <Label fx:id="weatherPreviewLabel" styleClass="weather-preview-label" wrapText="true" text="📍 Saisissez un lieu"/>
                             </VBox>
                             <VBox spacing="6" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                 <Label text="Date debut" styleClass="info-label"/>
                                 <DatePicker fx:id="dateDebutPicker"/>
+                                <Label fx:id="holidayInfoLabel" styleClass="holiday-preview-label" wrapText="true" text="📅 Sélectionnez une date"/>
                             </VBox>
                             <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="2">
                                 <Label text="Heure debut (HH:mm)" styleClass="info-label"/>
@@ -119,22 +117,14 @@
                                 <Label text="Description" styleClass="info-label"/>
                                 <TextArea fx:id="descriptionArea" prefRowCount="6" wrapText="true"
                                           promptText="Decris le programme, le niveau et les consignes pour les patients."/>
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <Button fx:id="suggestDescriptionButton" text="Suggérer via IA" styleClass="btn-ai"
+                                            onAction="#handleSuggestDescription"/>
+                                    <Label fx:id="aiSuggestionLabel" styleClass="ai-helper-label" wrapText="true"
+                                           text="L'IA peut proposer une base a partir du formulaire."/>
+                                </HBox>
                             </VBox>
                         </GridPane>
-
-                        <Separator/>
-                        <Label text="Selectionne les exercices existants a associer" styleClass="card-title"/>
-                        <Label text="Les exercices seront réassociés à cet événement après enregistrement."
-                               styleClass="tip-text" wrapText="true"/>
-                        <TableView fx:id="exercisesTable" prefHeight="280.0" editable="true" styleClass="dashboard-table, compact-table">
-                            <columns>
-                                <TableColumn fx:id="selectedCol" text="Choisir" prefWidth="80"/>
-                                <TableColumn fx:id="exerciseNameCol" text="Exercice" prefWidth="220"/>
-                                <TableColumn fx:id="exerciseDurationCol" text="Duree" prefWidth="90"/>
-                                <TableColumn fx:id="exerciseRepetitionsCol" text="Repetitions" prefWidth="110"/>
-                                <TableColumn fx:id="exerciseEventCol" text="Événement actuel" prefWidth="220"/>
-                            </columns>
-                        </TableView>
 
                         <Label fx:id="formHintLabel" styleClass="inline-helper-label" wrapText="true"/>
                         <Label fx:id="errorLabel" styleClass="error-label" wrapText="true" visible="false" managed="false"/>

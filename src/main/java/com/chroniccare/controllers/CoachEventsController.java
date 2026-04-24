@@ -23,6 +23,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
@@ -34,6 +38,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class CoachEventsController {
+    private static final int MAX_EVENTS_FOR_DASHBOARD = 250;
 
     @FXML private Label sidebarAvatar;
     @FXML private Label sidebarUserName;
@@ -178,13 +183,18 @@ public class CoachEventsController {
         }
 
         try {
-            List<Event> events = eventService.getByCoachId(currentUser.getId());
+            List<Event> events = eventService.getByCoachIdForList(currentUser.getId(), MAX_EVENTS_FOR_DASHBOARD);
             allEvents.setAll(events);
             registrationCountByEventId.clear();
-            registrationCountByEventId.putAll(eventService.getRegistrationCountByEventForCoach(currentUser.getId()));
+            List<Integer> eventIds = events.stream().map(Event::getId).collect(Collectors.toList());
+            registrationCountByEventId.putAll(eventService.getRegistrationCountByEventIds(eventIds));
             refreshKpis();
             applyFilters();
-            errorLabel.setText("");
+            if (events.size() == MAX_EVENTS_FOR_DASHBOARD) {
+                errorLabel.setText("Affichage limite aux " + MAX_EVENTS_FOR_DASHBOARD + " derniers evenements.");
+            } else {
+                errorLabel.setText("");
+            }
         } catch (Exception e) {
             errorLabel.setText("Erreur chargement evenements : " + e.getMessage());
         }
@@ -235,7 +245,7 @@ public class CoachEventsController {
 
     @FXML
     public void goToAdd() {
-        navigate("/com/chroniccare/add-event.fxml");
+        navigateToAddEvent();
     }
 
     @FXML
@@ -424,11 +434,11 @@ public class CoachEventsController {
 
     private void goToEdit(Event event) {
         try {
-            releaseViewMemory();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/chroniccare/edit-event.fxml"));
             Parent root = loader.load();
             EditEventController controller = loader.getController();
             controller.setEvent(event);
+            releaseViewMemory();
             eventsTable.getScene().setRoot(root);
         } catch (Exception e) {
             errorLabel.setText("Erreur navigation : " + formatExceptionMessage(e));
@@ -437,11 +447,11 @@ public class CoachEventsController {
 
     private void goToParticipants(Event event) {
         try {
-            releaseViewMemory();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/chroniccare/event-participants.fxml"));
             Parent root = loader.load();
             EventParticipantsController controller = loader.getController();
             controller.setEvent(event);
+            releaseViewMemory();
             eventsTable.getScene().setRoot(root);
         } catch (Exception e) {
             errorLabel.setText("Erreur navigation : " + e.getMessage());
@@ -450,10 +460,36 @@ public class CoachEventsController {
 
     private void navigate(String fxmlPath) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
+            URL resource = getClass().getResource(fxmlPath);
+            if (resource == null && fxmlPath != null && fxmlPath.matches("^/[A-Za-z]:/.*")) {
+                Path absolutePath = Paths.get(fxmlPath.substring(1));
+                if (Files.exists(absolutePath)) {
+                    resource = absolutePath.toUri().toURL();
+                }
+            }
+            if (resource == null) {
+                throw new IllegalArgumentException("Ressource introuvable : " + fxmlPath);
+            }
+            Parent root = FXMLLoader.load(resource);
+            releaseViewMemory();
             eventsTable.getScene().setRoot(root);
         } catch (Exception e) {
-            errorLabel.setText("Erreur navigation : " + e.getMessage());
+            errorLabel.setText("Erreur navigation : " + formatExceptionMessage(e));
+        }
+    }
+
+    private void navigateToAddEvent() {
+        try {
+            URL resource = getClass().getResource("/com/chroniccare/add-event.fxml");
+            if (resource == null) {
+                throw new IllegalArgumentException("Ressource introuvable : /com/chroniccare/add-event.fxml");
+            }
+            releaseViewMemory();
+            Parent root = FXMLLoader.load(resource);
+            eventsTable.getScene().setRoot(root);
+        } catch (Exception e) {
+            loadEvents();
+            errorLabel.setText("Erreur navigation : " + formatExceptionMessage(e));
         }
     }
 
