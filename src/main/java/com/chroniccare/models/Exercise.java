@@ -8,6 +8,7 @@ public class Exercise {
     private Integer repetitions;
     private Integer evenementId;
     private String evenementTitre;
+    private String videoUrl;
 
     public int getId() {
         return id;
@@ -67,5 +68,13 @@ public class Exercise {
 
     public String getRepetitionsDisplay() {
         return repetitions != null ? String.valueOf(repetitions) : "-";
+    }
+
+    public String getVideoUrl() {
+        return videoUrl;
+    }
+
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
     }
 }

@@ -21,12 +21,15 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.VBox;
 import javafx.scene.web.WebView;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.Optional;
+import java.awt.Desktop;
+import java.net.URI;
 
 public class PatientEventDetailsController {
 
@@ -52,6 +55,9 @@ public class PatientEventDetailsController {
     @FXML private Button registerButton;
     @FXML private Button cancelRegistrationButton;
     @FXML private Label messageLabel;
+    @FXML private VBox videoPanel;
+    @FXML private Button openVideoButton;
+    @FXML private Label videoStatusLabel;
 
     private final EventService eventService = new EventService();
     private final ExerciseService exerciseService = new ExerciseService();
@@ -60,6 +66,7 @@ public class PatientEventDetailsController {
     private int eventId;
     private volatile int mapRequestSeq = 0;
     private Event currentEvent;
+    private Exercise selectedExercise;
 
     @FXML
     public void initialize() {
@@ -110,7 +117,7 @@ public class PatientEventDetailsController {
             Event event = eventService.getById(eventId);
             currentEvent = event;
             if (event == null) {
-                messageLabel.setText("Evenement introuvable.");
+                messageLabel.setText("Événement introuvable.");
                 registerButton.setDisable(true);
                 if (cancelRegistrationButton != null) {
                     cancelRegistrationButton.setDisable(true);
@@ -119,7 +126,7 @@ public class PatientEventDetailsController {
             }
 
             eventTitleLabel.setText(event.getTitre());
-            statusLabel.setText(event.getStatut() != null ? event.getStatut() : "Non precise");
+            statusLabel.setText(event.getStatut() != null ? event.getStatut() : "Non précisé");
             startLabel.setText(event.getDateDebutDisplay());
             endLabel.setText(event.getDateFinDisplay());
             locationLabel.setText(event.getLieu() != null ? event.getLieu() : "-");
@@ -135,7 +142,7 @@ public class PatientEventDetailsController {
             boolean alreadyRegistered = eventService.isPatientRegistered(eventId, currentUser.getEmail());
             updateRegistrationActions(alreadyRegistered, event);
         } catch (Exception e) {
-            messageLabel.setText("Erreur chargement details : " + e.getMessage());
+            messageLabel.setText("Erreur chargement détails : " + e.getMessage());
         }
     }
 
@@ -144,8 +151,8 @@ public class PatientEventDetailsController {
             return;
         }
         if (location == null || location.isBlank()) {
-            mapStatusLabel.setText("Carte indisponible: lieu non specifie.");
-            locationMapView.getEngine().loadContent(buildMapPlaceholderHtml("Lieu non specifie"));
+            mapStatusLabel.setText("Carte indisponible: lieu non spécifié.");
+            locationMapView.getEngine().loadContent(buildMapPlaceholderHtml("Lieu non spécifié"));
             return;
         }
 
@@ -173,7 +180,7 @@ public class PatientEventDetailsController {
                 } else {
                     mapStatusLabel.setText("Carte indisponible pour " + location + ".");
                     locationMapView.getEngine().loadContent(
-                            buildMapPlaceholderHtml("Emplacement non trouve dans Nominatim"));
+                            buildMapPlaceholderHtml("Emplacement non trouvé dans Nominatim"));
                 }
             });
         });
@@ -191,7 +198,7 @@ public class PatientEventDetailsController {
         int baseTileY = (int) Math.floor(y);
         double pixelOffsetX = (x - baseTileX) * tileSize;
         double pixelOffsetY = (y - baseTileY) * tileSize;
-        String safeLabel = escapeHtml(label == null || label.isBlank() ? "Lieu de l'evenement" : label);
+        String safeLabel = escapeHtml(label == null || label.isBlank() ? "Lieu de l'événement" : label);
 
         StringBuilder tiles = new StringBuilder();
         for (int row = -1; row <= 1; row++) {
@@ -282,10 +289,10 @@ public class PatientEventDetailsController {
 
     private void loadWeather(String location) {
         if (location == null || location.isBlank()) {
-            weatherLabel.setText("Lieu non specifie");
+            weatherLabel.setText("Lieu non spécifié");
             return;
         }
-        weatherLabel.setText("Chargement meteo...");
+        weatherLabel.setText("Chargement météo...");
 
         Thread weatherThread = new Thread(() -> {
             Optional<Weather> weather = WeatherService.getWeatherByCity(location);
@@ -294,7 +301,7 @@ public class PatientEventDetailsController {
                     Weather w = weather.get();
                     weatherLabel.setText(w.getWeatherDisplay());
                 } else {
-                    weatherLabel.setText("Meteo indisponible pour " + location);
+                    weatherLabel.setText("Météo indisponible pour " + location);
                 }
             });
         });
@@ -307,7 +314,7 @@ public class PatientEventDetailsController {
             return;
         }
         if (eventDate == null) {
-            holidayLabel.setText("Date non specifiee");
+            holidayLabel.setText("Date non spécifiée");
             return;
         }
 
@@ -315,7 +322,7 @@ public class PatientEventDetailsController {
         if (holidayName.isPresent()) {
             holidayLabel.setText(holidayName.get());
         } else {
-            holidayLabel.setText("Pas de jour ferie officiel");
+            holidayLabel.setText("Pas de jour férié officiel");
         }
     }
 
@@ -327,12 +334,12 @@ public class PatientEventDetailsController {
                 if (currentEvent != null) {
                     updateRegistrationActions(true, currentEvent);
                 }
-                messageLabel.setText("Inscription enregistree avec succes.");
+                messageLabel.setText("Inscription enregistrée avec succès.");
             } else {
                 if (currentEvent != null) {
                     updateRegistrationActions(true, currentEvent);
                 }
-                messageLabel.setText("Vous etes deja inscrit a cet evenement.");
+                messageLabel.setText("Vous êtes déjà inscrit à cet événement.");
             }
         } catch (Exception e) {
             messageLabel.setText("Erreur inscription : " + e.getMessage());
@@ -347,13 +354,47 @@ public class PatientEventDetailsController {
                 if (currentEvent != null) {
                     updateRegistrationActions(false, currentEvent);
                 }
-                messageLabel.setText("Inscription annulee avec succes.");
+                messageLabel.setText("Inscription annulée avec succès.");
             } else {
-                messageLabel.setText("Aucune inscription active a annuler.");
+                messageLabel.setText("Aucune inscription active à annuler.");
             }
         } catch (Exception e) {
             messageLabel.setText("Erreur annulation : " + e.getMessage());
         }
+    }
+
+    @FXML
+    public void handleExerciseSelected() {
+        Exercise selected = exercisesTable.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            openVideoButton.setDisable(true);
+            videoStatusLabel.setText("Sélectionne un exercice pour voir la vidéo");
+            return;
+        }
+
+        selectedExercise = selected;
+        String videoUrl = selected.getVideoUrl();
+
+        if (videoUrl == null || videoUrl.isEmpty()) {
+            openVideoButton.setDisable(true);
+            videoStatusLabel.setText("Cet exercice n'a pas de vidéo");
+            return;
+        }
+
+        openVideoButton.setDisable(false);
+        setupVideoButton(videoUrl);
+    }
+
+    private void setupVideoButton(String youtubeUrl) {
+        openVideoButton.setOnAction(event -> {
+            try {
+                Desktop.getDesktop().browse(new URI(youtubeUrl));
+                videoStatusLabel.setText("✅ Vidéo ouverte dans votre navigateur");
+            } catch (Exception e) {
+                videoStatusLabel.setText("Erreur: " + e.getMessage());
+            }
+        });
+        videoStatusLabel.setText("Clique le bouton pour ouvrir la vidéo YouTube");
     }
 
     @FXML
@@ -414,13 +455,13 @@ public class PatientEventDetailsController {
         }
 
         if (!alreadyRegistered) {
-            messageLabel.setText("Inscrivez-vous pour reserver votre place.");
+            messageLabel.setText("Inscrivez-vous pour réserver votre place.");
             return;
         }
         if (eventService.canCancelRegistration(event)) {
-            messageLabel.setText("Vous etes inscrit. Annulation possible jusqu'a 24h avant le debut.");
+            messageLabel.setText("Vous êtes inscrit. Annulation possible jusqu'à 24h avant le début.");
         } else {
-            messageLabel.setText("Vous etes inscrit. Annulation fermee moins de 24h avant le debut.");
+            messageLabel.setText("Vous êtes inscrit. Annulation fermée moins de 24h avant le début.");
         }
     }
 }

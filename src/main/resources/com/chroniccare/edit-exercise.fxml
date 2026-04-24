@@ -95,6 +95,16 @@
                                            text="L'IA peut proposer une nouvelle description."/>
                                 </HBox>
                             </VBox>
+                            <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.columnSpan="2">
+                                <Label text="Lien vidéo YouTube (optionnel)" styleClass="info-label"/>
+                                <HBox spacing="10">
+                                    <TextField fx:id="videoUrlField" maxWidth="Infinity" HBox.hgrow="ALWAYS"
+                                               promptText="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                                               styleClass="filter-field"/>
+                                    <Button fx:id="testVideoButton" text="🔗 Tester" styleClass="btn-secondary"
+                                            onAction="#handleTestVideoUrl"/>
+                                </HBox>
+                            </VBox>
                         </GridPane>
 
                         <Label fx:id="errorLabel" styleClass="error-label" wrapText="true" visible="false" managed="false"/>

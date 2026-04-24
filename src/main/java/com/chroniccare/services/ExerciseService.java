@@ -156,7 +156,7 @@ public class ExerciseService {
     }
 
     public void insert(Exercise exercise) throws SQLException {
-        String sql = "INSERT INTO exercice (nom, description, duree, repetitions, evenement_id) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO exercice (nom, description, duree, repetitions, evenement_id, video_url) VALUES (?, ?, ?, ?, ?, ?)";
         PreparedStatement ps = conn.prepareStatement(sql);
         ps.setString(1, exercise.getNom());
         ps.setString(2, exercise.getDescription());
@@ -167,13 +167,18 @@ public class ExerciseService {
             ps.setNull(4, java.sql.Types.INTEGER);
         }
         ps.setInt(5, exercise.getEvenementId());
+        if (exercise.getVideoUrl() != null && !exercise.getVideoUrl().isEmpty()) {
+            ps.setString(6, exercise.getVideoUrl());
+        } else {
+            ps.setNull(6, java.sql.Types.VARCHAR);
+        }
         ps.executeUpdate();
     }
 
     public void update(Exercise exercise, int coachId) throws SQLException {
         String sql = "UPDATE exercice ex " +
                 "JOIN evenement ev ON ev.id = ex.evenement_id " +
-                "SET ex.nom=?, ex.description=?, ex.duree=?, ex.repetitions=?, ex.evenement_id=? " +
+                "SET ex.nom=?, ex.description=?, ex.duree=?, ex.repetitions=?, ex.evenement_id=?, ex.video_url=? " +
                 "WHERE ex.id=? AND ev.coach_id=?";
         PreparedStatement ps = conn.prepareStatement(sql);
         ps.setString(1, exercise.getNom());
@@ -185,8 +190,13 @@ public class ExerciseService {
             ps.setNull(4, java.sql.Types.INTEGER);
         }
         ps.setInt(5, exercise.getEvenementId());
-        ps.setInt(6, exercise.getId());
-        ps.setInt(7, coachId);
+        if (exercise.getVideoUrl() != null && !exercise.getVideoUrl().isEmpty()) {
+            ps.setString(6, exercise.getVideoUrl());
+        } else {
+            ps.setNull(6, java.sql.Types.VARCHAR);
+        }
+        ps.setInt(7, exercise.getId());
+        ps.setInt(8, coachId);
         ps.executeUpdate();
     }
 
@@ -244,6 +254,8 @@ public class ExerciseService {
         int evenementId = rs.getInt("evenement_id");
         exercise.setEvenementId(rs.wasNull() ? null : evenementId);
         exercise.setEvenementTitre(rs.getString("evenement_titre"));
+        String videoUrl = rs.getString("video_url");
+        exercise.setVideoUrl(videoUrl);
         return exercise;
     }
 }

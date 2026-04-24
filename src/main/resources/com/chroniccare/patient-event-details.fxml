@@ -15,7 +15,7 @@
                     <Label text="+" styleClass="brand-icon"/>
                     <Label text="ChronicCare" styleClass="brand-title"/>
                 </HBox>
-                <Label text="Suivi medical intelligent" styleClass="brand-subtitle"/>
+                <Label text="Suivi médical intelligent" styleClass="brand-subtitle"/>
             </VBox>
             <VBox styleClass="sidebar-user-card" spacing="6">
                 <Label fx:id="sidebarAvatar" styleClass="sidebar-avatar"/>
@@ -28,19 +28,19 @@
                 <Button text="Accueil" styleClass="nav-btn" onAction="#goToHome" maxWidth="Infinity"/>
                 <Button text="Mon Profil" styleClass="nav-btn" onAction="#goToProfile" maxWidth="Infinity"/>
                 <Label text="MES SOINS" styleClass="nav-section-label"/>
-                <Button text="Evenements" styleClass="nav-btn, nav-btn-active" onAction="#goToEvents" maxWidth="Infinity"/>
+                <Button text="Événements" styleClass="nav-btn, nav-btn-active" onAction="#goToEvents" maxWidth="Infinity"/>
                 <Button text="Mes inscriptions" styleClass="nav-btn" onAction="#goToMyRegistrations" maxWidth="Infinity"/>
                 <Button text="Mon Suivi" styleClass="nav-btn" maxWidth="Infinity"/>
                 <Button text="Prendre RDV" styleClass="nav-btn" maxWidth="Infinity"/>
                 <Button text="Mes consultations" styleClass="nav-btn" maxWidth="Infinity"/>
                 <Button text="Nutrition" styleClass="nav-btn" maxWidth="Infinity"/>
-                <Button text="Activite Physique" styleClass="nav-btn" maxWidth="Infinity"/>
-                <Button text="Medicaments" styleClass="nav-btn" maxWidth="Infinity"/>
+                <Button text="Activité Physique" styleClass="nav-btn" maxWidth="Infinity"/>
+                <Button text="Médicaments" styleClass="nav-btn" maxWidth="Infinity"/>
                 <Button text="Mes Statistiques" styleClass="nav-btn" maxWidth="Infinity"/>
             </VBox>
             <VBox styleClass="sidebar-bottom">
                 <Separator styleClass="sidebar-sep"/>
-                <Button text="Deconnexion" styleClass="nav-btn, nav-btn-logout"
+                <Button text="Déconnexion" styleClass="nav-btn, nav-btn-logout"
                         onAction="#handleLogout" maxWidth="Infinity"/>
             </VBox>
         </VBox>
@@ -49,7 +49,7 @@
     <center>
         <VBox styleClass="main-content" spacing="0">
             <HBox styleClass="topbar" alignment="CENTER_LEFT" spacing="16">
-                <Label text="Detail evenement" styleClass="page-title"/>
+                <Label text="Détail événement" styleClass="page-title"/>
                 <Region HBox.hgrow="ALWAYS"/>
                 <Label fx:id="topbarDate" styleClass="topbar-date"/>
                 <HBox styleClass="topbar-user-pill" alignment="CENTER" spacing="8">
@@ -63,23 +63,23 @@
                     <HBox styleClass="welcome-banner" alignment="CENTER_LEFT" spacing="18">
                         <VBox spacing="8">
                             <Label fx:id="eventTitleLabel" styleClass="welcome-title"/>
-                            <Label text="Consulte toutes les informations de cet evenement avant de t'inscrire."
+                            <Label text="Consulte toutes les informations de cet événement avant de t'inscrire."
                                    styleClass="welcome-subtitle" wrapText="true"/>
                         </VBox>
                         <Region HBox.hgrow="ALWAYS"/>
-                        <Button text="Retour a la liste" styleClass="btn-secondary" onAction="#goToEvents"/>
+                        <Button text="Retour à la liste" styleClass="btn-secondary" onAction="#goToEvents"/>
                     </HBox>
 
                     <HBox spacing="14">
                         <VBox styleClass="stat-card, stat-blue" spacing="6" HBox.hgrow="ALWAYS">
                             <Label text="Statut" styleClass="stat-label"/>
                             <Label fx:id="statusLabel" styleClass="stat-value"/>
-                            <Label text="Etat actuel de l'evenement" styleClass="stat-sub"/>
+                            <Label text="État actuel de l'événement" styleClass="stat-sub"/>
                         </VBox>
                         <VBox styleClass="stat-card, stat-green" spacing="6" HBox.hgrow="ALWAYS">
-                            <Label text="Debut" styleClass="stat-label"/>
+                            <Label text="Début" styleClass="stat-label"/>
                             <Label fx:id="startLabel" styleClass="stat-value"/>
-                            <Label text="Date de debut" styleClass="stat-sub"/>
+                            <Label text="Date de début" styleClass="stat-sub"/>
                         </VBox>
                         <VBox styleClass="stat-card, stat-purple" spacing="6" HBox.hgrow="ALWAYS">
                             <Label text="Fin" styleClass="stat-label"/>
@@ -89,7 +89,7 @@
                     </HBox>
 
                     <VBox styleClass="card, event-detail-card" spacing="16">
-                        <Label text="Informations generales" styleClass="card-title, event-detail-card-title"/>
+                        <Label text="Informations générales" styleClass="card-title, event-detail-card-title"/>
                         <Label text="Lieu" styleClass="info-label, event-detail-label"/>
                         <Label fx:id="locationLabel" styleClass="info-value, event-detail-value"/>
                         <VBox styleClass="map-panel" spacing="8">
@@ -100,15 +100,15 @@
                         <Label text="Description" styleClass="info-label, event-detail-label"/>
                         <Label fx:id="descriptionLabel" wrapText="true" styleClass="tip-text, event-detail-text, event-description-text"/>
                         <VBox styleClass="weather-detail-panel" spacing="6">
-                            <Label text="METEO EN DIRECT" styleClass="weather-detail-title"/>
-                            <Label fx:id="weatherLabel" wrapText="true" styleClass="weather-detail-value, event-detail-weather-value" text="Chargement meteo..."/>
+                            <Label text="MÉTÉO EN DIRECT" styleClass="weather-detail-title"/>
+                            <Label fx:id="weatherLabel" wrapText="true" styleClass="weather-detail-value, event-detail-weather-value" text="Chargement météo..."/>
                         </VBox>
                         <VBox styleClass="weather-detail-panel" spacing="6">
-                            <Label text="JOUR FERIE (TUNISIE)" styleClass="weather-detail-title"/>
-                            <Label fx:id="holidayLabel" wrapText="true" styleClass="weather-detail-value, event-detail-weather-value" text="Verification..."/>
+                            <Label text="JOUR FÉRIÉ (TUNISIE)" styleClass="weather-detail-title"/>
+                            <Label fx:id="holidayLabel" wrapText="true" styleClass="weather-detail-value, event-detail-weather-value" text="Vérification..."/>
                         </VBox>
                         <HBox spacing="10">
-                            <Button fx:id="registerButton" text="S'inscrire a cet evenement" styleClass="btn-primary" onAction="#handleRegister"/>
+                            <Button fx:id="registerButton" text="S'inscrire à cet événement" styleClass="btn-primary" onAction="#handleRegister"/>
                             <Button fx:id="cancelRegistrationButton" text="Annuler mon inscription" styleClass="btn-secondary" onAction="#handleCancelRegistration"/>
                             <Button text="Mes inscriptions" styleClass="btn-secondary" onAction="#goToMyRegistrations"/>
                         </HBox>
@@ -116,12 +116,19 @@
                     </VBox>
 
                     <VBox styleClass="card, event-detail-card" spacing="14">
-                        <Label text="Exercices de l'evenement" styleClass="card-title, event-detail-card-title"/>
-                        <TableView fx:id="exercisesTable" VBox.vgrow="ALWAYS" styleClass="dashboard-table, exercises-main-table">
+                        <Label text="Exercices de l'événement" styleClass="card-title, event-detail-card-title"/>
+                        <VBox fx:id="videoPanel" styleClass="video-panel" spacing="10" managed="true" visible="true" alignment="TOP_CENTER">
+                            <Label text="TUTORIEL VIDEO" styleClass="video-title"/>
+                            <HBox alignment="CENTER" spacing="10">
+                                <Button fx:id="openVideoButton" text="🎬 Ouvrir la vidéo" styleClass="btn-primary"/>
+                            </HBox>
+                            <Label fx:id="videoStatusLabel" styleClass="tip-text" wrapText="true" text="Sélectionne un exercice pour voir la vidéo"/>
+                        </VBox>
+                        <TableView fx:id="exercisesTable" VBox.vgrow="ALWAYS" styleClass="dashboard-table, exercises-main-table" onMouseClicked="#handleExerciseSelected">
                             <columns>
                                 <TableColumn fx:id="exNomCol" text="Exercice" prefWidth="320"/>
-                                <TableColumn fx:id="exDureeCol" text="Duree (min)" prefWidth="160"/>
-                                <TableColumn fx:id="exRepCol" text="Repetitions" prefWidth="150"/>
+                                <TableColumn fx:id="exDureeCol" text="Durée (min)" prefWidth="160"/>
+                                <TableColumn fx:id="exRepCol" text="Répétitions" prefWidth="150"/>
                             </columns>
                         </TableView>
                     </VBox>

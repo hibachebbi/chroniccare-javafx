@@ -42,6 +42,8 @@ public class EditExerciseController {
     @FXML private TextArea descriptionArea;
     @FXML private Button suggestDescriptionButton;
     @FXML private Label aiSuggestionLabel;
+    @FXML private TextField videoUrlField;
+    @FXML private Button testVideoButton;
     @FXML private Label errorLabel;
 
     private final ExerciseService exerciseService = new ExerciseService();
@@ -69,6 +71,7 @@ public class EditExerciseController {
         dureeField.setText(String.valueOf(exercise.getDuree()));
         repetitionsField.setText(exercise.getRepetitions() != null ? String.valueOf(exercise.getRepetitions()) : "");
         descriptionArea.setText(exercise.getDescription());
+        videoUrlField.setText(exercise.getVideoUrl() != null ? exercise.getVideoUrl() : "");
 
         if (eventCombo.getItems() != null && exercise.getEvenementId() != null) {
             for (Event event : eventCombo.getItems()) {
@@ -99,6 +102,20 @@ public class EditExerciseController {
         } catch (Exception e) {
             showError("Erreur enregistrement : " + e.getMessage());
         }
+    }
+
+    @FXML
+    public void handleTestVideoUrl() {
+        String url = videoUrlField.getText() == null ? "" : videoUrlField.getText().trim();
+        if (url.isEmpty()) {
+            setAiSuggestionState(false, "Colle un lien YouTube d'abord.");
+            return;
+        }
+        if (!isValidYoutubeUrl(url)) {
+            setAiSuggestionState(false, "Format invalide. Utilise: youtube.com/watch?v=... ou youtu.be/...");
+            return;
+        }
+        setAiSuggestionState(false, "✅ Lien YouTube valide!");
     }
 
     @FXML
@@ -186,6 +203,12 @@ public class EditExerciseController {
         if (!repetitionsText.isEmpty()) {
             exercise.setRepetitions(Integer.parseInt(repetitionsText));
         }
+
+        String videoUrl = videoUrlField.getText() == null ? "" : videoUrlField.getText().trim();
+        if (!videoUrl.isEmpty() && isValidYoutubeUrl(videoUrl)) {
+            exercise.setVideoUrl(videoUrl);
+        }
+
         return exercise;
     }
 
@@ -313,5 +336,12 @@ public class EditExerciseController {
         String nom = user.getNom() != null && !user.getNom().isEmpty()
                 ? String.valueOf(user.getNom().charAt(0)).toUpperCase() : "";
         return prenom + nom;
+    }
+
+    private boolean isValidYoutubeUrl(String url) {
+        if (url == null || url.isEmpty()) {
+            return false;
+        }
+        return url.contains("youtube.com") || url.contains("youtu.be");
     }
 }

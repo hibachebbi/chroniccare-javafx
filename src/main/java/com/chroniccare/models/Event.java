@@ -5,7 +5,7 @@ import java.time.format.DateTimeFormatter;
 
 public class Event {
     private static final DateTimeFormatter DATE_TIME_FORMATTER =
-            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     private int id;
     private String statut;

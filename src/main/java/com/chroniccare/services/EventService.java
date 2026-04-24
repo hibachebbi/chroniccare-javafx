@@ -213,10 +213,10 @@ public class EventService {
 
         Event event = getById(eventId);
         if (event == null) {
-            throw new IllegalArgumentException("Evenement introuvable.");
+            throw new IllegalArgumentException("Événement introuvable.");
         }
         if (!canCancelRegistration(event)) {
-            throw new IllegalStateException("Annulation impossible moins de 24h avant le debut de l'evenement.");
+            throw new IllegalStateException("Annulation impossible moins de 24h avant le début de l'événement.");
         }
 
         String sql = "DELETE FROM inscription_evenement WHERE evenement_id=? AND email=?";

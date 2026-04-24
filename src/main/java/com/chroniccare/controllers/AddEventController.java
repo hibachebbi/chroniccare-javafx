@@ -17,7 +17,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.DatePicker;
@@ -86,8 +85,9 @@ public class AddEventController {
                 return;
             }
             Event event = buildEvent();
-            int eventId = eventService.insertAndReturnId(event);
-            promptExerciseAssignment(eventId);
+            eventService.insertAndReturnId(event);
+            showSuccess("Événement créé avec succès. Retrouve-le dans la liste pour assigner des exercices.");
+            goToList();
         } catch (Exception e) {
             showError("Erreur enregistrement : " + e.getMessage());
         }
@@ -191,15 +191,9 @@ public class AddEventController {
         statutCombo.setConverter(new StringConverter<>() {
             @Override
             public String toString(String value) {
-                if (value == null) {
-                    return "";
-                }
-                if ("valide".equals(value)) {
-                    return "Valide";
-                }
-                if ("annule".equals(value)) {
-                    return "Annule";
-                }
+                if (value == null) return "";
+                if ("valide".equals(value)) return "Valide";
+                if ("annule".equals(value)) return "Annulé";
                 return "En attente";
             }
 
@@ -208,46 +202,30 @@ public class AddEventController {
                 return value;
             }
         });
+
+        List<String> heures = List.of("08:00", "09:00", "10:00", "11:00", "12:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00");
+        heureDebutCombo.setItems(FXCollections.observableArrayList(heures));
+        heureFinCombo.setItems(FXCollections.observableArrayList(heures));
     }
 
     private void setupFormExperience() {
         LocalDate today = LocalDate.now();
         dateDebutPicker.setValue(today);
         dateFinPicker.setValue(today);
-        List<String> timeSlots = buildTimeSlots();
-        heureDebutCombo.setItems(FXCollections.observableArrayList(timeSlots));
-        heureFinCombo.setItems(FXCollections.observableArrayList(timeSlots));
         heureDebutCombo.setValue("09:00");
         heureFinCombo.setValue("10:00");
 
-        formHintLabel.setText("Etape 1/2 : cree l'evenement. Tu pourras associer les exercices ensuite.");
+        formHintLabel.setText("Crée l'événement. Tu assigneras les exercices depuis la liste.");
         refreshSessionWindowSummary();
-        refreshHolidayInfo();
-        refreshLocationHint();
 
         dateDebutPicker.valueProperty().addListener((obs, oldVal, newVal) -> {
             refreshSessionWindowSummary();
-            refreshHolidayInfo();
         });
         dateFinPicker.valueProperty().addListener((obs, oldVal, newVal) -> refreshSessionWindowSummary());
         heureDebutCombo.valueProperty().addListener((obs, oldVal, newVal) -> refreshSessionWindowSummary());
         heureFinCombo.valueProperty().addListener((obs, oldVal, newVal) -> refreshSessionWindowSummary());
-        titreField.textProperty().addListener((obs, oldVal, newVal) -> {
-            updateHint();
-            refreshValidationFeedback();
-        });
-        lieuField.textProperty().addListener((obs, oldVal, newVal) -> {
-            updateHint();
-            refreshValidationFeedback();
-            refreshLocationHint();
-            refreshWeatherPreview();
-        });
-        descriptionArea.textProperty().addListener((obs, oldVal, newVal) -> refreshValidationFeedback());
-        statutCombo.valueProperty().addListener((obs, oldVal, newVal) -> refreshValidationFeedback());
-        dateDebutPicker.valueProperty().addListener((obs, oldVal, newVal) -> refreshValidationFeedback());
-        dateFinPicker.valueProperty().addListener((obs, oldVal, newVal) -> refreshValidationFeedback());
-        heureDebutCombo.valueProperty().addListener((obs, oldVal, newVal) -> refreshValidationFeedback());
-        heureFinCombo.valueProperty().addListener((obs, oldVal, newVal) -> refreshValidationFeedback());
+        titreField.textProperty().addListener((obs, oldVal, newVal) -> updateHint());
+        lieuField.textProperty().addListener((obs, oldVal, newVal) -> updateHint());
     }
 
     private Event buildEvent() {
@@ -420,10 +398,26 @@ public class AddEventController {
 
     private void navigate(String fxmlPath) {
         try {
+            cleanupResources();
             Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
             titreField.getScene().setRoot(root);
         } catch (Exception e) {
             showError("Erreur navigation : " + e.getMessage());
+        }
+    }
+
+    private void cleanupResources() {
+        try {
+            heureDebutCombo.getItems().clear();
+            heureFinCombo.getItems().clear();
+            statutCombo.getItems().clear();
+            descriptionArea.clear();
+            titreField.clear();
+            lieuField.clear();
+            dateDebutPicker.setValue(null);
+            dateFinPicker.setValue(null);
+        } catch (Exception e) {
+            System.err.println("Erreur nettoyage ressources: " + e.getMessage());
         }
     }
 
@@ -472,39 +466,12 @@ public class AddEventController {
         descriptionArea.getStyleClass().remove("field-invalid");
     }
 
-    private void promptExerciseAssignment(int eventId) throws Exception {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Evenement cree");
-        alert.setHeaderText("Evenement enregistre.");
-        alert.setContentText("Souhaites-tu associer des exercices maintenant ?");
-
-        ButtonType assignNow = new ButtonType("Assigner maintenant");
-        ButtonType finishNow = new ButtonType("Terminer");
-        alert.getButtonTypes().setAll(assignNow, finishNow);
-
-        alert.showAndWait().ifPresent(choice -> {
-            try {
-                if (choice == assignNow) {
-                    goToExerciseAssignment(eventId);
-                } else {
-                    goToList();
-                }
-            } catch (Exception e) {
-                showError("Erreur navigation : " + e.getMessage());
-            }
-        });
-    }
-
-    private void goToExerciseAssignment(int eventId) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/chroniccare/edit-event.fxml"));
-        Parent root = loader.load();
-        EditEventController controller = loader.getController();
-        Event createdEvent = eventService.getById(eventId);
-        if (createdEvent == null) {
-            throw new IllegalStateException("Evenement cree introuvable.");
-        }
-        controller.setEvent(createdEvent);
-        titreField.getScene().setRoot(root);
+    private void showSuccess(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Succès");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     private String getInitials(User user) {
