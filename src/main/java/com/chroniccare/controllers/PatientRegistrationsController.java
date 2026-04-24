@@ -11,6 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
@@ -19,8 +20,12 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -71,6 +76,7 @@ public class PatientRegistrationsController {
         currentUser = SessionManager.getInstance().getCurrentUser();
         setupHeader();
         setupTables();
+        addQRCodeColumn();
         loadRegistrations();
         searchField.textProperty().addListener((obs, oldValue, newValue) -> applyFilters());
         registrationsTable.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> onRegistrationSelected(newValue));
@@ -130,6 +136,69 @@ public class PatientRegistrationsController {
         exDureeCol.setCellValueFactory(new PropertyValueFactory<>("duree"));
         exRepCol.setCellValueFactory(new PropertyValueFactory<>("repetitionsDisplay"));
         exercisesTable.setItems(exercises);
+    }
+
+    private void addQRCodeColumn() {
+        TableColumn<Event, Void> qrCol = new TableColumn<>("QR Code");
+        qrCol.setCellFactory(col -> new TableCell<>() {
+            private final Button btn = new Button("Voir QR");
+            {
+                btn.setStyle("-fx-padding: 5px 10px; -fx-font-size: 11px;");
+                btn.setOnAction(event -> {
+                    Event registration = getTableView().getItems().get(getIndex());
+                    if (registration != null) {
+                        showQRCodeModal(registration);
+                    }
+                });
+            }
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                setGraphic(empty ? null : btn);
+            }
+        });
+        registrationsTable.getColumns().add(qrCol);
+    }
+
+    private void showQRCodeModal(Event event) {
+        try {
+            var registration = eventService.getPatientRegistrationForEvent(event.getId(), currentUser.getEmail());
+            String qrPath = registration != null ? registration.getQrCodePath() : null;
+            String qrToken = registration != null ? registration.getQrCodeToken() : null;
+
+            if (qrPath == null || qrToken == null) {
+                messageLabel.setText("QR Code non trouvé pour cette inscription.");
+                return;
+            }
+
+            Stage modal = new Stage();
+            modal.setTitle("Code QR - " + event.getTitre());
+            
+            File qrFile = new File(qrPath);
+            if (!qrFile.exists()) {
+                messageLabel.setText("Fichier QR Code non trouvé: " + qrPath);
+                return;
+            }
+
+            Image qrImage = new Image(qrFile.toURI().toString());
+            ImageView imageView = new ImageView(qrImage);
+            imageView.setFitWidth(400);
+            imageView.setFitHeight(400);
+            imageView.setPreserveRatio(true);
+
+            Label titleLabel = new Label(event.getTitre());
+            titleLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-padding: 10px;");
+
+            VBox vbox = new VBox(10);
+            vbox.setStyle("-fx-padding: 20px; -fx-alignment: center;");
+            vbox.getChildren().addAll(titleLabel, imageView);
+
+            Scene scene = new Scene(vbox, 500, 550);
+            modal.setScene(scene);
+            modal.show();
+        } catch (Exception e) {
+            messageLabel.setText("Erreur affichage QR Code: " + e.getMessage());
+        }
     }
 
     private void loadRegistrations() {

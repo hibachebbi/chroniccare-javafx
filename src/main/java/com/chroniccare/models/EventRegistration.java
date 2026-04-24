@@ -14,6 +14,8 @@ public class EventRegistration {
     private String telephone;
     private LocalDateTime createdAt;
     private int evenementId;
+    private String qrCodeToken;
+    private String qrCodePath;
 
     public int getId() {
         return id;
@@ -69,6 +71,22 @@ public class EventRegistration {
 
     public void setEvenementId(int evenementId) {
         this.evenementId = evenementId;
+    }
+
+    public String getQrCodeToken() {
+        return qrCodeToken;
+    }
+
+    public void setQrCodeToken(String qrCodeToken) {
+        this.qrCodeToken = qrCodeToken;
+    }
+
+    public String getQrCodePath() {
+        return qrCodePath;
+    }
+
+    public void setQrCodePath(String qrCodePath) {
+        this.qrCodePath = qrCodePath;
     }
 
     public String getCreatedAtDisplay() {

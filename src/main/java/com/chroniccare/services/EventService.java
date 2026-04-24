@@ -143,16 +143,67 @@ public class EventService {
         if (isPatientRegistered(eventId, patient.getEmail())) {
             return false;
         }
-        String sql = "INSERT INTO inscription_evenement (nom, prenom, email, telephone, created_at, evenement_id) " +
-                "VALUES (?, ?, ?, ?, NOW(), ?)";
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setString(1, patient.getNom());
-        ps.setString(2, patient.getPrenom());
-        ps.setString(3, patient.getEmail());
-        ps.setString(4, patient.getTelephone());
-        ps.setInt(5, eventId);
-        ps.executeUpdate();
-        return true;
+        
+        // Récupérer l'event pour avoir les détails (date, titre, lieu)
+        Event event = getById(eventId);
+        if (event == null) {
+            throw new IllegalArgumentException("Événement introuvable.");
+        }
+        
+        String qrToken = null;
+        String qrPath = null;
+        
+        try {
+            // Générer QR code
+            String qrData = String.format("REG_%d_%s_%d", 
+                eventId, patient.getEmail(), System.currentTimeMillis());
+            qrToken = QRCodeService.generateQRCode(qrData);
+            qrPath = QRCodeService.getQRCodePath(qrToken);
+            
+            // Insérer en base
+            String sql = "INSERT INTO inscription_evenement (nom, prenom, email, telephone, created_at, evenement_id, qr_code_token, qr_code_path) " +
+                    "VALUES (?, ?, ?, ?, NOW(), ?, ?, ?)";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, patient.getNom());
+            ps.setString(2, patient.getPrenom());
+            ps.setString(3, patient.getEmail());
+            ps.setString(4, patient.getTelephone());
+            ps.setInt(5, eventId);
+            ps.setString(6, qrToken);
+            ps.setString(7, qrPath);
+            ps.executeUpdate();
+            
+            // Envoyer email avec QR code
+            try {
+                EmailService.sendRegistrationEmailWithQRCode(
+                    patient.getEmail(),
+                    patient.getPrenom() + " " + patient.getNom(),
+                    event.getTitre(),
+                    event.getDateDebut() != null ? event.getDateDebut().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) : "",
+                    event.getLieu(),
+                    qrPath
+                );
+            } catch (Exception e) {
+                System.err.println("Avertissement: Erreur envoi email: " + e.getMessage());
+                // On continue même si l'email échoue
+            }
+            
+            return true;
+        } catch (Exception e) {
+            // Si génération QR ou email échoue, on supprime l'inscription
+            if (qrToken != null) {
+                try {
+                    String sql = "DELETE FROM inscription_evenement WHERE qr_code_token=?";
+                    PreparedStatement ps = conn.prepareStatement(sql);
+                    ps.setString(1, qrToken);
+                    ps.executeUpdate();
+                    QRCodeService.deleteQRCode(qrToken);
+                } catch (Exception ex) {
+                    System.err.println("Erreur nettoyage après inscription échouée: " + ex.getMessage());
+                }
+            }
+            throw new SQLException("Erreur lors de l'inscription: " + e.getMessage(), e);
+        }
     }
 
     public boolean cancelPatientRegistration(int eventId, String email) throws SQLException {
@@ -266,6 +317,18 @@ public class EventService {
         return registrations;
     }
 
+    public EventRegistration getPatientRegistrationForEvent(int eventId, String email) throws SQLException {
+        String sql = "SELECT * FROM inscription_evenement " +
+                "WHERE evenement_id=? AND email=? " +
+                "ORDER BY created_at DESC LIMIT 1";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, eventId);
+        ps.setString(2, email);
+
+        ResultSet rs = ps.executeQuery();
+        return rs.next() ? mapRegistration(rs) : null;
+    }
+
     public Map<Integer, Integer> getRegistrationCountByEventForCoach(int coachId) throws SQLException {
         String sql = "SELECT e.id AS event_id, COUNT(ie.id) AS registration_count " +
                 "FROM evenement e " +
@@ -330,6 +393,13 @@ public class EventService {
         registration.setTelephone(rs.getString("telephone"));
         registration.setCreatedAt(toLocalDateTime(rs.getTimestamp("created_at")));
         registration.setEvenementId(rs.getInt("evenement_id"));
+        
+        String qrToken = rs.getString("qr_code_token");
+        if (qrToken != null) {
+            registration.setQrCodeToken(qrToken);
+            registration.setQrCodePath(rs.getString("qr_code_path"));
+        }
+        
         return registration;
     }
 
