@@ -8,16 +8,18 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class EtatServiceTest {
     private EtatService etatService;
     private ActiviteService activiteService;
+    private InMemoryActiviteRepository activiteRepository;
 
     @BeforeEach
     void setUp() {
-        InMemoryActiviteRepository activiteRepository = new InMemoryActiviteRepository();
+        activiteRepository = new InMemoryActiviteRepository();
         InMemoryEtatRepository etatRepository = new InMemoryEtatRepository();
 
         etatService = new EtatService(etatRepository, activiteRepository);
@@ -30,6 +32,17 @@ class EtatServiceTest {
 
         assertEquals(1L, etat.getId());
         assertEquals("Traitement A", etat.getTraitementEnCours());
+    }
+
+    @Test
+    void shouldGenerateRecommendedActiviteWhenEtatIsCreated() {
+        Etat etat = etatService.create(1L, "Suivi cardio", "fatigue legere", "38.0", "1.0", LocalDateTime.now());
+
+        var activites = activiteRepository.findByEtatId(etat.getId());
+
+        assertEquals(1, activites.size());
+        assertEquals("marche", activites.get(0).getType());
+        assertFalse(activites.get(0).getNotes().isBlank());
     }
 
     @Test

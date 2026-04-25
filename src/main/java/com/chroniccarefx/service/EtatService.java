@@ -10,10 +10,12 @@ import java.util.List;
 public class EtatService {
     private final EtatRepository etatRepository;
     private final ActiviteRepository activiteRepository;
+    private final ActiviteRecommendationService activiteRecommendationService;
 
     public EtatService(EtatRepository etatRepository, ActiviteRepository activiteRepository) {
         this.etatRepository = etatRepository;
         this.activiteRepository = activiteRepository;
+        this.activiteRecommendationService = new ActiviteRecommendationService();
     }
 
     public List<Etat> listAll() {
@@ -38,7 +40,9 @@ public class EtatService {
                 normalizeNullableChoice(niveauHydratation),
                 dateReleve
         );
-        return etatRepository.save(etat);
+        Etat savedEtat = etatRepository.save(etat);
+        activiteRepository.save(activiteRecommendationService.buildRecommendedActivite(savedEtat));
+        return savedEtat;
     }
 
     public Etat update(

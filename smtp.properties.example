@@ -1,0 +1,4 @@
+CC_MAIL_API_URL=https://api.brevo.com/v3/smtp/email
+CC_MAIL_API_KEY=YOUR_API_V3_KEY
+CC_MAIL_FROM=revtechtuning.contact@gmail.com
+CC_MAIL_FROM_NAME=Chronicare
