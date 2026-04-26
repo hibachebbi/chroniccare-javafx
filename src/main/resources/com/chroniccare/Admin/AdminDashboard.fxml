@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.chroniccare.controllers.Admin.AdminDashboardController"
+      spacing="20"
+      style="-fx-padding: 30; -fx-background-color: #f0f4ff;">
+
+    <children>
+        <!-- Header -->
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <Label text="📊 Tableau de Bord Admin"
+                   style="-fx-font-size: 26; -fx-font-weight: bold; -fx-text-fill: #2563eb;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="🔄 Actualiser"
+                    onAction="#refreshDashboard"
+                    style="-fx-background-color: #2563eb; -fx-text-fill: white; -fx-font-size: 12; -fx-padding: 8 16; -fx-cursor: hand; -fx-background-radius: 8;"/>
+            <Button text="🧾 Commandes"
+                    onAction="#goToCommandes"
+                    style="-fx-background-color: #2563eb; -fx-text-fill: white; -fx-font-size: 12; -fx-padding: 8 16; -fx-cursor: hand; -fx-background-radius: 8;"/>
+            <Button text="📦 Produits"
+                    onAction="#goToProduits"
+                    style="-fx-background-color: #2563eb; -fx-text-fill: white; -fx-font-size: 12; -fx-padding: 8 16; -fx-cursor: hand; -fx-background-radius: 8;"/>
+            <Button text="🚚 Livraisons"
+                    onAction="#goToLivraisons"
+                    style="-fx-background-color: #2563eb; -fx-text-fill: white; -fx-font-size: 12; -fx-padding: 8 16; -fx-cursor: hand; -fx-background-radius: 8;"/>
+            <Button text="🚪 Déconnexion"
+                    onAction="#goToLogin"
+                    style="-fx-background-color: #ef4444; -fx-text-fill: white; -fx-font-size: 12; -fx-padding: 8 16; -fx-cursor: hand; -fx-background-radius: 8;"/>
+        </HBox>
+
+        <Separator style="-fx-padding: 0;"/>
+
+        <!-- KPIs -->
+        <VBox spacing="15">
+            <!-- Row 1: CA -->
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <VBox prefWidth="280" style="-fx-border-color: #e5e7eb; -fx-border-radius: 8; -fx-padding: 20; -fx-background-color: white;">
+                    <Label text="💰 Chiffre d'Affaires (CA)"
+                           style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #1f2937;"/>
+                    <Label fx:id="caLabel" text="0 € / 0 €"
+                           style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #2563eb; -fx-padding: 10 0;"/>
+                    <ProgressBar fx:id="caProgress" prefWidth="250" style="-fx-control-inner-background: #d1d5db;"/>
+                </VBox>
+
+                <!-- Row 1: Commandes -->
+                <VBox prefWidth="280" style="-fx-border-color: #e5e7eb; -fx-border-radius: 8; -fx-padding: 20; -fx-background-color: white;">
+                    <Label text="📋 Total Commandes"
+                           style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #1f2937;"/>
+                    <Label fx:id="commandesTotalLabel" text="0"
+                           style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #2563eb; -fx-padding: 10 0;"/>
+                </VBox>
+
+                <VBox prefWidth="280" style="-fx-border-color: #e5e7eb; -fx-border-radius: 8; -fx-padding: 20; -fx-background-color: white;">
+                    <Label text="📅 Commandes Aujourd'hui"
+                           style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #1f2937;"/>
+                    <Label fx:id="commandesTodayLabel" text="0"
+                           style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #10b981; -fx-padding: 10 0;"/>
+                </VBox>
+
+                <VBox prefWidth="280" style="-fx-border-color: #e5e7eb; -fx-border-radius: 8; -fx-padding: 20; -fx-background-color: white;">
+                    <Label text="⏳ En Attente"
+                           style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #1f2937;"/>
+                    <Label fx:id="commandesPendingLabel" text="0"
+                           style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #f59e0b; -fx-padding: 10 0;"/>
+                </VBox>
+            </HBox>
+
+            <!-- Row 2: Livraisons -->
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <VBox prefWidth="280" style="-fx-border-color: #e5e7eb; -fx-border-radius: 8; -fx-padding: 20; -fx-background-color: white;">
+                    <Label text="🚚 Total Livraisons"
+                           style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #1f2937;"/>
+                    <Label fx:id="livraisonsLabel" text="0"
+                           style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #2563eb; -fx-padding: 10 0;"/>
+                </VBox>
+
+                <VBox prefWidth="280" style="-fx-border-color: #e5e7eb; -fx-border-radius: 8; -fx-padding: 20; -fx-background-color: white;">
+                    <Label text="🚨 Livraisons en retard"
+                           style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #1f2937;"/>
+                    <Label fx:id="livraisonsRetardLabel" text="0"
+                           style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #ef4444; -fx-padding: 10 0;"/>
+                </VBox>
+
+                <!-- Row 2: Stocks -->
+                <VBox prefWidth="280" style="-fx-border-color: #e5e7eb; -fx-border-radius: 8; -fx-padding: 20; -fx-background-color: white;">
+                    <Label text="📦 Total Produits"
+                           style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #1f2937;"/>
+                    <Label fx:id="produitsLabel" text="0"
+                           style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #2563eb; -fx-padding: 10 0;"/>
+                </VBox>
+
+                <VBox prefWidth="280" style="-fx-border-color: #e5e7eb; -fx-border-radius: 8; -fx-padding: 20; -fx-background-color: white;">
+                    <Label text="📉 Stock Faible"
+                           style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #1f2937;"/>
+                    <Label fx:id="produitsStockFaibleLabel" text="0"
+                           style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #f59e0b; -fx-padding: 10 0;"/>
+                </VBox>
+
+                <VBox prefWidth="280" style="-fx-border-color: #e5e7eb; -fx-border-radius: 8; -fx-padding: 20; -fx-background-color: white;">
+                    <Label text="🔴 Rupture"
+                           style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #1f2937;"/>
+                    <Label fx:id="produitsRuptureLabel" text="0"
+                           style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #ef4444; -fx-padding: 10 0;"/>
+                </VBox>
+            </HBox>
+        </VBox>
+
+        <Separator style="-fx-padding: 10 0;"/>
+
+        <!-- Alerts -->
+        <VBox spacing="10">
+            <Label text="🚨 Alertes et Notifications"
+                   style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #1f2937;"/>
+            <VBox fx:id="alertsBox"
+                  spacing="8"
+                  style="-fx-border-color: #e5e7eb; -fx-border-radius: 8; -fx-padding: 15; -fx-background-color: white;"/>
+        </VBox>
+
+    </children>
+</VBox>
+
