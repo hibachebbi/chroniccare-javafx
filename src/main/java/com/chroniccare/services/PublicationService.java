@@ -10,6 +10,7 @@ import java.util.List;
 public class PublicationService {
 
     private final Connection conn = MyDatabase.getInstance().getConnection();
+    private final NotificationService notificationService = new NotificationService();
 
     // CREATE
     public boolean ajouter(Publication p) {
@@ -108,7 +109,11 @@ public class PublicationService {
             ps.setString(1, String.valueOf(userId));
             ps.setString(2, String.valueOf(userId));
             ps.setInt(3, publicationId);
-            return ps.executeUpdate() > 0;
+            boolean success = ps.executeUpdate() > 0;
+            if (success) {
+                notificationService.notifierLikePublication(publicationId, userId);
+            }
+            return success;
         } catch (SQLException e) {
             System.err.println("Erreur liker : " + e.getMessage());
             return false;

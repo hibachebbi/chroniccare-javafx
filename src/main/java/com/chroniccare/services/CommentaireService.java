@@ -10,16 +10,30 @@ import java.util.List;
 public class CommentaireService {
 
     private final Connection conn = MyDatabase.getInstance().getConnection();
+    private final NotificationService notificationService = new NotificationService();
 
     // CREATE
     public boolean ajouter(Commentaire c) {
         String sql = "INSERT INTO commentaire (contenu, is_anonymous, like_count, created_at, publication_id, auteur_id) VALUES (?, ?, 0, NOW(), ?, ?)";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, c.getContenu());
             ps.setBoolean(2, c.isAnonymous());
             ps.setInt(3, c.getPublicationId());
             ps.setObject(4, c.getAuteurId());
-            return ps.executeUpdate() > 0;
+            boolean success = ps.executeUpdate() > 0;
+            if (success) {
+                try (ResultSet keys = ps.getGeneratedKeys()) {
+                    if (keys.next() && c.getAuteurId() != null) {
+                        notificationService.notifierCommentairePublication(
+                                c.getPublicationId(),
+                                keys.getInt(1),
+                                c.getAuteurId(),
+                                c.getContenu()
+                        );
+                    }
+                }
+            }
+            return success;
         } catch (SQLException e) {
             System.err.println("Erreur ajouter commentaire : " + e.getMessage());
             return false;

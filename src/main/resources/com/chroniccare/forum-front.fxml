@@ -54,6 +54,34 @@
                            prefWidth="220"
                            style="-fx-background-radius:8px; -fx-border-radius:8px;
                                   -fx-border-color:#d1d5db; -fx-padding:8 12;"/>
+
+                <!-- 🔔 BOUTON NOTIFICATION -->
+                <StackPane fx:id="notifBellContainer" style="-fx-cursor:hand;">
+                    <Button fx:id="btnNotification"
+                            text="🔔"
+                            onAction="#toggleNotifications"
+                            style="-fx-background-color:#f1f5f9;
+                                   -fx-background-radius:50%;
+                                   -fx-font-size:16px;
+                                   -fx-min-width:38px; -fx-min-height:38px;
+                                   -fx-max-width:38px; -fx-max-height:38px;
+                                   -fx-border-width:0; -fx-cursor:hand;"/>
+                    <Label fx:id="badgeNotif"
+                           text="0"
+                           visible="false"
+                           managed="false"
+                           style="-fx-background-color:#ef4444;
+                                  -fx-text-fill:white;
+                                  -fx-font-size:9px;
+                                  -fx-font-weight:bold;
+                                  -fx-background-radius:10px;
+                                  -fx-min-width:16px; -fx-min-height:16px;
+                                  -fx-max-width:16px; -fx-max-height:16px;
+                                  -fx-alignment:CENTER;
+                                  -fx-padding:0;"
+                           StackPane.alignment="TOP_RIGHT"/>
+                </StackPane>
+
                 <Button fx:id="btnAjouter"
                         text="+ Nouvelle publication"
                         styleClass="btn-primary"
@@ -107,6 +135,7 @@
                         <Separator/>
                         <FlowPane fx:id="flowCategories" hgap="6" vgap="6"/>
                     </VBox>
+
                     <!-- Filtre statut -->
                     <VBox styleClass="card" spacing="10">
                         <Label text="Statut"
