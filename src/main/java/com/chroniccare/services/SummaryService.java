@@ -6,23 +6,35 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 
-/**
- * Service de resume IA via Groq API (100% gratuit - 14400 req/jour).
- * Modele : llama3-8b-8192 (rapide et gratuit)
- * Cle gratuite sur : https://console.groq.com
- */
 public class SummaryService {
 
     private static final String API_URL = "https://api.groq.com/openai/v1/chat/completions";
-    private static final String API_KEY = "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"; // console.groq.com -> API Keys
     private static final String MODEL   = "llama-3.3-70b-versatile";
+    private static final String API_KEY = chargerCle();
 
     private final HttpClient client = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(15))
             .build();
 
+    // Charge la cle depuis config.properties (jamais commite sur Git)
+    private static String chargerCle() {
+        try (var is = SummaryService.class.getResourceAsStream("/com/chroniccare/config.properties")) {
+            if (is == null) {
+                System.err.println("config.properties introuvable !");
+                return "";
+            }
+            java.util.Properties props = new java.util.Properties();
+            props.load(is);
+            return props.getProperty("groq.api.key", "");
+        } catch (Exception e) {
+            System.err.println("Erreur chargement cle : " + e.getMessage());
+            return "";
+        }
+    }
+
     public String resumer(String titre, String contenu) {
         if (contenu == null || contenu.isBlank()) return "Contenu vide, impossible de resumer.";
+        if (API_KEY.isBlank()) return "Cle API manquante. Verifie config.properties.";
 
         try {
             String prompt = "Voici une publication medicale intitulee : \""
@@ -65,8 +77,6 @@ public class SummaryService {
                 return "Erreur API (" + response.statusCode() + "). Verifie ta cle Groq.";
             }
 
-            // Parser "content":"..."  dans la reponse Groq
-            // Format: {"choices":[{"message":{"content":"..."}}]}
             String key = "\"content\":\"";
             int start = json.indexOf(key);
             if (start == -1) return "Impossible de parser la reponse.";
