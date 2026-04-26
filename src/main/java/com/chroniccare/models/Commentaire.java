@@ -1,6 +1,8 @@
 package com.chroniccare.models;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Commentaire {
     private int id;
@@ -10,6 +12,8 @@ public class Commentaire {
     private LocalDateTime createdAt;
     private int publicationId;
     private Integer auteurId;
+    private Integer parentId; // null = commentaire racine, sinon = reponse
+    private List<Commentaire> reponses = new ArrayList<>();
 
     public Commentaire() {}
 
@@ -27,4 +31,10 @@ public class Commentaire {
     public void setPublicationId(int publicationId) { this.publicationId = publicationId; }
     public Integer getAuteurId() { return auteurId; }
     public void setAuteurId(Integer auteurId) { this.auteurId = auteurId; }
+    public Integer getParentId() { return parentId; }
+    public void setParentId(Integer parentId) { this.parentId = parentId; }
+    public List<Commentaire> getReponses() { return reponses; }
+    public void setReponses(List<Commentaire> reponses) { this.reponses = reponses; }
+    public void addReponse(Commentaire r) { this.reponses.add(r); }
+    public boolean isReponse() { return parentId != null; }
 }
