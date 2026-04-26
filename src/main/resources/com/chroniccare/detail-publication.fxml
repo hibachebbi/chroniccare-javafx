@@ -12,7 +12,7 @@
     <!-- HEADER -->
     <HBox style="-fx-background-color:white; -fx-padding:16 24;"
           alignment="CENTER_LEFT" spacing="12">
-        <Button text="← Retour" styleClass="btn-secondary" onAction="#fermer"/>
+        <Button text="&#8592; Retour" styleClass="btn-secondary" onAction="#fermer"/>
         <Label fx:id="labelTitrePublication" styleClass="page-title"/>
     </HBox>
 
@@ -34,10 +34,72 @@
                     <Label fx:id="labelDate"
                            style="-fx-text-fill:#94a3b8; -fx-font-size:12px;"/>
                 </HBox>
+
+                <!-- Contenu -->
                 <Label fx:id="labelContenu" wrapText="true"
                        style="-fx-font-size:14px; -fx-text-fill:#374151; -fx-line-spacing:4;"/>
+
+                <!-- AI SUMMARY BLOCK (caché par défaut) -->
+                <VBox fx:id="summaryBox"
+                      visible="false" managed="false"
+                      spacing="8"
+                      style="-fx-background-color:linear-gradient(to right, #ede9fe, #dbeafe);
+                             -fx-background-radius:12px;
+                             -fx-padding:14 16;
+                             -fx-border-color:#c4b5fd;
+                             -fx-border-width:1;
+                             -fx-border-radius:12px;">
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                        <Label text="&#10024; Résumé IA"
+                               style="-fx-font-size:12px; -fx-font-weight:bold;
+                                      -fx-text-fill:#6d28d9;"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button fx:id="btnFermerSummary"
+                                text="&#10005;"
+                                onAction="#fermerSummary"
+                                style="-fx-background-color:transparent;
+                                       -fx-text-fill:#9ca3af;
+                                       -fx-font-size:12px;
+                                       -fx-border-width:0;
+                                       -fx-cursor:hand;
+                                       -fx-padding:0 4;"/>
+                    </HBox>
+                    <Label fx:id="labelSummary"
+                           wrapText="true"
+                           style="-fx-font-size:13px; -fx-text-fill:#374151;
+                                  -fx-line-spacing:3;"/>
+                </VBox>
+
+                <!-- Boutons actions -->
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <!-- Traduction -->
+                    <Button fx:id="btnTraduirePublication"
+                            text="&#127760; Traduire"
+                            onAction="#traduirePublication"
+                            style="-fx-background-color:#eff6ff;
+                                   -fx-text-fill:#2563eb;
+                                   -fx-font-size:12px;
+                                   -fx-background-radius:6px;
+                                   -fx-padding:6 14;
+                                   -fx-border-width:0;
+                                   -fx-cursor:hand;"/>
+                    <!-- AI Summary -->
+                    <Button fx:id="btnSummary"
+                            text="&#10024; Résumer avec IA"
+                            onAction="#genererSummary"
+                            style="-fx-background-color:linear-gradient(to right,#7c3aed,#2563eb);
+                                   -fx-text-fill:white;
+                                   -fx-font-size:12px;
+                                   -fx-font-weight:bold;
+                                   -fx-background-radius:6px;
+                                   -fx-padding:6 14;
+                                   -fx-border-width:0;
+                                   -fx-cursor:hand;"/>
+                </HBox>
+
+                <!-- Like -->
                 <HBox spacing="16" alignment="CENTER_LEFT">
-                    <Button fx:id="btnLikerPublication" text="❤️ Liker"
+                    <Button fx:id="btnLikerPublication" text="&#10084;&#65039; Liker"
                             styleClass="btn-secondary" onAction="#likerPublication"/>
                     <Label fx:id="labelLikes"
                            style="-fx-text-fill:#64748b; -fx-font-size:13px;"/>
@@ -47,7 +109,7 @@
             <!-- COMMENTAIRES -->
             <VBox styleClass="card" spacing="14">
                 <HBox alignment="CENTER_LEFT" spacing="8">
-                    <Label text="💬" styleClass="card-icon"/>
+                    <Label text="&#128172;" styleClass="card-icon"/>
                     <Label text="Commentaires" styleClass="card-title"/>
                     <Label fx:id="nbCommentaires"
                            style="-fx-background-color:#e0e7ff; -fx-text-fill:#3730a3;
@@ -55,11 +117,7 @@
                                   -fx-font-size:11px; -fx-font-weight:bold;"/>
                 </HBox>
                 <Separator/>
-
-                <!-- LISTE COMMENTAIRES -->
                 <VBox fx:id="listeCommentaires" spacing="10"/>
-
-                <!-- AJOUTER COMMENTAIRE -->
                 <Separator/>
                 <Label text="Ajouter un commentaire" styleClass="info-label"/>
                 <TextArea fx:id="fieldCommentaire" prefHeight="80"
