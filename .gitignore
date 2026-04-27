@@ -34,6 +34,8 @@ build/
 
 ### VS Code ###
 .vscode/
+config/openai.properties
+config/gemini.properties
 
 ### Mac OS ###
 .DS_Store

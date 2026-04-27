@@ -1,8 +1,10 @@
 package com.chroniccare.controllers;
 
 import com.chroniccare.models.Appointment;
+import com.chroniccare.models.HolidayInfo;
 import com.chroniccare.models.User;
 import com.chroniccare.services.AppointmentService;
+import com.chroniccare.services.HolidayService;
 import com.chroniccare.utils.SessionManager;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -24,6 +26,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 public class NutritionRdvController {
     @FXML private Label sidebarAvatar;
@@ -53,6 +56,7 @@ public class NutritionRdvController {
     @FXML private Button openConsultationButton;
 
     private final AppointmentService appointmentService = new AppointmentService();
+    private final HolidayService holidayService = new HolidayService();
 
     @FXML
     public void initialize() {
@@ -84,6 +88,11 @@ public class NutritionRdvController {
         }
         LocalDateTime slot = resolveDecisionSlot(appointment);
         if (slot == null) return;
+        String availabilityError = validateDecisionSlot(slot);
+        if (availabilityError != null) {
+            showError(availabilityError);
+            return;
+        }
 
         try {
             appointmentService.acceptAppointment(appointment.getId(), slot, responseArea.getText().trim());
@@ -119,6 +128,11 @@ public class NutritionRdvController {
         }
         LocalDateTime slot = resolveDecisionSlot(null);
         if (slot == null) return;
+        String availabilityError = validateDecisionSlot(slot);
+        if (availabilityError != null) {
+            showError(availabilityError);
+            return;
+        }
 
         try {
             appointmentService.proposeReschedule(appointment.getId(), slot, responseArea.getText().trim());
@@ -219,6 +233,28 @@ public class NutritionRdvController {
             return null;
         }
         return LocalDateTime.of(date, LocalTime.parse(time));
+    }
+
+    private String validateDecisionSlot(LocalDateTime slot) {
+        if (slot.isBefore(LocalDateTime.now())) {
+            return "Le creneau retenu doit etre dans le futur.";
+        }
+        LocalDate date = slot.toLocalDate();
+        if (holidayService.isWeekend(date)) {
+            return "Le creneau retenu tombe un week-end.";
+        }
+        try {
+            Optional<HolidayInfo> holiday = holidayService.findHoliday(date);
+            if (holiday.isPresent()) {
+                String holidayName = holiday.get().getLocalName() != null
+                        ? holiday.get().getLocalName()
+                        : holiday.get().getName();
+                return "Le creneau retenu tombe un jour ferie : " + valueOrDash(holidayName) + ".";
+            }
+        } catch (Exception e) {
+            return "Impossible de verifier les jours feries : " + e.getMessage();
+        }
+        return null;
     }
 
     private void applyHeader(User currentUser) {

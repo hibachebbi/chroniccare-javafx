@@ -77,9 +77,60 @@
                         </VBox>
                     </VBox>
 
+                    <VBox styleClass="card, card-tips" spacing="14">
+                        <Label text="Assistance nutrition produit" styleClass="card-title"/>
+                        <Separator/>
+                        <HBox spacing="12" alignment="CENTER_LEFT">
+                            <TextField fx:id="foodSearchField" promptText="Ex. yaourt nature, muesli, cereales" HBox.hgrow="ALWAYS"/>
+                            <Button text="Rechercher" styleClass="btn-secondary" onAction="#handleSearchFood"/>
+                            <Button text="Inserer dans recommandations" styleClass="btn-primary" onAction="#handleInsertFoodIntoRecommendations"/>
+                        </HBox>
+                        <Label fx:id="foodSearchStatusLabel" styleClass="stat-sub" wrapText="true" text="Recherche Open Food Facts non lancee."/>
+                        <HBox spacing="22">
+                            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                                <Label text="Produit" styleClass="info-label"/>
+                                <Label fx:id="productNameLabel" styleClass="info-value" wrapText="true" text="-"/>
+                            </VBox>
+                            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                                <Label text="Marque" styleClass="info-label"/>
+                                <Label fx:id="productBrandLabel" styleClass="info-value" wrapText="true" text="-"/>
+                            </VBox>
+                            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                                <Label text="Nutri-Score" styleClass="info-label"/>
+                                <Label fx:id="productNutriScoreLabel" styleClass="info-value" text="-"/>
+                            </VBox>
+                        </HBox>
+                        <HBox spacing="22">
+                            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                                <Label text="Calories" styleClass="info-label"/>
+                                <Label fx:id="productCaloriesLabel" styleClass="info-value" text="-"/>
+                            </VBox>
+                            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                                <Label text="Sucres" styleClass="info-label"/>
+                                <Label fx:id="productSugarsLabel" styleClass="info-value" text="-"/>
+                            </VBox>
+                            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                                <Label text="Lipides" styleClass="info-label"/>
+                                <Label fx:id="productFatLabel" styleClass="info-value" text="-"/>
+                            </VBox>
+                            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                                <Label text="Proteines" styleClass="info-label"/>
+                                <Label fx:id="productProteinsLabel" styleClass="info-value" text="-"/>
+                            </VBox>
+                        </HBox>
+                        <VBox spacing="6">
+                            <Label text="Ingredients" styleClass="info-label"/>
+                            <Label fx:id="productIngredientsLabel" styleClass="info-value" wrapText="true" text="-"/>
+                        </VBox>
+                    </VBox>
+
                     <VBox styleClass="card" spacing="16">
                         <Label text="Saisie de la consultation" styleClass="card-title"/>
                         <Separator/>
+                        <HBox spacing="12" alignment="CENTER_LEFT">
+                            <Button text="Generer avec Gemini" styleClass="btn-secondary" onAction="#handleGenerateWithAi"/>
+                            <Label fx:id="aiStatusLabel" styleClass="stat-sub" wrapText="true" text="Gemini non lance."/>
+                        </HBox>
                         <VBox spacing="6">
                             <Label text="Theme" styleClass="info-label"/>
                             <TextField fx:id="themeField" styleClass="filter-field"/>

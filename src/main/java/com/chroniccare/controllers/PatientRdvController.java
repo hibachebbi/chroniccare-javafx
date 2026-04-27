@@ -1,8 +1,10 @@
 package com.chroniccare.controllers;
 
 import com.chroniccare.models.Appointment;
+import com.chroniccare.models.HolidayInfo;
 import com.chroniccare.models.User;
 import com.chroniccare.services.AppointmentService;
+import com.chroniccare.services.HolidayService;
 import com.chroniccare.utils.SessionManager;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -24,6 +26,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 public class PatientRdvController {
     @FXML private Label sidebarAvatar;
@@ -53,6 +56,7 @@ public class PatientRdvController {
     @FXML private TextArea selectedResponseArea;
 
     private final AppointmentService appointmentService = new AppointmentService();
+    private final HolidayService holidayService = new HolidayService();
 
     @FXML
     public void initialize() {
@@ -103,6 +107,11 @@ public class PatientRdvController {
         );
         if (requestedDateTime.isBefore(LocalDateTime.now())) {
             showError("Le creneau souhaite doit etre dans le futur.");
+            return;
+        }
+        String availabilityError = validateRequestedSlot(requestedDateTime);
+        if (availabilityError != null) {
+            showError(availabilityError);
             return;
         }
 
@@ -227,6 +236,25 @@ public class PatientRdvController {
     private void clearMessages() {
         errorLabel.setText("");
         successLabel.setText("");
+    }
+
+    private String validateRequestedSlot(LocalDateTime requestedDateTime) {
+        LocalDate date = requestedDateTime.toLocalDate();
+        if (holidayService.isWeekend(date)) {
+            return "Les rendez-vous ne sont pas disponibles le week-end.";
+        }
+        try {
+            Optional<HolidayInfo> holiday = holidayService.findHoliday(date);
+            if (holiday.isPresent()) {
+                String holidayName = holiday.get().getLocalName() != null
+                        ? holiday.get().getLocalName()
+                        : holiday.get().getName();
+                return "La date choisie est un jour ferie : " + valueOrDash(holidayName) + ".";
+            }
+        } catch (Exception e) {
+            return "Impossible de verifier les jours feries : " + e.getMessage();
+        }
+        return null;
     }
 
     private String getInitials(User user) {

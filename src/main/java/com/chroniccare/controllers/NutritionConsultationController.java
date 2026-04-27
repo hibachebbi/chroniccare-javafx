@@ -2,9 +2,13 @@ package com.chroniccare.controllers;
 
 import com.chroniccare.models.Appointment;
 import com.chroniccare.models.Consultation;
+import com.chroniccare.models.ConsultationDraft;
+import com.chroniccare.models.OpenFoodFactsProduct;
 import com.chroniccare.models.User;
 import com.chroniccare.services.AppointmentService;
 import com.chroniccare.services.ConsultationService;
+import com.chroniccare.services.GeminiService;
+import com.chroniccare.services.OpenFoodFactsService;
 import com.chroniccare.utils.SessionManager;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,6 +23,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 public class NutritionConsultationController {
     @FXML private Label sidebarAvatar;
@@ -31,6 +36,17 @@ public class NutritionConsultationController {
     @FXML private Label followUpTypeLabel;
     @FXML private Label medicalContextLabel;
     @FXML private Label historyLabel;
+    @FXML private TextField foodSearchField;
+    @FXML private Label foodSearchStatusLabel;
+    @FXML private Label productNameLabel;
+    @FXML private Label productBrandLabel;
+    @FXML private Label productNutriScoreLabel;
+    @FXML private Label productCaloriesLabel;
+    @FXML private Label productSugarsLabel;
+    @FXML private Label productFatLabel;
+    @FXML private Label productProteinsLabel;
+    @FXML private Label productIngredientsLabel;
+    @FXML private Label aiStatusLabel;
     @FXML private TextField themeField;
     @FXML private TextArea summaryArea;
     @FXML private TextArea recommendationsArea;
@@ -43,13 +59,17 @@ public class NutritionConsultationController {
 
     private final AppointmentService appointmentService = new AppointmentService();
     private final ConsultationService consultationService = new ConsultationService();
+    private final OpenFoodFactsService openFoodFactsService = new OpenFoodFactsService();
+    private final GeminiService geminiService = new GeminiService();
     private Appointment currentAppointment;
+    private OpenFoodFactsProduct selectedProduct;
 
     @FXML
     public void initialize() {
         User currentUser = SessionManager.getInstance().getCurrentUser();
         if (currentUser == null) return;
         applyHeader(currentUser);
+        clearProductResult();
         try {
             Integer appointmentId = SessionManager.getInstance().getSelectedAppointmentId();
             if (appointmentId == null) {
@@ -102,6 +122,79 @@ public class NutritionConsultationController {
         }
     }
 
+    @FXML
+    public void handleSearchFood() {
+        String searchTerm = foodSearchField.getText();
+        if (searchTerm == null || searchTerm.trim().isEmpty()) {
+            foodSearchStatusLabel.setText("Saisissez un produit a rechercher.");
+            clearProductResult();
+            return;
+        }
+
+        try {
+            Optional<OpenFoodFactsProduct> result = openFoodFactsService.searchFirstProduct(searchTerm);
+            if (result.isEmpty()) {
+                foodSearchStatusLabel.setText("Aucun produit trouve sur Open Food Facts.");
+                clearProductResult();
+                return;
+            }
+            selectedProduct = result.get();
+            fillProductResult(selectedProduct);
+            foodSearchStatusLabel.setText("Produit nutritionnel charge depuis Open Food Facts.");
+        } catch (Exception e) {
+            foodSearchStatusLabel.setText("Recherche Open Food Facts impossible : " + e.getMessage());
+            clearProductResult();
+        }
+    }
+
+    @FXML
+    public void handleInsertFoodIntoRecommendations() {
+        if (selectedProduct == null) {
+            showError("Recherchez d'abord un produit Open Food Facts.");
+            return;
+        }
+        String snippet = selectedProduct.toRecommendationSnippet();
+        if (recommendationsArea.getText() == null || recommendationsArea.getText().isBlank()) {
+            recommendationsArea.setText(snippet);
+        } else {
+            recommendationsArea.appendText(System.lineSeparator() + snippet);
+        }
+        successLabel.setText("Informations produit ajoutees aux recommandations.");
+        errorLabel.setText("");
+    }
+
+    @FXML
+    public void handleGenerateWithAi() {
+        if (currentAppointment == null) {
+            showError("Rendez-vous indisponible.");
+            return;
+        }
+
+        aiStatusLabel.setText("Generation Gemini en cours...");
+        try {
+            ConsultationDraft draft = geminiService.generateConsultationDraft(
+                    currentAppointment.getPatientName(),
+                    currentAppointment.getMotif(),
+                    currentAppointment.getFollowUpType(),
+                    currentAppointment.getMedicalSnapshot(),
+                    themeField.getText(),
+                    summaryArea.getText(),
+                    recommendationsArea.getText(),
+                    mealPlanArea.getText(),
+                    objectivesArea.getText(),
+                    medicalNotesArea.getText(),
+                    selectedProduct
+            );
+            applyDraft(draft);
+            aiStatusLabel.setText("Brouillon Gemini genere. Verifiez puis ajustez avant enregistrement.");
+            successLabel.setText("Les champs ont ete enrichis par Gemini.");
+            errorLabel.setText("");
+        } catch (Exception e) {
+            aiStatusLabel.setText("Generation Gemini indisponible.");
+            showError("Impossible de generer avec Gemini : " + e.getMessage());
+        }
+    }
+
     @FXML public void goToHome() { navigate("/com/chroniccare/home.fxml"); }
     @FXML public void goToProfile() { navigate("/com/chroniccare/profile-nutritionniste.fxml"); }
     @FXML public void goToRdv() { navigate("/com/chroniccare/nutrition-rdv.fxml"); }
@@ -147,6 +240,40 @@ public class NutritionConsultationController {
         followUpDatePicker.setValue(consultation.getFollowUpDate());
     }
 
+    private void fillProductResult(OpenFoodFactsProduct product) {
+        productNameLabel.setText(valueOrDash(product.getProductName()));
+        productBrandLabel.setText(valueOrDash(product.getBrands()));
+        productNutriScoreLabel.setText(valueOrDash(toUpper(product.getNutriScoreGrade())));
+        productCaloriesLabel.setText(formatNumber(product.getEnergyKcal100g(), "kcal / 100g"));
+        productSugarsLabel.setText(formatNumber(product.getSugars100g(), "g / 100g"));
+        productFatLabel.setText(formatNumber(product.getFat100g(), "g / 100g"));
+        productProteinsLabel.setText(formatNumber(product.getProteins100g(), "g / 100g"));
+        productIngredientsLabel.setText(valueOrDash(product.getIngredientsText()));
+    }
+
+    private void applyDraft(ConsultationDraft draft) {
+        if (draft == null) {
+            return;
+        }
+        themeField.setText(valueOrBlank(draft.getTheme()));
+        summaryArea.setText(valueOrBlank(draft.getSummary()));
+        recommendationsArea.setText(joinWithPatientMessage(draft.getRecommendations(), draft.getFollowUpMessage()));
+        mealPlanArea.setText(valueOrBlank(draft.getMealPlan()));
+        objectivesArea.setText(valueOrBlank(draft.getObjectives()));
+    }
+
+    private void clearProductResult() {
+        selectedProduct = null;
+        productNameLabel.setText("-");
+        productBrandLabel.setText("-");
+        productNutriScoreLabel.setText("-");
+        productCaloriesLabel.setText("-");
+        productSugarsLabel.setText("-");
+        productFatLabel.setText("-");
+        productProteinsLabel.setText("-");
+        productIngredientsLabel.setText("-");
+    }
+
     private void applyHeader(User currentUser) {
         String initials = getInitials(currentUser);
         sidebarAvatar.setText(initials);
@@ -186,5 +313,32 @@ public class NutritionConsultationController {
 
     private String valueOrBlank(String value) {
         return value == null ? "" : value;
+    }
+
+    private String joinWithPatientMessage(String recommendations, String followUpMessage) {
+        String firstPart = valueOrBlank(recommendations).trim();
+        String secondPart = valueOrBlank(followUpMessage).trim();
+        if (firstPart.isEmpty()) {
+            return secondPart;
+        }
+        if (secondPart.isEmpty()) {
+            return firstPart;
+        }
+        return firstPart + System.lineSeparator() + System.lineSeparator() + "Message patient :" +
+                System.lineSeparator() + secondPart;
+    }
+
+    private String toUpper(String value) {
+        return value == null ? null : value.toUpperCase(Locale.ROOT);
+    }
+
+    private String formatNumber(Double value, String suffix) {
+        if (value == null) {
+            return "-";
+        }
+        if (Math.rint(value) == value) {
+            return value.intValue() + " " + suffix;
+        }
+        return String.format(Locale.US, "%.1f %s", value, suffix);
     }
 }
