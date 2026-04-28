@@ -2,6 +2,7 @@ package com.chroniccare.controllers.Admin;
 
 import com.chroniccare.entities.Produit;
 import com.chroniccare.services.ProduitsService;
+import com.chroniccare.services.StockAlertService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -26,11 +27,11 @@ import java.util.stream.Collectors;
 public class ProduitsDashboardController {
 
     @FXML private TableView<Produit> productsTable;
-    @FXML private TableColumn<Produit, Integer> idCol;
     @FXML private TableColumn<Produit, String> nomCol;
     @FXML private TableColumn<Produit, String> categorieCol;
     @FXML private TableColumn<Produit, Double> prixCol;
     @FXML private TableColumn<Produit, Integer> stockCol;
+    @FXML private TableColumn<Produit, String> statutCol;
     @FXML private TableColumn<Produit, Boolean> activeCol;
     @FXML private TableColumn<Produit, Void> actionsCol;
 
@@ -40,6 +41,7 @@ public class ProduitsDashboardController {
     @FXML private Label countLabel;
 
     private final ProduitsService service = new ProduitsService();
+    private final StockAlertService stockAlertService = new StockAlertService();
     private final ObservableList<Produit> allProduits = FXCollections.observableArrayList();
     private final ObservableList<Produit> filteredProduits = FXCollections.observableArrayList();
 
@@ -53,6 +55,38 @@ public class ProduitsDashboardController {
         prixCol.setCellValueFactory(new PropertyValueFactory<>("prix"));
         stockCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
         activeCol.setCellValueFactory(new PropertyValueFactory<>("active"));
+
+        statutCol.setCellValueFactory(cellData -> {
+            Produit produit = cellData.getValue();
+            String statut;
+            if (produit.getStock() <= 0) {
+                statut = "🔴 Rupture";
+            } else if (produit.getStock() <= StockAlertService.STOCK_FAIBLE_SEUIL) {
+                statut = "📉 Faible";
+            } else {
+                statut = "✅ OK";
+            }
+            return new javafx.beans.property.SimpleStringProperty(statut);
+        });
+        statutCol.setCellFactory(col -> new TableCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                    setStyle("");
+                    return;
+                }
+                setText(item);
+                if (item.contains("Rupture")) {
+                    setStyle("-fx-text-fill: #dc2626; -fx-font-weight: bold; -fx-font-size: 12;");
+                } else if (item.contains("Faible")) {
+                    setStyle("-fx-text-fill: #f59e0b; -fx-font-weight: bold; -fx-font-size: 12;");
+                } else {
+                    setStyle("-fx-text-fill: #10b981; -fx-font-weight: bold; -fx-font-size: 12;");
+                }
+            }
+        });
 
         actionsCol.setCellFactory(col -> new TableCell<>() {
             private final Button btnEdit = new Button("Modifier");
@@ -76,7 +110,19 @@ public class ProduitsDashboardController {
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
-                setGraphic(empty ? null : box);
+                if (empty) {
+                    setGraphic(null);
+                    return;
+                }
+                if (getIndex() < 0 || getIndex() >= getTableView().getItems().size()) {
+                    setGraphic(null);
+                    return;
+                }
+                Produit produit = getTableView().getItems().get(getIndex());
+                boolean rupture = produit != null && produit.getStock() <= 0;
+                btnDelete.setDisable(!rupture);
+                btnDelete.setText(rupture ? "Supprimer" : "Supprimer (stock > 0)");
+                setGraphic(box);
             }
         });
 

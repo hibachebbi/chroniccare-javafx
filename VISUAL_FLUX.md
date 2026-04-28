@@ -1,4 +1,4 @@
-# 🎨 Flux Visual - Annulation de Commande (CORRIGÉ)
+#  Flux Visual - Annulation de Commande (CORRIGÉ)
 
 ## Statuts en Base de Données
 
@@ -29,7 +29,7 @@
 │  Statut = annulee    → Bouton MASQUÉ ❌                     │
 │  Statut = livree     → Bouton MASQUÉ ❌                      │
 │                                                              │
-│  💡 Normalisation: trim() + toLowerCase()                  │
+│   Normalisation: trim() + toLowerCase()                  │
 └─────────────────────────────────────────────────────────────┘
                             ↓
             Utilisateur clique "Annuler"?
@@ -247,4 +247,3 @@ Couche 3: DATABASE (Intégrité Data)
 ---
 
 **Résumé**: Le flux est maintenant **sécurisé, robuste et user-friendly** ✅
-

@@ -21,15 +21,15 @@
     <children>
         <!-- Header -->
         <HBox alignment="CENTER_LEFT" spacing="10">
-            <Label fx:id="historyTitle" text="📜 Mon Historique"
+            <Label fx:id="historyTitle" text=" Mon Historique"
                    style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #2563eb;"/>
             <Region HBox.hgrow="ALWAYS"/>
             <Label fx:id="utilisateurLabel" text="Client"
                    style="-fx-font-size: 12; -fx-text-fill: #666;"/>
-            <Button text="🏠 Accueil"
+            <Button text=" Accueil"
                     onAction="#goToAccueil"
                     style="-fx-background-color: #0f172a; -fx-text-fill: white; -fx-font-size: 12; -fx-padding: 8 16; -fx-cursor: hand; -fx-background-radius: 8;"/>
-            <Button text="🚪 Déconnexion"
+            <Button text=" Déconnexion"
                     onAction="#goToLogin"
                     style="-fx-background-color: #ef4444; -fx-text-fill: white; -fx-font-size: 12; -fx-padding: 8 16; -fx-cursor: hand; -fx-background-radius: 8;"/>
         </HBox>
@@ -39,21 +39,21 @@
         <!-- Statistiques -->
         <HBox spacing="15" alignment="CENTER_LEFT">
             <VBox prefWidth="250" style="-fx-border-color: #e5e7eb; -fx-border-radius: 8; -fx-padding: 15; -fx-background-color: white;">
-                <Label text="📋 Mes Commandes"
+                <Label text=" Mes Commandes"
                        style="-fx-font-size: 13; -fx-font-weight: bold; -fx-text-fill: #1f2937;"/>
                 <Label fx:id="commandesCountLabel" text="0"
                        style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #2563eb; -fx-padding: 8 0;"/>
             </VBox>
 
             <VBox prefWidth="250" style="-fx-border-color: #e5e7eb; -fx-border-radius: 8; -fx-padding: 15; -fx-background-color: white;">
-                <Label text="🚚 Mes Livraisons"
+                <Label text=" Mes Livraisons"
                        style="-fx-font-size: 13; -fx-font-weight: bold; -fx-text-fill: #1f2937;"/>
                 <Label fx:id="livraisonsCountLabel" text="0"
                        style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #10b981; -fx-padding: 8 0;"/>
             </VBox>
 
             <VBox prefWidth="250" style="-fx-border-color: #e5e7eb; -fx-border-radius: 8; -fx-padding: 15; -fx-background-color: white;">
-                <Label text="💰 Total Dépensé"
+                <Label text=" Total Dépensé"
                        style="-fx-font-size: 13; -fx-font-weight: bold; -fx-text-fill: #1f2937;"/>
                 <Label fx:id="totalCALabel" text="0.00 €"
                        style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #f59e0b; -fx-padding: 8 0;"/>
@@ -65,7 +65,7 @@
         <!-- Tabs -->
         <TabPane tabClosingPolicy="UNAVAILABLE" style="-fx-font-size: 12;">
             <!-- Commandes Tab -->
-            <Tab text="📋 Mes Commandes">
+            <Tab text=" Mes Commandes">
                 <VBox spacing="10" style="-fx-padding: 15;">
                     <Label text="Liste de toutes mes commandes"
                            style="-fx-font-size: 13; -fx-text-fill: #666;"/>
@@ -82,7 +82,7 @@
             </Tab>
 
             <!-- Livraisons Tab -->
-            <Tab text="🚚 Mes Livraisons">
+            <Tab text=" Mes Livraisons">
                 <VBox spacing="10" style="-fx-padding: 15;">
                     <Label text="Suivi de toutes mes livraisons"
                            style="-fx-font-size: 13; -fx-text-fill: #666;"/>
@@ -102,4 +102,3 @@
 
     </children>
 </VBox>
-

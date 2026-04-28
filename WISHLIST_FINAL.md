@@ -1,6 +1,6 @@
-# 🎉 WISHLIST - INTÉGRATION COMPLÈTE ✅
+#  WISHLIST - INTÉGRATION COMPLÈTE ✅
 
-## 📊 CE QUI A ÉTÉ FAIT
+##  CE QUI A ÉTÉ FAIT
 
 ### Workflow:
 ```
@@ -31,7 +31,7 @@ Wishlist ✅
 
 ---
 
-## 🚀 3 ÉTAPES POUR TESTER
+##  3 ÉTAPES POUR TESTER
 
 ### 1. BD Setup (1 min)
 ```sql
@@ -63,7 +63,7 @@ mvn javafx:run
 
 ---
 
-## 🎯 WORKFLOW CLIENT FINAL
+##  WORKFLOW CLIENT FINAL
 
 ```
 1. Parcourir produits
@@ -90,7 +90,7 @@ mvn javafx:run
 
 ---
 
-## 🏆 RÉSUMÉ
+##  RÉSUMÉ
 
 Vous avez maintenant:
 - ✅ **6 features complètes** (Panier + Annulation + Wishlist + 3 autres)
@@ -102,7 +102,6 @@ Vous avez maintenant:
 
 ---
 
-**Status:** 🟢 PRÊT POUR TEST
+**Status:**  PRÊT POUR TEST
 
-Allez tester maintenant! 🚀
-
+Allez tester maintenant! 

@@ -1,4 +1,4 @@
-# 🎯 WISHLIST - Guide d'Intégration
+#  WISHLIST - Guide d'Intégration
 
 ## Étapes pour Intégrer la Wishlist
 
@@ -102,13 +102,13 @@ private void toggleWishlist(Produit produit) {
 
 ---
 
-## 📁 FICHIERS MODIFIÉS
+##  FICHIERS MODIFIÉS
 
 Aucun fichier existant n'a été modifié. Tout est créé de zéro!
 
 ---
 
-## 🧪 CHECKLIST
+##  CHECKLIST
 
 - [ ] Table `wishlist` créée en BD
 - [ ] App compilee (`mvn clean compile`)
@@ -120,7 +120,7 @@ Aucun fichier existant n'a été modifié. Tout est créé de zéro!
 
 ---
 
-## 🎊 C'EST SIMPLE!
+##  C'EST SIMPLE!
 
 La wishlist fonctionne déjà. Vous pouvez:
 
@@ -129,7 +129,7 @@ La wishlist fonctionne déjà. Vous pouvez:
 
 ---
 
-## 📚 PROCHAINES ÉTAPES
+##  PROCHAINES ÉTAPES
 
 Après wishlist:
 1. Intégrer "Ajouter au panier" depuis wishlist
@@ -138,5 +138,4 @@ Après wishlist:
 
 ---
 
-**Prêt?** 🚀 Lancez le app et testez!
-
+**Prêt?**  Lancez le app et testez!

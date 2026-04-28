@@ -1,4 +1,4 @@
-# 🚨 URGENT FIX - 5 Minutes pour Corriger
+#  URGENT FIX - 5 Minutes pour Corriger
 
 ## Le Problème
 ```
@@ -29,7 +29,7 @@ Copie-colle ceci dans la boîte SQL:
 ALTER TABLE commande ADD COLUMN motif_annulation VARCHAR(255) NULL AFTER statut;
 ```
 
-Clique **Exécuter** 👉
+Clique **Exécuter** 
 
 **Résultat**: `Requête exécutée avec succès` ✅
 
@@ -41,7 +41,7 @@ Clique **Exécuter** 👉
 SHOW COLUMNS FROM annulation_commande;
 ```
 
-Clique **Exécuter** 👉
+Clique **Exécuter** 
 
 **Résultat**: 
 Doit afficher 8 colonnes:
@@ -81,7 +81,7 @@ CREATE TABLE annulation_commande (
 SELECT DISTINCT statut FROM commande;
 ```
 
-Clique **Exécuter** 👉
+Clique **Exécuter** 
 
 **Résultat attendu**: Seulement ces 4 statuts:
 - annulee
@@ -124,13 +124,13 @@ mvn javafx:run
 
 ## ✅ C'EST FAIT!
 
-Si tout fonctionne → Production-ready! 🚀
+Si tout fonctionne → Production-ready! 
 
 Si problème reste → Vérifier les checklists ci-dessous
 
 ---
 
-## 🆘 Si Ça Ne Marche Pas
+##  Si Ça Ne Marche Pas
 
 **Problème 1**: "Erreur: colonne existe déjà"
 - Pas grave! Ça veut dire elle existe déjà
@@ -159,5 +159,4 @@ Si problème reste → Vérifier les checklists ci-dessous
 **Difficulté**: Facile  
 **Risque**: Aucun
 
-Vous êtes HABITUÉ à faire ça maintenant! 💪
-
+Vous êtes HABITUÉ à faire ça maintenant! 

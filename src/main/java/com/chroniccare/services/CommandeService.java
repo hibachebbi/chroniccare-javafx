@@ -21,13 +21,14 @@ public class CommandeService {
     }
 
     /**
-     * Crée une commande à partir d'un panier (sans table details) et décrémente le stock en base.
+     * Crée une commande à partir d'un panier (sans table details) et décrémente le
+     * stock en base.
      * Transactionnel: si un produit n'a pas assez de stock, rien n'est enregistré.
      */
     public com.chroniccare.entities.Commande createFromCart(int utilisateurId,
-                                   double total,
-                                   String methodePaiement,
-                                   java.util.Map<Integer, com.chroniccare.services.CartService.CartItem> items) throws SQLException {
+            double total,
+            String methodePaiement,
+            java.util.Map<Integer, com.chroniccare.services.CartService.CartItem> items) throws SQLException {
         if (utilisateurId <= 0) {
             throw new IllegalArgumentException("utilisateurId invalide");
         }
@@ -59,7 +60,8 @@ public class CommandeService {
                     ps.setInt(3, qty);
                     int updated = ps.executeUpdate();
                     if (updated == 0) {
-                        throw new SQLException("Stock insuffisant pour le produit: " + (p.getNom() == null ? "" : p.getNom()));
+                        throw new SQLException(
+                                "Stock insuffisant pour le produit: " + (p.getNom() == null ? "" : p.getNom()));
                     }
                 }
             }
@@ -69,7 +71,8 @@ public class CommandeService {
             commande.setUtilisateurId(utilisateurId);
             commande.setTotal(total);
             commande.setStatut("en_attente");
-            commande.setMethodePaiement(methodePaiement == null || methodePaiement.isBlank() ? "card" : methodePaiement);
+            commande.setMethodePaiement(
+                    methodePaiement == null || methodePaiement.isBlank() ? "card" : methodePaiement);
             commande.setCreatedAt(LocalDateTime.now());
             if (commande.getNumeroCommande() == null || commande.getNumeroCommande().isBlank()) {
                 commande.setNumeroCommande(generateNumeroCommande());
@@ -117,7 +120,7 @@ public class CommandeService {
         String sql = "SELECT * FROM commande ORDER BY created_at DESC, id DESC";
         List<Commande> commandes = new ArrayList<>();
         try (PreparedStatement ps = connection().prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+                ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 commandes.add(map(rs));
             }
@@ -174,8 +177,10 @@ public class CommandeService {
     }
 
     /**
-     * Update minimaliste pour l'administration : ne modifie que le statut et la méthode de paiement.
-     * Permet d'éviter d'écraser des champs sensibles (numero, total, utilisateur_id, etc.).
+     * Update minimaliste pour l'administration : ne modifie que le statut et la
+     * méthode de paiement.
+     * Permet d'éviter d'écraser des champs sensibles (numero, total,
+     * utilisateur_id, etc.).
      */
     public void updateAdminStatusAndPayment(int commandeId, String statut, String methodePaiement) throws SQLException {
         if (commandeId <= 0) {
@@ -192,6 +197,47 @@ public class CommandeService {
         try (PreparedStatement ps = connection().prepareStatement(sql)) {
             ps.setString(1, statut.trim());
             ps.setString(2, methodePaiement.trim());
+            ps.setInt(3, commandeId);
+            int updated = ps.executeUpdate();
+            if (updated != 1) {
+                throw new SQLException("Commande introuvable (id=" + commandeId + ")");
+            }
+        }
+    }
+
+    public void updateStripePaymentIntentId(int commandeId, String stripePaymentIntentId) throws SQLException {
+        if (commandeId <= 0) {
+            throw new IllegalArgumentException("commandeId invalide");
+        }
+        if (stripePaymentIntentId == null || stripePaymentIntentId.isBlank()) {
+            throw new IllegalArgumentException("stripePaymentIntentId obligatoire");
+        }
+
+        String sql = "UPDATE commande SET stripe_payment_intent_id = ? WHERE id = ?";
+        try (PreparedStatement ps = connection().prepareStatement(sql)) {
+            ps.setString(1, stripePaymentIntentId.trim());
+            ps.setInt(2, commandeId);
+            int updated = ps.executeUpdate();
+            if (updated != 1) {
+                throw new SQLException("Commande introuvable (id=" + commandeId + ")");
+            }
+        }
+    }
+
+    public void updateStripeReferences(int commandeId, String stripeSessionId, String stripePaymentIntentId)
+            throws SQLException {
+        if (commandeId <= 0) {
+            throw new IllegalArgumentException("commandeId invalide");
+        }
+        if ((stripeSessionId == null || stripeSessionId.isBlank())
+                && (stripePaymentIntentId == null || stripePaymentIntentId.isBlank())) {
+            throw new IllegalArgumentException("Au moins une reference Stripe doit etre fournie");
+        }
+
+        String sql = "UPDATE commande SET stripe_session_id = ?, stripe_payment_intent_id = ? WHERE id = ?";
+        try (PreparedStatement ps = connection().prepareStatement(sql)) {
+            setNullableString(ps, 1, stripeSessionId);
+            setNullableString(ps, 2, stripePaymentIntentId);
             ps.setInt(3, commandeId);
             int updated = ps.executeUpdate();
             if (updated != 1) {
@@ -238,7 +284,9 @@ public class CommandeService {
             // Message plus explicite si contrainte FK
             String msg = ex.getMessage() == null ? "" : ex.getMessage().toLowerCase();
             if (msg.contains("foreign key") || msg.contains("constraint")) {
-                throw new SQLException("Impossible de supprimer cette commande car elle est liée à d'autres données (lignes de commande / livraison).", ex);
+                throw new SQLException(
+                        "Impossible de supprimer cette commande car elle est liée à d'autres données (lignes de commande / livraison).",
+                        ex);
             }
             throw ex;
         } finally {
@@ -263,7 +311,7 @@ public class CommandeService {
     public double sumTotal() throws SQLException {
         String sql = "SELECT COALESCE(SUM(total), 0) FROM commande";
         try (PreparedStatement ps = connection().prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+                ResultSet rs = ps.executeQuery()) {
             return rs.next() ? rs.getDouble(1) : 0.0;
         }
     }
@@ -335,7 +383,7 @@ public class CommandeService {
 
     private int countQuery(String sql) throws SQLException {
         try (PreparedStatement ps = connection().prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+                ResultSet rs = ps.executeQuery()) {
             return rs.next() ? rs.getInt(1) : 0;
         }
     }

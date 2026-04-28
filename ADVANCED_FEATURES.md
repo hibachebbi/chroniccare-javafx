@@ -1,4 +1,4 @@
-# 🚀 Fonctionnalités Métier Avancées - ChronicCare
+#  Fonctionnalités Métier Avancées - ChronicCare
 
 Ce document décrit les 4 fonctionnalités métier avancées implémentées dans l'application.
 
@@ -6,7 +6,7 @@ Ce document décrit les 4 fonctionnalités métier avancées implémentées dans
 
 ## 1️⃣ **Workflow Commande → Livraison**
 
-### 📊 Statuts de Commande
+###  Statuts de Commande
 Les commandes passent par les statuts suivants (en ordre logique):
 - `en_attente` : Commande reçue, en attente de confirmation
 - `confirmée` : Admin a validé la commande
@@ -15,14 +15,14 @@ Les commandes passent par les statuts suivants (en ordre logique):
 - `livrée` : Le client a reçu la commande
 - `annulée` : Commande annulée
 
-### 📦 Statuts de Livraison
+###  Statuts de Livraison
 - `en_preparation` : Livraison en cours de préparation
 - `en_transit` : En route vers le client
 - `livree` : Livrée au client
 - `retard` : Livraison en retard
 - `annulee` : Livraison annulée
 
-### 🔧 Utilisation
+###  Utilisation
 ```java
 CommandeWorkflowService workflow = new CommandeWorkflowService();
 
@@ -37,56 +37,56 @@ int enAttente = workflow.countByStatut(CommandeWorkflowService.CommandeStatut.EN
 
 ## 2️⃣ **Dashboard Admin Avancé**
 
-### 📈 Vue d'Ensemble
+###  Vue d'Ensemble
 Le dashboard affiche en temps réel:
 
-#### 💰 **Chiffre d'Affaires (CA)**
+####  **Chiffre d'Affaires (CA)**
 - Total CA vs CA déjà livré
 - Barre de progression
 
-#### 📋 **Commandes**
+####  **Commandes**
 - Total commandes
 - Commandes d'aujourd'hui
 - Commandes en attente (en_attente + confirmée)
 
-#### 🚚 **Livraisons**
+####  **Livraisons**
 - Total livraisons
 - Livraisons en retard
 
-#### 📦 **Produits**
+####  **Produits**
 - Total produits
 - Produits en stock faible (< 5)
 - Produits en rupture (stock = 0)
 
-#### 🚨 **Alertes Dynamiques**
+####  **Alertes Dynamiques**
 Une section d'alertes s'met à jour automatiquement avec:
 - ⚠️ Commandes en attente
-- 🚨 Livraisons en retard
-- 📉 Stock faible
-- 🔴 Ruptures de stock
+-  Livraisons en retard
+-  Stock faible
+-  Ruptures de stock
 - ✅ Tout est normal
 
-### 📍 Accès
+###  Accès
 - Fichier FXML: `/com/chroniccare/Admin/AdminDashboard.fxml`
 - Contrôleur: `AdminDashboardController.java`
-- Bouton dans l'interface: "📊 Tableau de Bord"
+- Bouton dans l'interface: " Tableau de Bord"
 
 ---
 
 ## 3️⃣ **Alerte Stock Faible & Rupture**
 
-### 🚨 Seuils
-- **Stock Faible**: `<= 5 unités` → Badge 📉 Orange
-- **Rupture**: `0 unité` → Badge 🔴 Rouge
+###  Seuils
+- **Stock Faible**: `<= 5 unités` → Badge  Orange
+- **Rupture**: `0 unité` → Badge  Rouge
 
 ### ✅ États
 | Statut | Couleur | Emoji |
 |--------|---------|-------|
 | OK | Vert | ✅ |
-| Stock Faible | Orange | 📉 |
-| Rupture | Rouge | 🔴 |
+| Stock Faible | Orange |  |
+| Rupture | Rouge |  |
 
-### 🔧 Service
+###  Service
 ```java
 StockAlertService alert = new StockAlertService();
 
@@ -103,19 +103,19 @@ List<String> problems = alert.getProduitsStockFaible();
 List<String> ruptures = alert.getProduitsRupture();
 ```
 
-### 📌 Affichage
+###  Affichage
 Dans le tableau des produits:
-- Colonne "Statut" affiche `✅ OK`, `📉 Faible`, ou `🔴 Rupture`
+- Colonne "Statut" affiche `✅ OK`, ` Faible`, ou ` Rupture`
 - Couleurs adaptées pour visibilité
 
 ---
 
 ## 4️⃣ **Historique Client**
 
-### 📜 Vue Client
+###  Vue Client
 Chaque client peut voir:
 
-#### 📋 **Mes Commandes**
+####  **Mes Commandes**
 Table affichant:
 - ID
 - Numéro de commande
@@ -123,7 +123,7 @@ Table affichant:
 - Total
 - Date
 
-#### 🚚 **Mes Livraisons**
+####  **Mes Livraisons**
 Table affichant:
 - ID
 - Commande ID
@@ -132,17 +132,17 @@ Table affichant:
 - Ville
 - Date prévue
 
-#### 📊 **Statistiques**
+####  **Statistiques**
 - Total commandes
 - Total livraisons
 - Total dépensé
 
-### 📍 Accès
+###  Accès
 - Fichier FXML: `/com/chroniccare/Client/ClientHistorique.fxml`
 - Contrôleur: `ClientHistoriqueController.java`
 - À ajouter dans le menu client
 
-### 🔧 Intégration Session
+###  Intégration Session
 ⚠️ **TODO**: Actuellement, `UTILISATEUR_ID = 2` est hardcodé.
 À remplacer par la vraie ID de session:
 ```java
@@ -151,7 +151,7 @@ private static int UTILISATEUR_ID = SessionManager.getCurrentUserId();
 
 ---
 
-## 📁 Fichiers Créés/Modifiés
+##  Fichiers Créés/Modifiés
 
 ### Nouveaux Services
 | Fichier | Description |
@@ -179,7 +179,7 @@ private static int UTILISATEUR_ID = SessionManager.getCurrentUserId();
 
 ---
 
-## 🔗 Liens Entre Fonctionnalités
+##  Liens Entre Fonctionnalités
 
 ```
 Commande (client)
@@ -200,7 +200,7 @@ Historique Client (visible dans "Mes Livraisons")
 
 ---
 
-## 🎯 Prochaines Étapes
+##  Prochaines Étapes
 
 Pour aller plus loin:
 
@@ -222,7 +222,7 @@ Pour aller plus loin:
 
 ---
 
-## 🧪 Tests Recommandés
+##  Tests Recommandés
 
 ### Test 1: Workflow Commande
 ```
@@ -236,8 +236,8 @@ Pour aller plus loin:
 
 ### Test 2: Alert Stock
 ```
-1. Produit A: stock = 5 → affiche "📉 Faible" (orange)
-2. Produit B: stock = 0 → affiche "🔴 Rupture" (rouge)
+1. Produit A: stock = 5 → affiche " Faible" (orange)
+2. Produit B: stock = 0 → affiche " Rupture" (rouge)
 3. Produit C: stock = 10 → affiche "✅ OK" (vert)
 ```
 
@@ -259,7 +259,7 @@ Pour aller plus loin:
 
 ---
 
-## 🐛 Dépannage
+##  Dépannage
 
 ### Dashboard Admin vide?
 - Vérifier que la DB a du data (commandes, livraisons)
@@ -277,4 +277,3 @@ Pour aller plus loin:
 
 **Dernière mise à jour**: 2024
 **Version**: 1.0
-

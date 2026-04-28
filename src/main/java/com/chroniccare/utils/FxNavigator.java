@@ -10,11 +10,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
 
-/**
- * Utilitaire simple pour naviguer entre les écrans (FXML) de l'application.
- *
- * Règle: tous les chemins FXML doivent être absolus et commencer par "/com/chroniccare/...".
- */
 public final class FxNavigator {
 
     private FxNavigator() {
@@ -28,16 +23,53 @@ public final class FxNavigator {
             throw new IllegalStateException("Impossible de naviguer: le Node n'est pas attaché à une Scene");
         }
 
-        URL url = FxNavigator.class.getResource(fxmlPath);
+        // Essayer plusieurs approches pour charger le FXML
+        URL url = null;
+
+        // Approche 1: Utiliser ClassLoader standard
+        String cleanPath = fxmlPath.startsWith("/") ? fxmlPath.substring(1) : fxmlPath;
+        url = FxNavigator.class.getClassLoader().getResource(cleanPath);
+
+        // Approche 2: Si pas trouvé, essayer avec
+        // Thread.currentThread().getContextClassLoader()
         if (url == null) {
+            url = Thread.currentThread().getContextClassLoader().getResource(cleanPath);
+        }
+
+        // Approche 3: Si pas trouvé, essayer directement via getClass().getResource()
+        // en utilisant le chemin orignal avec /
+        if (url == null && fxmlPath.startsWith("/")) {
+            url = FxNavigator.class.getResource(fxmlPath);
+        }
+
+        // Approche 4: Si toujours pas trouvé, essayer sans le /
+        if (url == null && !fxmlPath.startsWith("/")) {
+            url = FxNavigator.class.getResource("/" + fxmlPath);
+        }
+
+        if (url == null) {
+            System.err.println("[ERROR] FXML NOT FOUND - Loading attempts failed:");
+            System.err.println("   1. ClassLoader.getResource(\"" + cleanPath + "\")");
+            System.err.println("   2. ContextClassLoader.getResource(\"" + cleanPath + "\")");
+            System.err.println("   3. getClass().getResource(\"" + fxmlPath + "\")");
+            if (!fxmlPath.startsWith("/")) {
+                System.err.println("   4. getClass().getResource(\"/" + fxmlPath + "\")");
+            }
             throw new IllegalStateException("FXML introuvable ou invalide: " + fxmlPath);
         }
+
+        System.out.println("[INFO] FXML found: " + url);
 
         Parent root;
         try {
             root = FXMLLoader.load(url);
         } catch (IOException e) {
-            throw new IllegalStateException("FXML introuvable ou invalide: " + fxmlPath, e);
+            System.err.println("\n[ERROR] Failed to load FXML:");
+            System.err.println("   URL: " + url);
+            System.err.println("   Message: " + e.getMessage());
+            System.err.println("\nFull stacktrace:");
+            e.printStackTrace();
+            throw new IllegalStateException("Erreur chargement FXML: " + fxmlPath, e);
         }
 
         Scene scene = anyNodeInScene.getScene();
@@ -50,4 +82,3 @@ public final class FxNavigator {
         }
     }
 }
-

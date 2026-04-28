@@ -16,4 +16,3 @@ CREATE TABLE IF NOT EXISTS panier (
 
 -- Index pour améliorer les performances
 CREATE INDEX IF NOT EXISTS idx_panier_date ON panier(date_ajout);
-

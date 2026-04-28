@@ -1,8 +1,10 @@
 package com.chroniccare.controllers.Client;
 
 import com.chroniccare.entities.Produit;
+import com.chroniccare.entities.User;
 import com.chroniccare.services.ProduitsService;
 import com.chroniccare.services.CartService;
+import com.chroniccare.services.WishlistService;
 import com.chroniccare.utils.FxNavigator;
 import com.chroniccare.utils.SessionManager;
 import javafx.collections.FXCollections;
@@ -29,21 +31,34 @@ import java.util.stream.Collectors;
 
 public class ProduitsDashboardController {
 
-    // Ce node sert d'ancrage pour récupérer la Scene et naviguer.
-    @FXML private Node root;
+    @FXML
+    private Node root;
 
-    @FXML private TextField searchField;
-    @FXML private ComboBox<String> categorieFilter;
-    @FXML private TableView<Produit> productsTable;
-    @FXML private TableColumn<Produit, String> nomCol;
-    @FXML private TableColumn<Produit, String> categorieCol;
-    @FXML private TableColumn<Produit, Double> prixCol;
-    @FXML private TableColumn<Produit, Integer> stockCol;
-    @FXML private TableColumn<Produit, Void> actionsCol;
-    @FXML private Label pageLabel;
-    @FXML private Label countLabel;
+    @FXML
+    private TextField searchField;
+    @FXML
+    private ComboBox<String> categorieFilter;
+    @FXML
+    private TableView<Produit> productsTable;
+    @FXML
+    private TableColumn<Produit, String> nomCol;
+    @FXML
+    private TableColumn<Produit, String> categorieCol;
+    @FXML
+    private TableColumn<Produit, Double> prixCol;
+    @FXML
+    private TableColumn<Produit, Integer> stockCol;
+    @FXML
+    private TableColumn<Produit, Void> actionsCol;
+    @FXML
+    private TableColumn<Produit, String> statutCol;
+    @FXML
+    private Label pageLabel;
+    @FXML
+    private Label countLabel;
 
     private final ProduitsService service = new ProduitsService();
+    private final WishlistService wishlistService = new WishlistService();
     private final ObservableList<Produit> allProduits = FXCollections.observableArrayList();
     private final ObservableList<Produit> filteredProduits = FXCollections.observableArrayList();
 
@@ -57,13 +72,49 @@ public class ProduitsDashboardController {
         prixCol.setCellValueFactory(new PropertyValueFactory<>("prix"));
         stockCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
 
+        statutCol.setCellFactory(col -> new TableCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setText(null);
+                    setStyle("");
+                    return;
+                }
+                if (getIndex() < 0 || getIndex() >= getTableView().getItems().size()) {
+                    setText(null);
+                    setStyle("");
+                    return;
+                }
+                Produit p = getTableView().getItems().get(getIndex());
+                boolean rupture = p.getStock() <= 0;
+                setText(rupture ? "Rupture" : "Disponible");
+                setStyle(rupture
+                        ? "-fx-text-fill: #b91c1c; -fx-font-weight: bold;"
+                        : "-fx-text-fill: #166534; -fx-font-weight: bold;");
+            }
+        });
+
         actionsCol.setCellFactory(col -> new TableCell<>() {
+            private final Button btnWishlist = new Button("♡");
             private final Button btnCommander = new Button("Commander");
             private final Button btnPanier = new Button("Ajouter au panier");
-            private final HBox box = new HBox(6, btnCommander, btnPanier);
+            private final Button btnDetail = new Button("Détails");
+            private final HBox box = new HBox(6, btnWishlist, btnCommander, btnPanier, btnDetail);
             {
-                btnCommander.setStyle("-fx-background-color: #2563eb; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5;");
-                btnPanier.setStyle("-fx-background-color: #0f172a; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5;");
+                btnWishlist.setStyle(
+                        "-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5; -fx-font-size: 14;");
+                btnCommander.setStyle(
+                        "-fx-background-color: #2563eb; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5;");
+                btnPanier.setStyle(
+                        "-fx-background-color: #0f172a; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5;");
+                btnDetail.setStyle(
+                        "-fx-background-color: #6b7280; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5;");
+
+                btnWishlist.setOnAction(e -> {
+                    Produit produit = getTableView().getItems().get(getIndex());
+                    toggleWishlist(produit, btnWishlist);
+                });
 
                 btnCommander.setOnAction(e -> {
                     Produit produit = getTableView().getItems().get(getIndex());
@@ -74,12 +125,33 @@ public class ProduitsDashboardController {
                     Produit produit = getTableView().getItems().get(getIndex());
                     addToCart(produit);
                 });
+
+                btnDetail.setOnAction(e -> {
+                    Produit produit = getTableView().getItems().get(getIndex());
+                    goToProduitDetail(produit);
+                });
             }
 
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
-                setGraphic(empty ? null : box);
+                if (empty) {
+                    setGraphic(null);
+                    return;
+                }
+
+                if (getIndex() < 0 || getIndex() >= getTableView().getItems().size()) {
+                    setGraphic(null);
+                    return;
+                }
+
+                Produit produit = getTableView().getItems().get(getIndex());
+                boolean rupture = produit == null || produit.getStock() <= 0;
+                updateWishlistButton(produit, btnWishlist);
+                btnCommander.setDisable(rupture);
+                btnPanier.setDisable(rupture);
+                btnDetail.setDisable(produit == null);
+                setGraphic(box);
             }
         });
 
@@ -124,7 +196,8 @@ public class ProduitsDashboardController {
 
     private void updateTable() {
         int totalPages = (int) Math.ceil((double) filteredProduits.size() / PAGE_SIZE);
-        if (totalPages == 0) totalPages = 1;
+        if (totalPages == 0)
+            totalPages = 1;
 
         int fromIndex = (currentPage - 1) * PAGE_SIZE;
         int toIndex = Math.min(fromIndex + PAGE_SIZE, filteredProduits.size());
@@ -136,8 +209,7 @@ public class ProduitsDashboardController {
         }
 
         ObservableList<Produit> pageData = FXCollections.observableArrayList(
-                filteredProduits.subList(fromIndex, toIndex)
-        );
+                filteredProduits.subList(fromIndex, toIndex));
 
         productsTable.setItems(pageData);
         pageLabel.setText("Page " + currentPage + " / " + totalPages);
@@ -195,7 +267,8 @@ public class ProduitsDashboardController {
     }
 
     private void addToCart(Produit produit) {
-        if (produit == null) return;
+        if (produit == null)
+            return;
         if (produit.getStock() <= 0) {
             showInfo("Stock indisponible", "Ce produit est en rupture de stock.");
             return;
@@ -218,8 +291,13 @@ public class ProduitsDashboardController {
                     return;
                 }
 
-                CartService.getInstance().add(produit, qty);
-                showInfo("Ajout panier", "Produit ajoute au panier.");
+                try {
+                    CartService.getInstance().add(produit, qty);
+                    showInfo("Ajout panier", "Produit ajoute au panier.");
+                } catch (IllegalArgumentException ex) {
+                    showInfo("Stock indisponible", ex.getMessage());
+                    return;
+                }
                 FxNavigator.go(anchor(), "/com/chroniccare/Client/Panier.fxml");
             } catch (NumberFormatException e) {
                 showInfo("Quantite invalide", "Veuillez saisir un nombre valide.");
@@ -228,7 +306,8 @@ public class ProduitsDashboardController {
     }
 
     private void goToCommandeRapide(Produit produit) {
-        if (produit == null) return;
+        if (produit == null)
+            return;
         if (produit.getStock() <= 0) {
             showInfo("Stock indisponible", "Ce produit est en rupture de stock.");
             return;
@@ -241,6 +320,69 @@ public class ProduitsDashboardController {
             anchor().getScene().setRoot(root);
         } catch (Exception e) {
             showInfo("Navigation échouée", e.getMessage());
+        }
+    }
+
+    private void goToProduitDetail(Produit produit) {
+        if (produit == null)
+            return;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/chroniccare/Client/ProduitDetail.fxml"));
+            Parent root = loader.load();
+            ProduitDetailController controller = loader.getController();
+            controller.setProduit(produit);
+            anchor().getScene().setRoot(root);
+        } catch (Exception e) {
+            showInfo("Navigation échouée", e.getMessage());
+        }
+    }
+
+    private void toggleWishlist(Produit produit, Button button) {
+        if (produit == null)
+            return;
+
+        User user = SessionManager.getInstance().getCurrentUser();
+        if (user == null) {
+            showInfo("Connexion requise", "Vous devez être connecté pour gérer la wishlist.");
+            return;
+        }
+
+        try {
+            boolean inWishlist = wishlistService.isInWishlist(user.getId(), produit.getId());
+            if (inWishlist) {
+                wishlistService.removeFromWishlist(user.getId(), produit.getId());
+                showInfo("Wishlist", "Produit retiré de votre wishlist.");
+            } else {
+                wishlistService.addToWishlist(user.getId(), produit.getId());
+                showInfo("Wishlist", "Produit ajouté à votre wishlist.");
+            }
+            updateWishlistButton(produit, button);
+        } catch (Exception e) {
+            showInfo("Wishlist", e.getMessage());
+        }
+    }
+
+    private void updateWishlistButton(Produit produit, Button button) {
+        if (button == null) {
+            return;
+        }
+
+        User user = SessionManager.getInstance().getCurrentUser();
+        if (produit == null || user == null) {
+            button.setText("♡");
+            button.setStyle(
+                    "-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5; -fx-font-size: 14;");
+            return;
+        }
+
+        try {
+            boolean inWishlist = wishlistService.isInWishlist(user.getId(), produit.getId());
+            button.setText(inWishlist ? "❤️" : "♡");
+            button.setStyle(inWishlist
+                    ? "-fx-background-color: #dc2626; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5; -fx-font-size: 14;"
+                    : "-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5; -fx-font-size: 14;");
+        } catch (Exception e) {
+            button.setText("♡");
         }
     }
 
@@ -268,16 +410,24 @@ public class ProduitsDashboardController {
     }
 
     @FXML
+    public void goToWishlist() {
+        FxNavigator.go(anchor(), "/com/chroniccare/Client/Wishlist.fxml");
+    }
+
+    @FXML
     public void goToLogin() {
         SessionManager.getInstance().logout();
         FxNavigator.go(anchor(), "/com/chroniccare/login.fxml");
     }
 
     private Node anchor() {
-        // root peut être null si non déclaré dans le FXML; dans ce cas on tente de s'ancrer
-        // sur n'importe quel node accessible via le graph (à compléter quand le FXML sera ajusté).
-        if (root != null) return root;
-        throw new IllegalStateException("Ancre de navigation manquante: ajoutez fx:id=\"root\" sur le noeud racine du FXML");
+        // root peut être null si non déclaré dans le FXML; dans ce cas on tente de
+        // s'ancrer
+        // sur n'importe quel node accessible via le graph (à compléter quand le FXML
+        // sera ajusté).
+        if (root != null)
+            return root;
+        throw new IllegalStateException(
+                "Ancre de navigation manquante: ajoutez fx:id=\"root\" sur le noeud racine du FXML");
     }
 }
-

@@ -32,7 +32,7 @@ ALTER TABLE commande ADD COLUMN motif_annulation VARCHAR(255) NULL AFTER statut;
 
 ---
 
-## 📖 SI BESOIN DE PLUS DE DÉTAILS
+##  SI BESOIN DE PLUS DE DÉTAILS
 
 Lire: **QUICK_FIX_5MIN.md** (guide complet)
 Ou: **FIX_DATABASE_COLUMNS.md** (avec troubleshooting)
@@ -41,5 +41,4 @@ Ou: **FIX_DATABASE_COLUMNS.md** (avec troubleshooting)
 
 ## ⏱️ TEMPS: 5 minutes max
 
-C'est tout! Allez-y! 🚀
-
+C'est tout! Allez-y! 

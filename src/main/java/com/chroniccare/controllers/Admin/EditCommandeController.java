@@ -2,6 +2,7 @@ package com.chroniccare.controllers.Admin;
 
 import com.chroniccare.entities.Commande;
 import com.chroniccare.services.CommandeService;
+import com.chroniccare.services.LivraisonService;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,6 +23,8 @@ public class EditCommandeController {
     @FXML private Button saveButton;
 
     private final CommandeService service = new CommandeService();
+    private final LivraisonService livraisonService = new LivraisonService();
+
     private Commande currentCommande;
     private String oldStatut;
     private String oldPaiement;
@@ -84,6 +87,15 @@ public class EditCommandeController {
 
             // Update SQL minimaliste (évite d'écraser numéro/total/utilisateur_id)
             service.updateAdminStatusAndPayment(currentCommande.getId(), newStatut, newPaiement);
+
+            // Synchroniser la livraison avec le statut de commande
+            if ("validee".equalsIgnoreCase(newStatut)) {
+                livraisonService.updateStatutByCommandeId(currentCommande.getId(), "en_transit");
+            } else if ("livree".equalsIgnoreCase(newStatut)) {
+                livraisonService.updateStatutByCommandeId(currentCommande.getId(), "livree");
+            } else if ("annulee".equalsIgnoreCase(newStatut)) {
+                livraisonService.updateStatutByCommandeId(currentCommande.getId(), "annulee");
+            }
 
             Alert success = new Alert(Alert.AlertType.INFORMATION);
             success.setTitle("Succes");

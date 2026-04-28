@@ -18,4 +18,3 @@ ALTER TABLE commande ADD COLUMN IF NOT EXISTS motif_annulation VARCHAR(500);
 -- Index pour rapidité
 CREATE INDEX idx_commande_id_annulation ON annulation_commande(commande_id);
 CREATE INDEX idx_utilisateur_id_annulation ON annulation_commande(utilisateur_id);
-

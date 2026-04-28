@@ -1,6 +1,6 @@
-# 🔧 Guide de Dépannage - Erreurs d'Exécution
+#  Guide de Dépannage - Erreurs d'Exécution
 
-## 🚨 Problèmes Courants et Solutions
+##  Problèmes Courants et Solutions
 
 ### ❌ Problème 1: "Cannot find symbol: class StockAlertService"
 **Cause**: Import manquant ou classe non trouvée  
@@ -76,7 +76,7 @@
 
 ---
 
-## 🔨 Processus de Compilation et Exécution
+##  Processus de Compilation et Exécution
 
 ### 1️⃣ **Nettoyer et Reconstruire**
 ```
@@ -105,7 +105,7 @@ Ou: Shift + F10
 
 ---
 
-## 📝 Fichiers Critiques à Vérifier
+##  Fichiers Critiques à Vérifier
 
 | Fichier | Vérification |
 |---------|--------------|
@@ -118,7 +118,7 @@ Ou: Shift + F10
 
 ---
 
-## 🐛 Si tu reçois une Exception à l'Runtime
+##  Si tu reçois une Exception à l'Runtime
 
 ### Stack Trace à partager:
 ```
@@ -129,7 +129,7 @@ Ou: Shift + F10
 
 ---
 
-## 💡 Aide Rapide
+##  Aide Rapide
 
 **Si rien ne marche:**
 
@@ -142,4 +142,3 @@ Ou: Shift + F10
 
 **Version**: 1.0  
 **Dernière mise à jour**: 2024
-

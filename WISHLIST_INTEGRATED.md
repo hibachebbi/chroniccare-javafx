@@ -1,28 +1,28 @@
 # ✅ WISHLIST INTÉGRÉE DANS DÉTAILS PRODUIT
 
-## 🎯 Ce Qui a Été Fait
+##  Ce Qui a Été Fait
 
 L'intégration est **COMPLÈTE**! Voici où la wishlist est maintenant accessible:
 
 ---
 
-## 🚀 OÙ TROUVER LA WISHLIST
+##  OÙ TROUVER LA WISHLIST
 
 ### Méthode 1: Via les Produits (RECOMMANDÉ)
 1. **Login** en tant que client
-2. Aller dans **"📦 Produits"**
+2. Aller dans **" Produits"**
 3. Cliquer sur un produit → Page "Commande rapide"
 4. **Bouton ❤️ "Ajouter aux favoris"** → Ajouter à la wishlist
 5. Cliquer sur **"❤️ Wishlist"** dans le menu → Voir la liste
 
 ### Méthode 2: Directement depuis le Menu
-1. Aller dans **"📦 Produits"**
+1. Aller dans **" Produits"**
 2. Cliquer sur **"❤️ Wishlist"** en haut à droite
-3. Voir tous les produits en favoris 💕
+3. Voir tous les produits en favoris 
 
 ---
 
-## 📝 CHANGEMENTS APPLIQUÉS
+##  CHANGEMENTS APPLIQUÉS
 
 ### Fichiers Modifiés:
 
@@ -44,7 +44,7 @@ L'intégration est **COMPLÈTE**! Voici où la wishlist est maintenant accessibl
 
 ---
 
-## 🧪 À TESTER
+##  À TESTER
 
 ### Test 1: Ajouter un produit aux favoris
 1. Login client
@@ -65,7 +65,7 @@ L'intégration est **COMPLÈTE**! Voici où la wishlist est maintenant accessibl
 
 ---
 
-## 🎨 VISUELS
+##  VISUELS
 
 ### État Initial (Non ajouté):
 ```
@@ -81,7 +81,7 @@ Couleur: #dc2626 (rouge plus foncé)
 
 ---
 
-## 🏁 WORKFLOW CLIENT
+##  WORKFLOW CLIENT
 
 ```
 Produits
@@ -103,7 +103,7 @@ Bouton "Retirer" pour chaque produit
 
 ---
 
-## 🚀 À FAIRE MAINTENANT
+##  À FAIRE MAINTENANT
 
 ### Étape 1: Créer la table (1 min)
 ```sql
@@ -134,11 +134,10 @@ mvn javafx:run
 
 ## ✨ C'EST PRÊT!
 
-**Status**: 🟢 WISHLIST INTÉGRÉE DANS L'UI
+**Status**:  WISHLIST INTÉGRÉE DANS L'UI
 
 L'intégration est complète et fonctionnelle. Plus besoin d'une page "Ma Wishlist" séparée - tout est dans les détails produit + bouton de menu!
 
 ---
 
-**Prêt à tester?** 🚀
-
+**Prêt à tester?** 

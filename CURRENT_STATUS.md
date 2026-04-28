@@ -1,4 +1,4 @@
-# 🔧 DIAGNOSTIC ET FIX - "Unknown Column" Error
+#  DIAGNOSTIC ET FIX - "Unknown Column" Error
 
 ## Ce Qui s'est Passé
 
@@ -19,19 +19,19 @@ Mais la colonne `motif_annulation` n'existe pas dans la table `commande`.
 
 ---
 
-## 🛠️ FIX (3 Options, de la plus rapide à la plus complète)
+## ️ FIX (3 Options, de la plus rapide à la plus complète)
 
 ### Option 1: Ultra-Rapide (30 sec) ⚡
 Lire: **IMMEDIATE_FIX.md**
 - Une seule commande SQL
 - C'est tout!
 
-### Option 2: Rapide (5 min) 🏃
+### Option 2: Rapide (5 min) 
 Lire: **QUICK_FIX_5MIN.md**
 - 4 étapes avec phpMyAdmin
 - Incluant vérifications
 
-### Option 3: Complète (10-15 min) 🚀
+### Option 3: Complète (10-15 min) 
 Lire: **FIX_DATABASE_COLUMNS.md**
 - Tous les détails
 - Troubleshooting inclus
@@ -39,13 +39,13 @@ Lire: **FIX_DATABASE_COLUMNS.md**
 
 ---
 
-## 🎯 QUOI FAIRE MAINTENANT
+##  QUOI FAIRE MAINTENANT
 
 **Le plus simple**: Ouvrir **IMMEDIATE_FIX.md** et copier-coller la commande SQL
 
 ---
 
-## 📊 État Final Attendu
+##  État Final Attendu
 
 Après exécution:
 
@@ -79,7 +79,7 @@ Après BD fix:
 
 ---
 
-## 📁 Fichiers SQL Disponibles
+##  Fichiers SQL Disponibles
 
 ```
 C:\Users\rayen\dev_desktop\chroniccare-javafx\sql\fix_annulation_columns.sql
@@ -89,7 +89,7 @@ Script complet prêt à exécuter.
 
 ---
 
-## 🎊 Résumé
+##  Résumé
 
 | Item | Status |
 |------|--------|
@@ -104,4 +104,3 @@ Script complet prêt à exécuter.
 ---
 
 **Next Step**: Ouvrir IMMEDIATE_FIX.md ou QUICK_FIX_5MIN.md
-

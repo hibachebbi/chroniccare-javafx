@@ -1,4 +1,4 @@
-# 🔧 FIX - Colonnes Manquantes pour Annulation de Commande
+#  FIX - Colonnes Manquantes pour Annulation de Commande
 
 ## Problème
 Lors de l'annulation, vous recevez une erreur: `Unknown column 'motif_annulation'`
@@ -96,7 +96,7 @@ UPDATE commande SET statut = 'validee' WHERE statut = 'confirmee';
 
 ---
 
-## 🧪 Vérifier que c'est corrigé
+##  Vérifier que c'est corrigé
 
 Après les modifications BD, tester:
 
@@ -112,7 +112,7 @@ Après les modifications BD, tester:
 
 ---
 
-## 🆘 Si ça ne fonctionne toujours pas
+##  Si ça ne fonctionne toujours pas
 
 ### Vérification 1: Colonnes dans `commande`
 
@@ -166,7 +166,7 @@ Si vide = normal. Si erreur = problème de structure.
 
 ---
 
-## 📋 Checklist Finale
+##  Checklist Finale
 
 - [ ] Colonne `motif_annulation` existe dans `commande`
 - [ ] Table `annulation_commande` existe
@@ -178,7 +178,7 @@ Si vide = normal. Si erreur = problème de structure.
 
 ---
 
-## 💾 Fichiers SQL Utiles
+##  Fichiers SQL Utiles
 
 Un script SQL complet est disponible à:
 ```
@@ -189,7 +189,6 @@ Vous pouvez l'exécuter entièrement dans phpMyAdmin.
 
 ---
 
-**Status après corrections**: 🟢 PRÊT POUR TEST
+**Status après corrections**:  PRÊT POUR TEST
 
 Tester maintenant avec QUICK_TEST.md
-

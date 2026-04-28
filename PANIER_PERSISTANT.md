@@ -1,4 +1,4 @@
-# 🛒 Panier Persistant - Documentation
+#  Panier Persistant - Documentation
 
 ## Vue d'ensemble
 
@@ -155,9 +155,9 @@ CartService.getInstance().clear();
 ## Amélioration future
 
 Vous pourriez ajouter:
-- 🔄 Sync asynchrone (ne pas bloquer l'UI)
-- 💾 Cache local avec sync en arrière-plan
-- 📊 Analytics du panier (produits populaires, taux d'abandon)
+-  Sync asynchrone (ne pas bloquer l'UI)
+-  Cache local avec sync en arrière-plan
+-  Analytics du panier (produits populaires, taux d'abandon)
 - ⏰ Nettoyage automatique des vieux paniers (> 30 jours)
 
 ---
@@ -173,4 +173,3 @@ Vous pourriez ajouter:
 ---
 
 **Status:** ✅ Feature implémentée et intégrée
-

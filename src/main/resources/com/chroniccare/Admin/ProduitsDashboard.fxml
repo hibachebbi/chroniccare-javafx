@@ -59,6 +59,7 @@
                 <TableColumn fx:id="categorieCol" text="Categorie" prefWidth="170"/>
                 <TableColumn fx:id="prixCol" text="Prix" prefWidth="110"/>
                 <TableColumn fx:id="stockCol" text="Stock" prefWidth="90"/>
+                <TableColumn fx:id="statutCol" text="Statut" prefWidth="110"/>
                 <TableColumn fx:id="activeCol" text="Actif" prefWidth="90"/>
                 <TableColumn fx:id="actionsCol" text="Actions" prefWidth="190"/>
             </columns>

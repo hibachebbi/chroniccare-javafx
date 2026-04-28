@@ -107,6 +107,29 @@ public class ProduitsService {
         }
     }
 
+    public boolean existsByNomCategorie(String nom, String categorie) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM produit WHERE LOWER(nom) = LOWER(?) AND LOWER(categorie) = LOWER(?)";
+        try (PreparedStatement ps = connection().prepareStatement(sql)) {
+            ps.setString(1, nom == null ? "" : nom.trim());
+            ps.setString(2, categorie == null ? "" : categorie.trim());
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next() && rs.getInt(1) > 0;
+            }
+        }
+    }
+
+    public boolean existsByNomCategorieExceptId(String nom, String categorie, int produitId) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM produit WHERE LOWER(nom) = LOWER(?) AND LOWER(categorie) = LOWER(?) AND id <> ?";
+        try (PreparedStatement ps = connection().prepareStatement(sql)) {
+            ps.setString(1, nom == null ? "" : nom.trim());
+            ps.setString(2, categorie == null ? "" : categorie.trim());
+            ps.setInt(3, produitId);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next() && rs.getInt(1) > 0;
+            }
+        }
+    }
+
     private void bindInsert(PreparedStatement ps, Produit produit) throws SQLException {
         ps.setString(1, produit.getNom());
         ps.setString(2, produit.getDescription());

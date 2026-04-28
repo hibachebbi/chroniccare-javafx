@@ -41,6 +41,8 @@
     </HBox>
 
     <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button text="❤️ Ajouter aux favoris" fx:id="wishlistBtn" onAction="#toggleWishlist"
+                style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-padding: 8 16; -fx-background-radius: 8;"/>
         <Button text="Retour" onAction="#goBack"
                 style="-fx-background-color: #6b7280; -fx-text-fill: white; -fx-padding: 8 16; -fx-background-radius: 8;"/>
         <Button text="Confirmer" onAction="#confirmCommande"

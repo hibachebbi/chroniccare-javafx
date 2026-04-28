@@ -2,7 +2,9 @@ package com.chroniccare.controllers.Client;
 
 import com.chroniccare.entities.Commande;
 import com.chroniccare.entities.User;
+import com.chroniccare.services.AnnulationCommandeService;
 import com.chroniccare.services.CommandeService;
+import com.chroniccare.services.OrderReminderEmailService;
 import com.chroniccare.utils.FxNavigator;
 import com.chroniccare.utils.SessionManager;
 import javafx.collections.FXCollections;
@@ -13,6 +15,7 @@ import javafx.scene.Parent;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
@@ -27,20 +30,32 @@ import java.util.stream.Collectors;
 
 public class CommandesDashboardController {
 
-    @FXML private Node root;
+    @FXML
+    private Node root;
 
-    @FXML private TableView<Commande> ordersTable;
-    @FXML private TableColumn<Commande, String> statutCol;
-    @FXML private TableColumn<Commande, Double> totalCol;
-    @FXML private TableColumn<Commande, String> paiementCol;
-    @FXML private TableColumn<Commande, Void> actionsCol;
+    @FXML
+    private TableView<Commande> ordersTable;
+    @FXML
+    private TableColumn<Commande, String> statutCol;
+    @FXML
+    private TableColumn<Commande, Double> totalCol;
+    @FXML
+    private TableColumn<Commande, String> paiementCol;
+    @FXML
+    private TableColumn<Commande, Void> actionsCol;
 
-    @FXML private TextField searchField;
-    @FXML private ComboBox<String> statutFilter;
-    @FXML private Label pageLabel;
-    @FXML private Label countLabel;
+    @FXML
+    private TextField searchField;
+    @FXML
+    private ComboBox<String> statutFilter;
+    @FXML
+    private Label pageLabel;
+    @FXML
+    private Label countLabel;
 
     private final CommandeService service = new CommandeService();
+    private final AnnulationCommandeService annulationService = new AnnulationCommandeService();
+    private final OrderReminderEmailService orderReminderEmailService = new OrderReminderEmailService();
     private final ObservableList<Commande> allCommandes = FXCollections.observableArrayList();
     private final ObservableList<Commande> filteredCommandes = FXCollections.observableArrayList();
 
@@ -58,27 +73,103 @@ public class CommandesDashboardController {
 
         actionsCol.setCellFactory(col -> new TableCell<>() {
             private final Button btnCheckout = new Button("Payer");
-            private final HBox box = new HBox(5, btnCheckout);
+            private final Button btnAnnuler = new Button("🟠 Annuler");
+            private final Button btnRappel = new Button("Rappel email");
+            private final HBox box = new HBox(5, btnCheckout, btnAnnuler, btnRappel);
             {
-                btnCheckout.setStyle("-fx-background-color: #2563eb; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5;");
+                btnCheckout.setStyle(
+                        "-fx-background-color: #2563eb; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5;");
+                btnAnnuler.setStyle(
+                        "-fx-background-color: #f59e0b; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5;");
+                btnRappel.setStyle(
+                        "-fx-background-color: #0ea5e9; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5;");
+
                 btnCheckout.setOnAction(e -> {
                     Commande commande = getTableView().getItems().get(getIndex());
                     goToCheckout(commande);
+                });
+
+                btnAnnuler.setOnAction(e -> {
+                    Commande commande = getTableView().getItems().get(getIndex());
+                    handleAnnulation(commande);
+                });
+
+                btnRappel.setOnAction(e -> {
+                    Commande commande = getTableView().getItems().get(getIndex());
+                    handleEmailReminder(commande);
                 });
             }
 
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
-                setGraphic(empty ? null : box);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    Commande commande = getTableView().getItems().get(getIndex());
+                    if (commande == null || commande.getStatut() == null) {
+                        setGraphic(null);
+                        return;
+                    }
+
+                    String statut = commande.getStatut().trim().toLowerCase();
+
+                    // Afficher "Payer" seulement si en_attente et non payée
+                    boolean showCheckout = "en_attente".equals(statut);
+                    btnCheckout.setVisible(showCheckout);
+                    btnCheckout.setManaged(showCheckout);
+
+                    // Afficher "Annuler" seulement si en_attente ou validee
+                    // Exclure explicitement annulee et livree
+                    boolean canCancel = "en_attente".equals(statut) || "validee".equals(statut);
+                    btnAnnuler.setVisible(canCancel);
+                    btnAnnuler.setManaged(canCancel);
+
+                    // Afficher le rappel tant que la commande n'est pas terminee
+                    boolean canRemind = !"annulee".equals(statut) && !"livree".equals(statut);
+                    btnRappel.setVisible(canRemind);
+                    btnRappel.setManaged(canRemind);
+
+                    // Désactiver le bouton pour les commandes non annulables
+                    if (!canCancel) {
+                        btnAnnuler.setDisable(true);
+                        btnAnnuler.setOpacity(0.5);
+                    } else {
+                        btnAnnuler.setDisable(false);
+                        btnAnnuler.setOpacity(1.0);
+                    }
+
+                    setGraphic(box);
+                }
             }
         });
 
         loadCommandes();
     }
 
+    private void handleEmailReminder(Commande commande) {
+        if (commande == null) {
+            showError("Erreur", "Commande non valide pour envoi d'email");
+            return;
+        }
+
+        User user = SessionManager.getInstance().getCurrentUser();
+        if (user == null) {
+            showError("Erreur", "Utilisateur non connecte");
+            return;
+        }
+
+        OrderReminderEmailService.ReminderResult result = orderReminderEmailService.sendOrderReminder(user, commande);
+        Alert alert = new Alert(result.isSent() ? Alert.AlertType.INFORMATION : Alert.AlertType.WARNING);
+        alert.setTitle("ChronicCare");
+        alert.setHeaderText(result.isSent() ? "Rappel envoye" : "Rappel non envoye");
+        alert.setContentText(result.getMessage());
+        alert.showAndWait();
+    }
+
     private void goToCheckout(Commande commande) {
-        if (commande == null) return;
+        if (commande == null)
+            return;
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/chroniccare/Client/Checkout.fxml"));
             Parent root = loader.load();
@@ -88,6 +179,95 @@ public class CommandesDashboardController {
         } catch (Exception e) {
             showError("Navigation echouee", e.getMessage());
         }
+    }
+
+    /**
+     * Gère l'annulation d'une commande par le client
+     * Vérifications:
+     * - La commande existe
+     * - Le statut est annulable (en_attente ou validee)
+     * - Confirmation utilisateur
+     */
+    private void handleAnnulation(Commande commande) {
+        if (commande == null) {
+            showError("Erreur", "Commande non valide");
+            return;
+        }
+
+        // Récupération et normalisation du statut
+        String statut = commande.getStatut();
+        if (statut == null || statut.trim().isEmpty()) {
+            showError("Erreur", "Statut de commande invalide");
+            return;
+        }
+
+        statut = statut.trim().toLowerCase();
+
+        // Vérification métier stricte
+        if (!statut.equals("en_attente") && !statut.equals("validee")) {
+            String message;
+            if (statut.equals("annulee")) {
+                message = "Cette commande est déjà annulée.\nVous ne pouvez pas l'annuler à nouveau.";
+            } else if (statut.equals("livree")) {
+                message = "Impossible d'annuler une commande déjà livrée.";
+            } else {
+                message = "Cette commande ne peut pas être annulée (statut: " + statut + ").";
+            }
+            showError("Annulation impossible", message);
+            return;
+        }
+
+        // Dialogue de confirmation avec détails
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Annuler la commande");
+        confirm.setHeaderText("Confirmez-vous l'annulation?");
+        confirm.setContentText("Commande n°" + commande.getNumeroCommande() +
+                "\nMontant: " + String.format("%.2f", commande.getTotal()) + "€\n" +
+                "Statut actuel: " + statut + "\n\n" +
+                "Après annulation:\n" +
+                "- Le statut passera à 'annulée'\n" +
+                "- Vous serez remboursé automatiquement\n" +
+                "- Le stock sera restitué");
+
+        confirm.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                try {
+                    User currentUser = SessionManager.getInstance().getCurrentUser();
+                    if (currentUser == null) {
+                        showError("Erreur", "Vous devez être connecté pour annuler une commande");
+                        return;
+                    }
+
+                    // Appel au service d'annulation
+                    annulationService.annulerCommande(
+                            commande.getId(),
+                            "Annulée par le client",
+                            currentUser.getId());
+
+                    // Recharger les commandes depuis la BD
+                    loadCommandes();
+
+                    // Message de succès
+                    Alert success = new Alert(Alert.AlertType.INFORMATION);
+                    success.setTitle("Succès");
+                    success.setHeaderText("Commande annulée");
+                    success.setContentText(
+                            "La commande n°" + commande.getNumeroCommande() + " a été annulée avec succès.\n\n" +
+                                    "Remboursement: " + String.format("%.2f", commande.getTotal()) + "€\n" +
+                                    "Délai: 3-5 jours ouvrables");
+                    success.showAndWait();
+
+                } catch (IllegalArgumentException e) {
+                    // Erreur métier (statut, etc.)
+                    showError("Erreur d'annulation", e.getMessage());
+                } catch (Exception e) {
+                    // Erreur technique
+                    showError("Erreur système", "Une erreur est survenue lors de l'annulation.\n" +
+                            "Détail: " + (e.getMessage() != null ? e.getMessage() : "Erreur inconnue"));
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     private void loadCommandes() {
@@ -111,7 +291,8 @@ public class CommandesDashboardController {
 
     private void updateTable() {
         int totalPages = (int) Math.ceil((double) filteredCommandes.size() / PAGE_SIZE);
-        if (totalPages == 0) totalPages = 1;
+        if (totalPages == 0)
+            totalPages = 1;
 
         int fromIndex = (currentPage - 1) * PAGE_SIZE;
         int toIndex = Math.min(fromIndex + PAGE_SIZE, filteredCommandes.size());
@@ -122,7 +303,8 @@ public class CommandesDashboardController {
             toIndex = Math.min(PAGE_SIZE, filteredCommandes.size());
         }
 
-        ObservableList<Commande> pageData = FXCollections.observableArrayList(filteredCommandes.subList(fromIndex, toIndex));
+        ObservableList<Commande> pageData = FXCollections
+                .observableArrayList(filteredCommandes.subList(fromIndex, toIndex));
         ordersTable.setItems(pageData);
         pageLabel.setText("Page " + currentPage + " / " + totalPages);
         countLabel.setText("Total : " + filteredCommandes.size() + " commande(s)");
@@ -193,13 +375,19 @@ public class CommandesDashboardController {
     }
 
     @FXML
+    public void goToLivraisons() {
+        FxNavigator.go(anchor(), "/com/chroniccare/Client/LivraisonsDashboard.fxml");
+    }
+
+    @FXML
     public void goToLogin() {
         SessionManager.getInstance().logout();
         FxNavigator.go(anchor(), "/com/chroniccare/login.fxml");
     }
 
     private Node anchor() {
-        if (root != null) return root;
+        if (root != null)
+            return root;
         // fallback (au cas où root n'est pas injecté)
         return ordersTable;
     }

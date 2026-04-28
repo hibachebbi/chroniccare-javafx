@@ -1,4 +1,5 @@
-package com.chroniccare.controllers.Admin;
+/**package com.chroniccare.controllers.Admin;
 
 public class AfficherProduit {
 }
+**/

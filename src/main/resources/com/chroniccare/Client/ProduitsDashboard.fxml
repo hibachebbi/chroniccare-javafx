@@ -30,6 +30,8 @@
                 style="-fx-background-color: #2563eb; -fx-text-fill: white; -fx-font-size: 13; -fx-font-weight: bold; -fx-padding: 10 20; -fx-cursor: hand; -fx-background-radius: 8;"/>
         <Button text="🧺 Panier" onAction="#goToPanier"
                 style="-fx-background-color: #2563eb; -fx-text-fill: white; -fx-font-size: 13; -fx-font-weight: bold; -fx-padding: 10 20; -fx-cursor: hand; -fx-background-radius: 8;"/>
+        <Button text="❤️ Wishlist" onAction="#goToWishlist"
+                style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-size: 13; -fx-font-weight: bold; -fx-padding: 10 20; -fx-cursor: hand; -fx-background-radius: 8;"/>
         <Button text="Deconnexion" onAction="#goToLogin"
                 style="-fx-background-color: #ef4444; -fx-text-fill: white; -fx-font-size: 13; -fx-font-weight: bold; -fx-padding: 10 20; -fx-cursor: hand; -fx-background-radius: 8;"/>
     </HBox>
@@ -51,6 +53,7 @@
             <TableColumn fx:id="categorieCol" text="Categorie" prefWidth="170"/>
             <TableColumn fx:id="prixCol" text="Prix" prefWidth="110"/>
             <TableColumn fx:id="stockCol" text="Stock" prefWidth="90"/>
+            <TableColumn fx:id="statutCol" text="Statut" prefWidth="120"/>
             <TableColumn fx:id="actionsCol" text="Actions" prefWidth="240"/>
         </columns>
     </TableView>

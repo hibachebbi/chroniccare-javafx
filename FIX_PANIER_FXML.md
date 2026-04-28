@@ -1,4 +1,4 @@
-# 🔧 FIX: Erreur FXML "Panier.fxml não trovata" - RÉSOLU
+#  FIX: Erreur FXML "Panier.fxml não trovata" - RÉSOLU
 
 ## ❌ **Problème**
 
@@ -7,7 +7,7 @@ Navigation echouee
 FXML introuvable ou invalide: /com/chroniccare/Client/Panier.fxml
 ```
 
-## 🔍 **Cause**
+##  **Cause**
 
 Le `pom.xml` d'énergissait **pas** configuré pour copier les fichiers FXML du répertoire `src/main/resources` vers `target/classes`.
 
@@ -23,7 +23,7 @@ Mis à jour `pom.xml` avec:
 2. **Plugin `maven-resources-plugin`**: Gère la copie
 3. **Plugin `maven-compiler-plugin`**: Compil avec encoding UTF-8
 
-## 🚀 **Prochaines étapes (IMPORTANT!)**
+##  **Prochaines étapes (IMPORTANT!)**
 
 ### **1. Nettoie le projet**
 
@@ -59,15 +59,14 @@ Puis teste:
 3. Ferme l'app
 4. Rouvre → **Le panier doit être restauré!** ✅
 
-## 📋 **Fichiers modifiés**
+##  **Fichiers modifiés**
 
 - ✅ `pom.xml` - Configuration build complète
 
 ## ✨ **Si ça marche toujours pas**
 
-Dis-moi l'erreur complète! 📸
+Dis-moi l'erreur complète! 
 
 ---
 
 **Status:** ✅ Corrigé - À tester
-

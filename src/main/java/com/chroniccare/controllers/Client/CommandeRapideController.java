@@ -5,11 +5,13 @@ import com.chroniccare.entities.Produit;
 import com.chroniccare.entities.User;
 import com.chroniccare.services.CartService;
 import com.chroniccare.services.CommandeService;
+import com.chroniccare.services.WishlistService;
 import com.chroniccare.utils.FxNavigator;
 import com.chroniccare.utils.SessionManager;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
@@ -27,8 +29,10 @@ public class CommandeRapideController {
     @FXML private Spinner<Integer> qtySpinner;
     @FXML private ComboBox<String> paiementCombo;
     @FXML private Label totalLabel;
+    @FXML private Button wishlistBtn;
 
     private final CommandeService commandeService = new CommandeService();
+    private final WishlistService wishlistService = new WishlistService();
     private Produit produit;
 
     @FXML
@@ -47,10 +51,16 @@ public class CommandeRapideController {
         nomLabel.setText(produit.getNom());
         categorieLabel.setText(produit.getCategorie() == null ? "" : produit.getCategorie());
         prixLabel.setText(String.valueOf(produit.getPrix()));
-        stockLabel.setText(String.valueOf(produit.getStock()));
+        stockLabel.setText(produit.getStock() <= 0 ? "Rupture de stock" : String.valueOf(produit.getStock()));
 
-        int max = Math.max(1, produit.getStock());
-        qtySpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, max, 1));
+        int max = Math.max(0, produit.getStock());
+        if (max == 0) {
+            qtySpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 0, 0));
+            qtySpinner.setDisable(true);
+        } else {
+            qtySpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, max, 1));
+            qtySpinner.setDisable(false);
+        }
         updateTotal();
     }
 
@@ -69,7 +79,7 @@ public class CommandeRapideController {
 
         int qty = qtySpinner.getValue();
         if (qty <= 0 || qty > produit.getStock()) {
-            showError("Quantité invalide");
+            showError(produit.getStock() <= 0 ? "Ce produit est en rupture de stock" : "Quantité invalide");
             return;
         }
 
@@ -99,6 +109,38 @@ public class CommandeRapideController {
     }
 
     @FXML
+    public void toggleWishlist() {
+        if (produit == null) {
+            showError("Aucun produit sélectionné");
+            return;
+        }
+
+        try {
+            User user = SessionManager.getInstance().getCurrentUser();
+            if (user == null) {
+                showError("Vous devez être connecté");
+                return;
+            }
+
+            boolean isInWishlist = wishlistService.isInWishlist(user.getId(), produit.getId());
+
+            if (isInWishlist) {
+                wishlistService.removeFromWishlist(user.getId(), produit.getId());
+                wishlistBtn.setText("❤️ Ajouter aux favoris");
+                wishlistBtn.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-padding: 8 16; -fx-background-radius: 8;");
+                showInfo("Retiré", "Produit retiré de votre wishlist");
+            } else {
+                wishlistService.addToWishlist(user.getId(), produit.getId());
+                wishlistBtn.setText("❤️ Retirer des favoris");
+                wishlistBtn.setStyle("-fx-background-color: #dc2626; -fx-text-fill: white; -fx-padding: 8 16; -fx-background-radius: 8;");
+                showInfo("Ajouté", "Produit ajouté à votre wishlist");
+            }
+        } catch (Exception e) {
+            showError(e.getMessage());
+        }
+    }
+
+    @FXML
     public void goBack() {
         FxNavigator.go(nomLabel, "/com/chroniccare/Client/ProduitsDashboard.fxml");
     }
@@ -117,6 +159,14 @@ public class CommandeRapideController {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("ChronicCare");
         alert.setHeaderText("Erreur");
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    private void showInfo(String header, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("ChronicCare");
+        alert.setHeaderText(header);
         alert.setContentText(message);
         alert.showAndWait();
     }

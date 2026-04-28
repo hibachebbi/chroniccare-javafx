@@ -134,7 +134,20 @@ public class HomeController {
         if (SessionManager.getInstance().isAdmin()) {
             return;
         }
-        safeGo(btnPanier, "/com/chroniccare/Client/Panier.fxml");
+        // Approche directe sans FxNavigator pour éviter les problèmes
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/com/chroniccare/Client/Panier.fxml"));
+            btnPanier.getScene().setRoot(root);
+        } catch (Exception e) {
+            System.err.println("\n❌ ERREUR goToPanier:");
+            System.err.println("   Message: " + e.getMessage());
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur Navigation");
+            alert.setHeaderText("Erreur accès Panier");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
     }
 
     @FXML

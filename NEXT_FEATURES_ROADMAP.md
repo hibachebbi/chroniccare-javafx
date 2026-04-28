@@ -1,4 +1,4 @@
-## 🚀 ADVANCED FEATURES - Roadmap & Next Steps
+##  ADVANCED FEATURES - Roadmap & Next Steps
 
 ### ✅ Complétées à ce jour
 
@@ -6,20 +6,20 @@
    - Entité AnnulationCommande créée
    - Service AnnulationCommandeService créé
    - Button "Annuler" dans CommandesDashboardController
-   - 🎯 Status: Fonctionnel mais peut avoir UI/tests manquants
+   -  Status: Fonctionnel mais peut avoir UI/tests manquants
 
 2. **✅ Panier Persistant BD** (Complètement)
    - Table `panier` créée
    - Service PanierPersistantService implémenté
    - CartService intégré
    - Authentication avec chargement panier
-   - 🎯 Status: Prêt à tester et déployer
+   -  Status: Prêt à tester et déployer
 
 ---
 
-## 📋 Prochaines à implémenter (par ordre de complextité)
+##  Prochaines à implémenter (par ordre de complextité)
 
-### 🥇 Level 1 (Simple, 1-2 heures)
+###  Level 1 (Simple, 1-2 heures)
 
 #### 1️⃣ **Système de Wishlist** ⭐
 - **Objectif**: Permettre aux clients de sauvegarder leurs produits favoris
@@ -49,9 +49,9 @@
 
 ---
 
-### 🥈 Level 2 (Moyen, 2-4 heures)
+###  Level 2 (Moyen, 2-4 heures)
 
-#### 3️⃣ **Suivi Livraison en Temps Réel** 📦
+#### 3️⃣ **Suivi Livraison en Temps Réel** 
 - **Objectif**: Permettre aux clients de tracker leur livraison
 - **Entités**: LivraisonHistorique (id, livraisonId, statut, timestamp, localisation)
 - **Statuts**:
@@ -86,7 +86,7 @@
 
 ---
 
-### 🥉 Level 3 (Complexe, 4+ heures)
+###  Level 3 (Complexe, 4+ heures)
 
 #### 5️⃣ **Rappel de Commande** (Notifications)
 - **Objectif**: Notifications email/SMS automatiques
@@ -105,24 +105,24 @@
 
 ---
 
-## 🎯 RECOMMANDATION IMMÉDIATE
+##  RECOMMANDATION IMMÉDIATE
 
 ### **Implémenter en cet ordre:**
 
 1. **Wishlist** (facile, impact élevé)
-   - 👤 Utilisateurs: "J'aime sauvegarder mes produits favoris"
+   -  Utilisateurs: "J'aime sauvegarder mes produits favoris"
 2. **Dashboard Client** (facile, complète le profil)
-   - 📊 Raison: Les clients veulent voir LEURS stats
+   -  Raison: Les clients veulent voir LEURS stats
 3. **Suivi Livraison** (moyen, important)
-   - 📦 Raison: Client veut tracker son colis real-time
+   -  Raison: Client veut tracker son colis real-time
 4. **Admin Stats** (moyen, pour business intelligence)
-   - 📈 Raison: Admin veut analytiques détaillées
+   -  Raison: Admin veut analytiques détaillées
 5. **Notifications** (complexe, optimize plus tard)
-   - 🔔 Raison: Fort impact mais compliqué (SMS/Email)
+   -  Raison: Fort impact mais compliqué (SMS/Email)
 
 ---
 
-## 📊 Tableau des features vs complexité
+##  Tableau des features vs complexité
 
 | Feature | Temps | Difficulté | Impact | BDD | Controllers | UI |
 |---------|-------|-----------|--------|-----|-------------|-----|
@@ -134,7 +134,7 @@
 
 ---
 
-## 🔄 Dépendances entre features
+##  Dépendances entre features
 
 ```
 Panier Persistant ✅
@@ -152,7 +152,7 @@ Rappel Automatique (Notifier du status)
 
 ---
 
-## 💡 Quick Wins
+##  Quick Wins
 
 Ces features sont **faciles et impactantes**:
 
@@ -168,7 +168,7 @@ Ces features sont **faciles et impactantes**:
 
 ---
 
-## 🛠️ Template Code (Quick Start)
+## ️ Template Code (Quick Start)
 
 ### Pour Wishlist:
 ```java
@@ -192,15 +192,15 @@ public class WishlistService {
 
 ---
 
-## 📝 VOTRE CHOIX
+##  VOTRE CHOIX
 
 **Quelle feature voulez-vous implémenter en PREMIER?**
 
-1. 🎯 **Wishlist** (Impact + Facilité)
-2. 📊 **Dashboard Client** (Stats utilisateur)
-3. 📦 **Suivi Livraison Real-Time** (Cool factor)
-4. 📈 **Admin Stats Avancées** (Business info)
-5. 🔔 **Rappel/Notifications** (Complex mais WOW)
+1.  **Wishlist** (Impact + Facilité)
+2.  **Dashboard Client** (Stats utilisateur)
+3.  **Suivi Livraison Real-Time** (Cool factor)
+4.  **Admin Stats Avancées** (Business info)
+5.  **Rappel/Notifications** (Complex mais WOW)
 
 ---
 
@@ -223,5 +223,4 @@ EN ATTENTE:
 
 ---
 
-**Ready for next step! 🚀**
-
+**Ready for next step! **

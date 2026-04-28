@@ -1,10 +1,9 @@
 package com.chroniccare.services;
 
 import com.chroniccare.entities.PanierItem;
-import com.chroniccare.utils.DatabaseConnection;
+import com.chroniccare.utils.MyDatabase;
 
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,10 +13,8 @@ import java.util.List;
  */
 public class PanierPersistantService {
 
-    private final DatabaseConnection db = new DatabaseConnection();
-
-    private Connection connection() throws SQLException {
-        return db.getConnection();
+    private Connection connection() {
+        return MyDatabase.getInstance().getConnection();
     }
 
     private PanierItem map(ResultSet rs) throws SQLException {
@@ -224,4 +221,5 @@ public class PanierPersistantService {
         }
     }
 }
+
 

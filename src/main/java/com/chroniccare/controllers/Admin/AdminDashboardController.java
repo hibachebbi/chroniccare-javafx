@@ -12,6 +12,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.VBox;
+
+import java.io.IOException;
+import java.net.URL;
 import java.io.IOException;
 
 /**
@@ -46,27 +49,27 @@ public class AdminDashboardController {
     @FXML
     public void refreshDashboard() {
         try {
-            // 📊 Chiffre d'affaires
+            //  Chiffre d'affaires
             double totalCA = commandeService.sumTotal();
             double completedCA = commandeWorkflow.sumCompletedCommandes();
             caLabel.setText(String.format("%.2f € / %.2f €", completedCA, totalCA));
             caProgress.setProgress(totalCA > 0 ? completedCA / totalCA : 0);
 
-            // 📦 Commandes
+            //  Commandes
             int totalCommandes = commandeService.countAll();
             int commandesToday = commandeWorkflow.countTodayCommandes();
-            int commande sPending = commandeWorkflow.countPendingCommandes();
+            int commandesPending = commandeWorkflow.countPendingCommandes();
             commandesTotalLabel.setText(String.valueOf(totalCommandes));
             commandesTodayLabel.setText(String.valueOf(commandesToday));
             commandesPendingLabel.setText(String.valueOf(commandesPending));
 
-            // 🚚 Livraisons
+            //  Livraisons
             int totalLivraisons = livraisonWorkflow.countAll();
             int livraisonsRetard = livraisonWorkflow.countLivraisonsEnRetard();
             livraisonsLabel.setText(String.valueOf(totalLivraisons));
             livraisonsRetardLabel.setText(String.valueOf(livraisonsRetard));
 
-            // 📦 Produits
+            //  Produits
             int totalProduits = produitsService.countAll();
             int stockFaible = stockAlertService.countStockFaible();
             int rupture = stockAlertService.countRupture();
@@ -74,7 +77,7 @@ public class AdminDashboardController {
             produitsStockFaibleLabel.setText(String.valueOf(stockFaible));
             produitsRuptureLabel.setText(String.valueOf(rupture));
 
-            // 🚨 Alertes
+            //  Alertes
             updateAlerts(commandesPending, livraisonsRetard, stockFaible, rupture);
 
         } catch (Exception e) {
@@ -89,13 +92,13 @@ public class AdminDashboardController {
             addAlert("⚠️ " + pendingCommandes + " commandes en attente de traitement", "#f59e0b");
         }
         if (lateDeliveries > 0) {
-            addAlert("🚨 " + lateDeliveries + " livraisons en retard", "#ef4444");
+            addAlert(" " + lateDeliveries + " livraisons en retard", "#ef4444");
         }
         if (lowStock > 0) {
-            addAlert("📉 " + lowStock + " produits en stock faible", "#f59e0b");
+            addAlert(" " + lowStock + " produits en stock faible", "#f59e0b");
         }
         if (rupture > 0) {
-            addAlert("🔴 " + rupture + " produits en rupture", "#ef4444");
+            addAlert(" " + rupture + " produits en rupture", "#ef4444");
         }
         if (pendingCommandes == 0 && lateDeliveries == 0 && lowStock == 0 && rupture == 0) {
             addAlert("✅ Tout est normal !", "#10b981");
@@ -130,7 +133,12 @@ public class AdminDashboardController {
 
     private void navigate(String fxml) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource(fxml));
+            URL resource = getClass().getResource(fxml);
+            if (resource == null) {
+                showError("Fichier non trouvé", "Le fichier " + fxml + " n'existe pas");
+                return;
+            }
+            Parent root = FXMLLoader.load(resource);
             alertsBox.getScene().setRoot(root);
         } catch (IOException e) {
             showError("Navigation échouée", e.getMessage());
@@ -145,4 +153,6 @@ public class AdminDashboardController {
         alert.showAndWait();
     }
 }
+
+
 

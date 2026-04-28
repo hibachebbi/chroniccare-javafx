@@ -33,7 +33,7 @@ public class AnnulationCommandeService {
     /**
      * Annuler une commande
      * Étapes:
-     * 1. Vérifier que la commande peut être annulée (statut en_attente)
+     * 1. Vérifier que la commande peut être annulée (statut en_attente ou validee)
      * 2. Restituer le stock de tous les produits
      * 3. Mettre à jour le statut de la commande à "annulee"
      * 4. Enregistrer l'annulation en BD
@@ -41,18 +41,31 @@ public class AnnulationCommandeService {
     public void annulerCommande(int commandeId, String raison, int utilisateurId) throws SQLException {
         Commande commande = commandeService.findById(commandeId);
         if (commande == null) {
-            throw new IllegalArgumentException("Commande non trouvée");
+            throw new IllegalArgumentException("Commande introuvable. Veuillez vérifier le numéro de commande.");
         }
 
-        // Vérifier le statut
-        if (commande.getStatut() == null ||
-            (!commande.getStatut().equals("en_attente") && !commande.getStatut().equals("confirmee"))) {
-            throw new IllegalArgumentException("Impossible d'annuler une commande avec le statut: " + commande.getStatut());
+        // Vérifier et normaliser le statut
+        String statut = commande.getStatut();
+        if (statut == null || statut.trim().isEmpty()) {
+            throw new IllegalArgumentException("Statut de commande invalide (vide ou NULL).");
+        }
+
+        statut = statut.trim().toLowerCase();
+
+        // Vérifer que la commande peut être annulée
+        if (!statut.equals("en_attente") && !statut.equals("validee")) {
+            if (statut.equals("annulee")) {
+                throw new IllegalArgumentException("Cette commande est déjà annulée.");
+            } else if (statut.equals("livree")) {
+                throw new IllegalArgumentException("Impossible d'annuler une commande déjà livrée.");
+            } else {
+                throw new IllegalArgumentException("Cette commande ne peut pas être annulée (statut: " + statut + ").");
+            }
         }
 
         // Restituer le stock (récupérer les lignes de commande)
-        List<LigneCommandeService.LigneCommande> lignes = getLignesCommande(commandeId);
-        for (LigneCommandeService.LigneCommande ligne : lignes) {
+        List<LigneCommandeDetail> lignes = getLignesCommande(commandeId);
+        for (LigneCommandeDetail ligne : lignes) {
             augmenterStock(ligne.getProduitId(), ligne.getQuantite());
         }
 
@@ -117,8 +130,8 @@ public class AnnulationCommandeService {
      * Récupérer les lignes de commande (produits)
      * Cette méthode suppose que la table ligne_commande existe
      */
-    private List<LigneCommandeService.LigneCommande> getLignesCommande(int commandeId) throws SQLException {
-        List<LigneCommandeService.LigneCommande> lignes = new ArrayList<>();
+    private List<LigneCommandeDetail> getLignesCommande(int commandeId) throws SQLException {
+        List<LigneCommandeDetail> lignes = new ArrayList<>();
         String sql = "SELECT produit_id, quantite FROM ligne_commande WHERE commande_id = ?";
 
         try (PreparedStatement ps = connection().prepareStatement(sql)) {
@@ -127,7 +140,7 @@ public class AnnulationCommandeService {
                 while (rs.next()) {
                     int produitId = rs.getInt("produit_id");
                     int quantite = rs.getInt("quantite");
-                    lignes.add(new LigneCommandeService.LigneCommande(produitId, quantite));
+                    lignes.add(new LigneCommandeDetail(produitId, quantite));
                 }
             }
         }
@@ -193,19 +206,26 @@ public class AnnulationCommandeService {
         a.setStockRestitue(rs.getBoolean("stock_restitue"));
         return a;
     }
-}
 
-// Classe interne pour les lignes de commande
-class LigneCommande {
-    private int produitId;
-    private int quantite;
+    /**
+     * Classe interne pour mapper les lignes de commande
+     */
+    private static class LigneCommandeDetail {
+        private final int produitId;
+        private final int quantite;
 
-    public LigneCommande(int produitId, int quantite) {
-        this.produitId = produitId;
-        this.quantite = quantite;
+        LigneCommandeDetail(int produitId, int quantite) {
+            this.produitId = produitId;
+            this.quantite = quantite;
+        }
+
+        public int getProduitId() { return produitId; }
+        public int getQuantite() { return quantite; }
     }
-
-    public int getProduitId() { return produitId; }
-    public int getQuantite() { return quantite; }
 }
+
+
+
+
+
 

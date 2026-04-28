@@ -14,7 +14,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -122,7 +121,12 @@ public class ClientHistoriqueController {
 
     private void navigate(String fxml) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource(fxml));
+            java.net.URL resource = getClass().getResource(fxml);
+            if (resource == null) {
+                showError("Fichier non trouvé", "Le fichier " + fxml + " n'existe pas");
+                return;
+            }
+            Parent root = FXMLLoader.load(resource);
             historyTitle.getScene().setRoot(root);
         } catch (IOException e) {
             showError("Navigation échouée", e.getMessage());
@@ -137,4 +141,5 @@ public class ClientHistoriqueController {
         alert.showAndWait();
     }
 }
+
 

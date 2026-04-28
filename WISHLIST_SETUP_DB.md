@@ -1,4 +1,4 @@
-# 🚀 WISHLIST - Installation BD (1 minute)
+#  WISHLIST - Installation BD (1 minute)
 
 ## Créer la table Wishlist
 
@@ -41,4 +41,3 @@ Doit afficher 4 colonnes: id, utilisateur_id, produit_id, date_ajout
 ---
 
 **C'est tout!** La table est créée. Vous êtes prêt pour le code Java.
-

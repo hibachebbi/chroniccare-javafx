@@ -5,7 +5,7 @@ Valider que les corrections apportées à la fonction d'annulation de commande f
 
 ---
 
-## 📋 Checklist de Test
+##  Checklist de Test
 
 ### 1. Test d'affichage du bouton "Annuler"
 
@@ -13,33 +13,33 @@ Valider que les corrections apportées à la fonction d'annulation de commande f
 - [ ] Se connecter en tant que client
 - [ ] Aller dans "Mes commandes"  
 - [ ] Localiser une commande avec le statut `en_attente`
-- ✅ **Résultat attendu**: Le bouton "🟠 Annuler" doit être **VISIBLE et ACTIVÉ** (opacité 100%)
-- 📸 Capturer screenshot si visible
+- ✅ **Résultat attendu**: Le bouton " Annuler" doit être **VISIBLE et ACTIVÉ** (opacité 100%)
+-  Capturer screenshot si visible
 
 #### Test 1.2: Affichage pour statut "validee"
 - [ ] Aller dans "Mes commandes"
 - [ ] Localiser une commande avec le statut `validee`
-- ✅ **Résultat attendu**: Le bouton "🟠 Annuler" doit être **VISIBLE et ACTIVÉ** (opacité 100%)
-- 📸 Capturer screenshot si visible
+- ✅ **Résultat attendu**: Le bouton " Annuler" doit être **VISIBLE et ACTIVÉ** (opacité 100%)
+-  Capturer screenshot si visible
 
 #### Test 1.3: Masquage pour statut "annulee"
 - [ ] Aller dans "Mes commandes"
 - [ ] Localiser une commande avec le statut `annulee`
-- ✅ **Résultat attendu**: Le bouton "🟠 Annuler" doit être **MASQUÉ** (invisible)
-- 📸 Capturer screenshot pour confirmation
+- ✅ **Résultat attendu**: Le bouton " Annuler" doit être **MASQUÉ** (invisible)
+-  Capturer screenshot pour confirmation
 
 #### Test 1.4: Masquage pour statut "livree"
 - [ ] Aller dans "Mes commandes"
 - [ ] Localiser une commande avec le statut `livree`
-- ✅ **Résultat attendu**: Le bouton "🟠 Annuler" doit être **MASQUÉ** (invisible)
-- 📸 Capturer screenshot pour confirmation
+- ✅ **Résultat attendu**: Le bouton " Annuler" doit être **MASQUÉ** (invisible)
+-  Capturer screenshot pour confirmation
 
 ---
 
 ### 2. Test du processus d'annulation - Cas positif
 
 #### Test 2.1: Annuler une commande "en_attente"
-1. [ ] Cliquer sur le bouton "🟠 Annuler" d'une commande `en_attente`
+1. [ ] Cliquer sur le bouton " Annuler" d'une commande `en_attente`
 2. [ ] Vérifier le popup de confirmation affiche:
    - [ ] Le numéro de commande
    - [ ] Le montant total
@@ -76,16 +76,16 @@ Valider que les corrections apportées à la fonction d'annulation de commande f
 1. [ ] Localiser une commande déjà annulée (tester plusieurs fois si nécessaire)
 2. [ ] **Option A (UI)**: Si le bouton est masqué → Test réussi ✅
 3. [ ] **Option B (Edge case)**: Si on trouve un moyen de cliquer :
-   - [ ] Cliquer sur le bouton "🟠 Annuler"
+   - [ ] Cliquer sur le bouton " Annuler"
    - [ ] ✅ **Message d'erreur attendu**: "Cette commande est déjà annulée.\nVous ne pouvez pas l'annuler à nouveau."
-4. 📸 Capturer screenshot du message d'erreur
+4.  Capturer screenshot du message d'erreur
 
 #### Test 3.2: Tentative d'annulation d'une commande "livree"
 1. [ ] Localiser une commande livrée
 2. [ ] Vérifier que le bouton est masqué (invisible)
 3. [ ] **Option B (Edge case)**: Si on trouve un moyen de cliquer :
    - [ ] ✅ **Message d'erreur attendu**: "Impossible d'annuler une commande déjà livrée."
-4. 📸 Capturer screenshot du message d'erreur
+4.  Capturer screenshot du message d'erreur
 
 ---
 
@@ -114,12 +114,12 @@ Valider que les corrections apportées à la fonction d'annulation de commande f
 ### 5. Test de performance et robustesse
 
 #### Test 5.1: Double-click sur annulation
-1. [ ] Cliquer rapidement 2 fois sur "🟠 Annuler"
+1. [ ] Cliquer rapidement 2 fois sur " Annuler"
 2. [ ] ✅ **Résultat attendu**: Seulement 1 annulation doit se faire
    - (L'UI peut avoir un délai ou un verrou pour empêcher le double-clic)
 
 #### Test 5.2: Fermer l'app sans confirmation
-1. [ ] Cliquer sur "🟠 Annuler"
+1. [ ] Cliquer sur " Annuler"
 2. [ ] Popup de confirmation apparaît
 3. [ ] Fermer l'app (Ctrl+W ou X) au lieu de confirmer
 4. [ ] ✅ **Résultat attendu**: Rien ne doit être annulé
@@ -174,7 +174,7 @@ SELECT id, stock FROM produit WHERE id IN (
 
 ---
 
-## 📊 Résultats Finaux
+##  Résultats Finaux
 
 ### Checklist finale
 
@@ -193,7 +193,7 @@ SELECT id, stock FROM produit WHERE id IN (
 
 ---
 
-## 🎯 Criteria d'acceptation
+##  Criteria d'acceptation
 
 ✅ **ACCEPTÉ si**:
 1. Tous les tests 1.x et 2.x passent
@@ -212,7 +212,7 @@ SELECT id, stock FROM produit WHERE id IN (
 
 ---
 
-## 📝 Notes
+##  Notes
 
 - Chaque test doit être validé avec une commande différente si possible
 - Toujours vérifier la BD après chaque action critiquement
@@ -223,5 +223,4 @@ SELECT id, stock FROM produit WHERE id IN (
 
 **Date de création**: 2026-04-23  
 **Version**: 1.0  
-**Status**: Prêt pour test 🟢
-
+**Status**: Prêt pour test 

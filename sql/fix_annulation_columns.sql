@@ -7,10 +7,10 @@
 -- ========================================
 
 -- Vérifier si la colonne existe déjà
-SELECT COLUMN_NAME
+SELECT COLUMN_NAME 
 FROM INFORMATION_SCHEMA.COLUMNS
-WHERE TABLE_NAME = 'commande'
-AND COLUMN_NAME = 'motif_annulation'
+WHERE TABLE_NAME = 'commande' 
+AND COLUMN_NAME = 'motif_annulation' 
 AND TABLE_SCHEMA = 'chroniccare';
 
 -- Si la requête ci-dessus ne retourne rien, exécuter:
@@ -60,7 +60,7 @@ UPDATE commande SET statut = 'validee' WHERE statut = 'confirmee';
 -- ========================================
 
 -- Afficher les contraintes FK
-SELECT CONSTRAINT_NAME, TABLE_NAME
+SELECT CONSTRAINT_NAME, TABLE_NAME 
 FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
 WHERE TABLE_SCHEMA = 'chroniccare'
 AND CONSTRAINT_TYPE = 'FOREIGN KEY'
@@ -86,4 +86,3 @@ AND TABLE_NAME = 'annulation_commande';
 -- ========================================
 -- FIN DU SCRIPT
 -- ========================================
-

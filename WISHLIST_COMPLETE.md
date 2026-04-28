@@ -1,4 +1,4 @@
-# 🎉 WISHLIST - DÉPLOIEMENT COMPLET
+#  WISHLIST - DÉPLOIEMENT COMPLET
 
 ## ✅ FICHIERS CRÉÉS (5 fichiers)
 
@@ -20,7 +20,7 @@
 
 ---
 
-## 🚀 3 ÉTAPES POUR TESTER
+##  3 ÉTAPES POUR TESTER
 
 ### 1️⃣ Setup BD (30 sec) - FAIRE MAINTENANT
 Copier le SQL dans phpMyAdmin et exécuter
@@ -37,7 +37,7 @@ mvn javafx:run
 
 ---
 
-## 📊 CE QUI FONCTIONNE
+##  CE QUI FONCTIONNE
 
 ✅ Ajouter un produit à la wishlist  
 ✅ Retirer un produit de la wishlist  
@@ -48,7 +48,7 @@ mvn javafx:run
 
 ---
 
-## 🎯 PROCHAINES ÉTAPES (Optionnel)
+##  PROCHAINES ÉTAPES (Optionnel)
 
 1. **Intégrer boutons ❤️ dans ProduitsDashboard**
    - Voir `WIS_HLIST_INTEGRATION.md`
@@ -64,7 +64,7 @@ mvn javafx:run
 
 ---
 
-## 📁 STRUCTURE COMPLÈTE
+##  STRUCTURE COMPLÈTE
 
 ```
 Wishlist Feature:
@@ -81,17 +81,17 @@ Intégration:
 
 ---
 
-## 🏁 STATUS
+##  STATUS
 
 ```
 Development:  ✅ 100%
 Testing:      ⏳ Await user execution
-Production:   🟢 Ready
+Production:    Ready
 ```
 
 ---
 
-## 📞 NEXT?
+##  NEXT?
 
 Vous êtes prêt à:
 
@@ -108,17 +108,16 @@ Vous êtes prêt à:
 
 ---
 
-## 🎊 RÉSUMÉ
+##  RÉSUMÉ
 
 Vous avez maintenant:
 - 6 features complètes (Panier + Annulation + Wishlist + 3 autres)
 - Infrastructure solide pour ajouter plus
 - Code bien structuré et documenté
 
-**Momentum est là!** 💪
+**Momentum est là!** 
 
 ---
 
 **Prêt à tester?** 
 Allez lire: **WISHLIST_QUICK_TEST.md**
-

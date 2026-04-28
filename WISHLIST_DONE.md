@@ -1,6 +1,6 @@
-# 🎉 WISHLIST - IMPLÉMENTATION COMPLÈTE ✅
+#  WISHLIST - IMPLÉMENTATION COMPLÈTE ✅
 
-## 📊 CE QUI A ÉTÉ LIVRÉ (Durée: ~1-2 hours)
+##  CE QUI A ÉTÉ LIVRÉ (Durée: ~1-2 hours)
 
 ```
 ✅ Wishlist.java           (Entity)
@@ -13,7 +13,7 @@
 
 ---
 
-## 🚀 POUR TESTER (3 ÉTAPES - 5 min)
+##  POUR TESTER (3 ÉTAPES - 5 min)
 
 ### 1️⃣ Créer la table en BD (phpMyAdmin)
 
@@ -60,7 +60,7 @@ Login → Menu → "Ma Wishlist" ✅
 
 ---
 
-## 📁 FICHIERS & LIEUX
+##  FICHIERS & LIEUX
 
 ```
 Entity:       src/main/java/com/chroniccare/entities/Wishlist.java
@@ -72,31 +72,31 @@ SQL:          sql/create_wishlist.sql
 
 ---
 
-## 🎯 PROCHAINES ÉTAPES (CHOISIR)
+##  PROCHAINES ÉTAPES (CHOISIR)
 
-### A) 🧪 Tester tout de suite
+### A)  Tester tout de suite
 - Fichier: **WISHLIST_QUICK_TEST.md**
 - Durée: 5 min
 - Résultat: Confirmation que tout fonctionne
 
-### B) 🔗 Intégrer les boutons ❤️
+### B)  Intégrer les boutons ❤️
 - Fichier: **WISHLIST_INTEGRATION.md**
 - Durée: 15 min
 - Résultat: Boutons wishlist dans page produits
 
-### C) 📊 Passer à Dashboard
+### C)  Passer à Dashboard
 - Prochaine grosse feature
 - Durée: 3-4 heures
 - Impact: Important pour ROI
 
-### D) 🛑 Pause
+### D)  Pause
 - Vous avez livré une grosse feature
 - Prendre une pause
 - Reprendre après
 
 ---
 
-## 📈 STATISTIQUES
+##  STATISTIQUES
 
 | Métrique | Avant | Après |
 |----------|-------|-------|
@@ -109,19 +109,19 @@ SQL:          sql/create_wishlist.sql
 
 ---
 
-## 🏆 RÉSUMÉ SESSION
+##  RÉSUMÉ SESSION
 
 ```
 MATIN:      Fix Annulation (bug + BD + tests)
 APRÈS-MIDI: Wishlist complète (entity + service + UI)
 RÉSULTAT:   6 features prêtes, 4 en attente
 
-MOMENTUM:   🚀 TRÈS BON!
+MOMENTUM:    TRÈS BON!
 ```
 
 ---
 
-## 💬 DÉCISION À PRENDRE
+##  DÉCISION À PRENDRE
 
 **Que voulez-vous faire maintenant?**
 
@@ -132,7 +132,7 @@ D) "Pause" - Repos bien mérité
 
 ---
 
-**Vous êtes dans une SUPER position!** 💪
+**Vous êtes dans une SUPER position!** 
 
 - ✅ 6 features prêtes
 - ✅ Code bien structuré
@@ -143,5 +143,4 @@ D) "Pause" - Repos bien mérité
 
 ---
 
-**À vous de jouer!** 🚀
-
+**À vous de jouer!** 

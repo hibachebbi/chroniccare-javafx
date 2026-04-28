@@ -4,7 +4,9 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Priority?>
 <?import javafx.scene.layout.Region?>
@@ -80,6 +82,13 @@
             <VBox spacing="5">
                 <Label text="Statut:" style="-fx-font-size: 13; -fx-font-weight: bold; -fx-text-fill: #666;"/>
                 <Label fx:id="statutLabel" text="Disponible" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #166534;"/>
+            </VBox>
+        </HBox>
+
+        <HBox spacing="15" alignment="CENTER_LEFT">
+            <VBox spacing="5">
+                <Label text="Quantité:" style="-fx-font-size: 13; -fx-font-weight: bold; -fx-text-fill: #666;"/>
+                <Spinner fx:id="qtySpinner" prefWidth="110"/>
             </VBox>
         </HBox>
 

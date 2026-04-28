@@ -101,11 +101,26 @@ public class EditProduitController {
         StringBuilder errors = new StringBuilder();
 
         if (nomField.getText() == null || nomField.getText().trim().isEmpty()) {
-            errors.append("• Nom obligatoire\n");
+            errors.append("• Nom : champ obligatoire\n");
         }
 
         if (categorieCombo.getValue() == null || categorieCombo.getValue().trim().isEmpty()) {
-            errors.append("• Categorie obligatoire\n");
+            errors.append("• Catégorie : champ obligatoire\n");
+        }
+
+        String nom = nomField.getText() == null ? "" : nomField.getText().trim();
+        String categorie = categorieCombo.getValue() == null ? "" : categorieCombo.getValue().trim();
+        if (!nom.isEmpty() && !categorie.isEmpty()) {
+            try {
+                boolean exists = (currentProduit == null)
+                        ? service.existsByNomCategorie(nom, categorie)
+                        : service.existsByNomCategorieExceptId(nom, categorie, currentProduit.getId());
+                if (exists) {
+                    errors.append("• Un produit avec le même nom et la même catégorie existe déjà\n");
+                }
+            } catch (Exception e) {
+                errors.append("• Impossible de vérifier l'unicité du produit\n");
+            }
         }
 
         try {

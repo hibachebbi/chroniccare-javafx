@@ -1,6 +1,7 @@
 package com.chroniccare.controllers.user;
 
 import com.chroniccare.entities.User;
+import com.chroniccare.services.CartService;
 import com.chroniccare.services.UserService;
 import com.chroniccare.utils.SessionManager;
 import javafx.fxml.FXML;
@@ -46,8 +47,12 @@ public class LoginController {
                 admin.setEmail(STATIC_ADMIN_EMAIL);
                 admin.setRoles("[\"ROLE_ADMIN\"]");
                 admin.setActive(true);
+                admin.setId(1); // ID arbitraire pour admin statique
 
                 SessionManager.getInstance().setCurrentUser(admin);
+                // Charger le panier persistant
+                CartService.getInstance().chargerPanierUtilisateur(admin.getId());
+                
                 Parent root = FXMLLoader.load(getClass().getResource("/com/chroniccare/home.fxml"));
                 emailField.getScene().setRoot(root);
                 return;
@@ -66,6 +71,8 @@ public class LoginController {
             }
 
             SessionManager.getInstance().setCurrentUser(user);
+            // Charger le panier persistant de l'utilisateur
+            CartService.getInstance().chargerPanierUtilisateur(user.getId());
 
             // Tous les utilisateurs (admin inclus) passent par la page d'accueil commune
             String fxmlPath = "/com/chroniccare/home.fxml";

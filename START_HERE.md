@@ -1,6 +1,6 @@
 # ✅ CORRECTIONS APPLIQUÉES - À FAIRE MAINTENANT
 
-## 🎯 L'essentiel (2 minutes de lecture)
+##  L'essentiel (2 minutes de lecture)
 
 Tous les problèmes de l'annulation de commande ont été CORRIGÉS et DOCUMENTÉS.
 
@@ -16,7 +16,7 @@ Tous les problèmes de l'annulation de commande ont été CORRIGÉS et DOCUMENT�
 
 ---
 
-## 🚀 À FAIRE MAINTENANT
+##  À FAIRE MAINTENANT
 
 ### Option 1: Test Rapide (5 minutes)
 1. Lancez l'app
@@ -42,7 +42,7 @@ Lire dans l'ordre:
 
 ---
 
-## 📁 Fichiers de Support Disponibles
+##  Fichiers de Support Disponibles
 
 | Fichier | Durée | Pour qui? |
 |---------|-------|----------|
@@ -88,7 +88,7 @@ mvn javafx:run
 
 ---
 
-## 📊 État Final
+##  État Final
 
 ```
 ✅ Code source: CORRIGÉ
@@ -103,7 +103,7 @@ mvn javafx:run
 
 ---
 
-## 🎉 Prochaines Features (après validation)
+##  Prochaines Features (après validation)
 
 1. Wishlist (recommandé après ceci)
 2. Dashboard Stats
@@ -114,7 +114,7 @@ Voir memory-bank/progress.md pour détails.
 
 ---
 
-## 📞 Questions?
+##  Questions?
 
 1. **"Comment tester?"** → Lire VALIDATION_GUIDE.md
 2. **"Quoi a changé?"** → Lire ANNULATION_FIXES.md
@@ -127,5 +127,4 @@ Voir memory-bank/progress.md pour détails.
 **Urgence**: Moyenne (test recommandé aujourd'hui)  
 **Complexity**: Faible (corrections simples et testables)
 
-À toi de jouer ! 🚀
-
+À toi de jouer ! 

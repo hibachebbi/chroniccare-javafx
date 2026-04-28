@@ -116,6 +116,22 @@ public class LivraisonService {
         }
     }
 
+    public void updateStatutByCommandeId(int commandeId, String statut) throws SQLException {
+        if (commandeId <= 0) {
+            throw new IllegalArgumentException("commandeId invalide");
+        }
+        if (statut == null || statut.isBlank()) {
+            throw new IllegalArgumentException("statut obligatoire");
+        }
+        String sql = "UPDATE livraison SET statut = ?, updated_at = ? WHERE commande_id = ?";
+        try (PreparedStatement ps = connection().prepareStatement(sql)) {
+            ps.setString(1, statut);
+            ps.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
+            ps.setInt(3, commandeId);
+            ps.executeUpdate();
+        }
+    }
+
     private void bind(PreparedStatement ps, Livraison livraison, boolean isUpdate) throws SQLException {
         ps.setInt(1, livraison.getCommandeId());
         ps.setString(2, livraison.getStatut());
@@ -177,4 +193,3 @@ public class LivraisonService {
         }
     }
 }
-

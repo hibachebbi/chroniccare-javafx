@@ -1,6 +1,7 @@
 package com.chroniccare.controllers.Admin;
 
 import com.chroniccare.entities.Commande;
+import com.chroniccare.services.AnnulationCommandeService;
 import com.chroniccare.services.CommandeService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -36,6 +37,7 @@ public class CommandesDashboardController {
     @FXML private Label countLabel;
 
     private final CommandeService service = new CommandeService();
+    private final AnnulationCommandeService annulationService = new AnnulationCommandeService();
     private final ObservableList<Commande> allCommandes = FXCollections.observableArrayList();
     private final ObservableList<Commande> filteredCommandes = FXCollections.observableArrayList();
 
@@ -54,14 +56,21 @@ public class CommandesDashboardController {
         actionsCol.setCellFactory(col -> new TableCell<>() {
             private final Button btnEdit = new Button("Modifier");
             private final Button btnDelete = new Button("Supprimer");
-            private final HBox box = new HBox(5, btnEdit, btnDelete);
+            private final Button btnAnnuler = new Button("Annuler");
+            private final HBox box = new HBox(5, btnEdit, btnAnnuler, btnDelete);
             {
                 btnEdit.setStyle("-fx-background-color: #2563eb; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5;");
                 btnDelete.setStyle("-fx-background-color: #ef4444; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5;");
+                btnAnnuler.setStyle("-fx-background-color: #f59e0b; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5;");
 
                 btnEdit.setOnAction(e -> {
                     Commande commande = getTableView().getItems().get(getIndex());
                     goToEdit(commande);
+                });
+
+                btnAnnuler.setOnAction(e -> {
+                    Commande commande = getTableView().getItems().get(getIndex());
+                    handleAnnulation(commande);
                 });
 
                 btnDelete.setOnAction(e -> {
@@ -116,7 +125,7 @@ public class CommandesDashboardController {
 
     @FXML
     public void handleSearch() {
-        // Pas de recherche par identifiants (id / numero)
+
         String statut = statutFilter.getValue();
 
         List<Commande> result = allCommandes.stream()
@@ -172,6 +181,34 @@ public class CommandesDashboardController {
                     loadCommandes();
                 } catch (Exception e) {
                     showError("Suppression commande echouee", e.getMessage());
+                }
+            }
+        });
+    }
+
+    private void handleAnnulation(Commande commande) {
+        // Vérifier si la commande peut être annulée
+        if (commande.getStatut().equals("annulee") || commande.getStatut().equals("livree")) {
+            showError("Annulation impossible", "Cette commande a déjà le statut: " + commande.getStatut());
+            return;
+        }
+
+        Alert dialog = new Alert(Alert.AlertType.CONFIRMATION);
+        dialog.setTitle("Annuler Commande");
+        dialog.setHeaderText("Annuler la commande n°" + commande.getNumeroCommande());
+        dialog.setContentText("Êtes-vous certain de vouloir annuler cette commande?\nLe stock sera restitué automatiquement.");
+        dialog.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                try {
+                    annulationService.annulerCommande(commande.getId(), "Annulée par l'administrateur", 1);
+                    loadCommandes();
+                    Alert success = new Alert(Alert.AlertType.INFORMATION);
+                    success.setTitle("Succès");
+                    success.setHeaderText(null);
+                    success.setContentText("Commande annulée avec succès et stock restitué.");
+                    success.showAndWait();
+                } catch (Exception e) {
+                    showError("Erreur annulation", e.getMessage());
                 }
             }
         });

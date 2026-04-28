@@ -109,4 +109,3 @@ Les colonnes suivantes doivent exister dans les tables:
 ---
 
 **Status**: ✅ CORRIGÉ ET TESTÉ
-

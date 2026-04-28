@@ -5,7 +5,7 @@ Status: ✅ **CORRECTIONS APPLIQUÉES ET DOCUMENTÉES**
 
 ---
 
-## 🎯 Ce qui a été corrigé
+##  Ce qui a été corrigé
 
 ### Problème 1: Statuts incorrects
 **❌ Avant**: Code vérifie le statut `"confirmee"` qui n'existe pas en BD  
@@ -36,7 +36,7 @@ Status: ✅ **CORRECTIONS APPLIQUÉES ET DOCUMENTÉES**
 
 ---
 
-## 📄 Fichiers Modifiés
+##  Fichiers Modifiés
 
 ### 1. CommandesDashboardController.java
 - **Lignes 63-118**: Amélioration de la cellFactory pour affichage du bouton
@@ -60,7 +60,7 @@ Status: ✅ **CORRECTIONS APPLIQUÉES ET DOCUMENTÉES**
 
 ---
 
-## 🚀 Étapes de Validation
+##  Étapes de Validation
 
 ### Étape 1: Vérifier que le code compile
 
@@ -93,7 +93,7 @@ mvn javafx:run
 
 ### Étape 4: Tester l'annulation d'une commande
 
-1. Cliquer sur le bouton "🟠 Annuler" d'une commande `en_attente` ou `validee`
+1. Cliquer sur le bouton " Annuler" d'une commande `en_attente` ou `validee`
 2. Vérifier le popup de confirmation:
    - ✅ Affiche le numéro de commande
    - ✅ Affiche le montant
@@ -139,7 +139,7 @@ WHERE id = <ID_DE_LA_COMMANDE_ANNULEE>;
 
 ---
 
-## 📊 Grille d'Évaluation
+##  Grille d'Évaluation
 
 | Aspect | ✅ Ou ❌ | Notes |
 |--------|---------|-------|
@@ -158,7 +158,7 @@ WHERE id = <ID_DE_LA_COMMANDE_ANNULEE>;
 
 ---
 
-## 🔧 Fichiers de Support
+##  Fichiers de Support
 
 Les fichiers suivants ont été créés pour aider au test et à la documentation :
 
@@ -194,20 +194,20 @@ Les fichiers suivants ont été créés pour aider au test et à la documentatio
 
 ---
 
-## 🎬 Prochaines étapes
+##  Prochaines étapes
 
 Après avoir validé toutes les corrections :
 
 1. ✅ Tester l'annulation (ce document)
 2. ✅ Tester Client Historique (voir memory-bank/progress.md)
 3. ✅ Tester Panier Persistant
-4. 🔜 Implémenter Wishlist (Prochaine feature)
-5. 🔜 Implémenter Dashboard Statistiques
-6. 🔜 Implémenter Suivi Livraison
+4.  Implémenter Wishlist (Prochaine feature)
+5.  Implémenter Dashboard Statistiques
+6.  Implémenter Suivi Livraison
 
 ---
 
-## 💬 Support
+##  Support
 
 Si vous rencontrez des problèmes:
 
@@ -223,4 +223,3 @@ Si vous rencontrez des problèmes:
 Toutes les corrections ont été appliquées. Veuillez suivre les étapes de validation ci-dessus pour confirmer que tout fonctionne correctement.
 
 _Dernière mise à jour: 2026-04-23_
-

@@ -1,6 +1,8 @@
 package com.chroniccare.controllers.Client;
 
+import com.chroniccare.entities.Produit;
 import com.chroniccare.services.CartService;
+import com.chroniccare.services.ProduitsService;
 import com.chroniccare.utils.FxNavigator;
 import com.chroniccare.utils.SessionManager;
 import javafx.beans.property.ReadOnlyDoubleWrapper;
@@ -17,7 +19,13 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextInputDialog;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class PanierController {
+
+    private final ProduitsService produitsService = new ProduitsService();
+    private final Map<Integer, String> produitNoms = new HashMap<>(); // Cache des noms de produits
 
     @FXML private Node root;
     @FXML private TableView<CartService.CartItem> cartTable;
@@ -31,9 +39,25 @@ public class PanierController {
 
     @FXML
     public void initialize() {
-        colNom.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().getProduit().getNom()));
+        // Charger les noms de produits du panier
+        chargerNomsProduits();
+
+        // Nom du produit
+        colNom.setCellValueFactory(data -> {
+            CartService.CartItem item = data.getValue();
+            String nom = produitNoms.getOrDefault(item.getProduitId(), "Produit #" + item.getProduitId());
+            return new ReadOnlyStringWrapper(nom);
+        });
+
         colQty.setCellValueFactory(data -> new ReadOnlyIntegerWrapper(data.getValue().getQuantity()).asObject());
-        colPrix.setCellValueFactory(data -> new ReadOnlyDoubleWrapper(data.getValue().getProduit().getPrix()).asObject());
+
+        // Prix unitaire
+        colPrix.setCellValueFactory(data -> {
+            CartService.CartItem item = data.getValue();
+            double prix = item.getProduit() != null ? item.getProduit().getPrix() : item.getPrixUnitaire();
+            return new ReadOnlyDoubleWrapper(prix).asObject();
+        });
+
         colTotal.setCellValueFactory(data -> new ReadOnlyDoubleWrapper(data.getValue().getLineTotal()).asObject());
 
         cartTable.setItems(cartItems);
@@ -51,6 +75,27 @@ public class PanierController {
         refreshCart();
     }
 
+    /**
+     * Charge les noms de tous les produits du panier depuis la BD
+     */
+    private void chargerNomsProduits() {
+        try {
+            CartService cartService = CartService.getInstance();
+            for (CartService.CartItem item : cartService.getItems().values()) {
+                if (!produitNoms.containsKey(item.getProduitId())) {
+                    Produit produit = produitsService.findById(item.getProduitId());
+                    if (produit != null) {
+                        produitNoms.put(item.getProduitId(), produit.getNom());
+                    } else {
+                        produitNoms.put(item.getProduitId(), "Produit #" + item.getProduitId());
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Erreur chargement noms produits: " + e.getMessage());
+        }
+    }
+
     @FXML
     public void removeSelected() {
         CartService.CartItem selected = cartTable.getSelectionModel().getSelectedItem();
@@ -58,7 +103,7 @@ public class PanierController {
             showInfo("Panier", "Veuillez sélectionner un produit.");
             return;
         }
-        CartService.getInstance().remove(selected.getProduit().getId());
+        CartService.getInstance().remove(selected.getProduitId());
         refreshCart();
     }
 
@@ -109,16 +154,22 @@ public class PanierController {
     }
 
     private void refreshCart() {
+        chargerNomsProduits(); // Recharger les noms au cas où il y a de nouveaux articles
         cartItems.setAll(CartService.getInstance().getItems().values());
         totalLabel.setText("Total: " + CartService.getInstance().getTotalPrice());
     }
 
     private void editQuantity(CartService.CartItem item) {
         if (item == null) return;
-        int maxStock = item.getProduit().getStock();
+        int maxStock = item.getProduit() != null ? item.getProduit().getStock() : 999;
+        if (maxStock <= 0) {
+            showInfo("Stock indisponible", "Ce produit est en rupture de stock.");
+            return;
+        }
         TextInputDialog dialog = new TextInputDialog(String.valueOf(item.getQuantity()));
         dialog.setTitle("Modifier la quantite");
-        dialog.setHeaderText(item.getProduit().getNom());
+        String prodName = produitNoms.getOrDefault(item.getProduitId(), "Produit #" + item.getProduitId());
+        dialog.setHeaderText(prodName);
         dialog.setContentText("Quantite (max " + maxStock + "):");
 
         dialog.showAndWait().ifPresent(value -> {
@@ -132,7 +183,12 @@ public class PanierController {
                     showInfo("Stock insuffisant", "Stock disponible: " + maxStock);
                     return;
                 }
-                CartService.getInstance().setQuantity(item.getProduit().getId(), qty);
+                try {
+                    CartService.getInstance().setQuantity(item.getProduitId(), qty);
+                } catch (IllegalArgumentException ex) {
+                    showInfo("Stock indisponible", ex.getMessage());
+                    return;
+                }
                 refreshCart();
             } catch (NumberFormatException e) {
                 showInfo("Quantite invalide", "Veuillez saisir un nombre valide.");

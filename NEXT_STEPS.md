@@ -1,4 +1,4 @@
-# 🚀 PROCHAINES ÉTAPES - Roadmap 2026-04-23
+#  PROCHAINES ÉTAPES - Roadmap 2026-04-23
 
 ## ✅ Ce Qui Vient d'Être Complété
 
@@ -7,12 +7,12 @@
    ├─ Code corrigé
    ├─ BD fix (colonne motif_annulation)
    ├─ Tests passés
-   └─ Production-ready 🟢
+   └─ Production-ready 
 ```
 
 ---
 
-## 🎯 PROCHAINES FEATURES (Priorités)
+##  PROCHAINES FEATURES (Priorités)
 
 ### Option 1: **WISHLIST** (Recommandé) ⭐
 
@@ -108,36 +108,36 @@
 
 ---
 
-## 🎬 QUE VOULEZ-VOUS FAIRE?
+##  QUE VOULEZ-VOUS FAIRE?
 
 ### Option A: Commencer WISHLIST (Recommandé)
 - Rapide à implémenter
 - Améliore l'app immédiatement
 - Bonne expérience de développement
 
-👉 **Répondez**: "OK, Wishlist"
+ **Répondez**: "OK, Wishlist"
 
 ### Option B: Commencer DASHBOARD STATS
 - Plus important pour business
 - Prend un peu plus de temps
 
-👉 **Répondez**: "OK, Dashboard"
+ **Répondez**: "OK, Dashboard"
 
 ### Option C: Commencer SUIVI LIVRAISON
 - Important pour UX client
 - Moyen de complexité
 
-👉 **Répondez**: "OK, Suivi Livraison"
+ **Répondez**: "OK, Suivi Livraison"
 
 ### Option D: Prendre une pause
 - Vous avez complété une grosse feature!
-- Méritez un repos 😎
+- Méritez un repos 
 
-👉 **Répondez**: "Pause"
+ **Répondez**: "Pause"
 
 ---
 
-## 📋 CHECKLIST AVANT DE DÉMARRER
+##  CHECKLIST AVANT DE DÉMARRER
 
 - [x] Annulation de Commande fonctionnelle
 - [x] BD corrections appliquées
@@ -148,7 +148,7 @@
 
 ---
 
-## 🏆 Résumé Session
+##  Résumé Session
 
 ```
 DÉVELOPPEMENT EFFECTUÉ:
@@ -156,18 +156,18 @@ DÉVELOPPEMENT EFFECTUÉ:
 ✅ BD fixes (colonne motif_annulation)
 ✅ Tests validés
 ✅ Documentation (15+ fichiers)
-✅ Production-ready 🟢
+✅ Production-ready 
 
 PROCHAINES ÉTAPES:
-🔄 Wishlist (recommandé, 2-3h)
-🔄 Dashboard Stats (important, 3-4h)
-🔄 Suivi Livraison (UX, 2-3h)
-🔄 Notifications (engagement, 4-5h)
+ Wishlist (recommandé, 2-3h)
+ Dashboard Stats (important, 3-4h)
+ Suivi Livraison (UX, 2-3h)
+ Notifications (engagement, 4-5h)
 ```
 
 ---
 
-## 📞 CONSEILS
+##  CONSEILS
 
 **Pour Wishlist**:
 - Simple CRUD (Create, Read, Delete)
@@ -191,7 +191,7 @@ PROCHAINES ÉTAPES:
 
 ---
 
-## 🎯 MON RECOMMANDATION (100%)
+##  MON RECOMMANDATION (100%)
 
 **DÉMARRER WISHLIST**:
 1. ✅ Facile + rapide
@@ -200,11 +200,11 @@ PROCHAINES ÉTAPES:
 4. ✅ Après → Dashboard sera facile
 
 Avant vous aviez 0 features. Maintenant **5 features complètes**.  
-Une de plus (Wishlist) = **6 features** en 2-3h max. 💪
+Une de plus (Wishlist) = **6 features** en 2-3h max. 
 
 ---
 
-**Prêt?** 🚀
+**Prêt?** 
 
 Dites-moi quelle feature voulez-vous commencer:
 - "OK, Wishlist"
@@ -212,4 +212,3 @@ Dites-moi quelle feature voulez-vous commencer:
 - "OK, Suivi Livraison"
 - "OK, Notifications"
 - "Pause"
-

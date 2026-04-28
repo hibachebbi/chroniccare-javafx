@@ -1,4 +1,4 @@
-# 🎯 CHOIX DES PROCHAINES ÉTAPES
+#  CHOIX DES PROCHAINES ÉTAPES
 
 ## ✅ CE QUI EST TERMINÉ
 
@@ -7,16 +7,16 @@ Annulation de Commande: 100% FONCTIONNELLE ✅
 ├─ Code corrigé
 ├─ BD fix appliquée
 ├─ Tests passés
-└─ Production-ready 🟢
+└─ Production-ready 
 
 Status Global: 5 features complètes + 5 en attente
 ```
 
 ---
 
-## 🚀 PROCHAINES ACTIONS (Choisir une)
+##  PROCHAINES ACTIONS (Choisir une)
 
-### **A) 🛑 PAUSE**
+### **A)  PAUSE**
 Vous avez complété une grosse feature!
 - ✅ Prendre un repos
 - ✅ Déployer en production ? (optionnel)
@@ -26,11 +26,11 @@ Vous avez complété une grosse feature!
 
 ---
 
-### **B) 💪 WISHLIST (Recommandé!)**
+### **B)  WISHLIST (Recommandé!)**
 Liste de souhaits/favoris pour clients
 - ⏱️ Durée: 2-3 heures
-- 📊 Impact: Moyen (améliore UX)
-- 🎯 Difficulté: Facile (bonne pour apprentissage)
+-  Impact: Moyen (améliore UX)
+-  Difficulté: Facile (bonne pour apprentissage)
 
 **Avantages**:
 - Rapide à faire
@@ -41,11 +41,11 @@ Liste de souhaits/favoris pour clients
 
 ---
 
-### **C) 📊 DASHBOARD STATISTIQUES**
+### **C)  DASHBOARD STATISTIQUES**
 Analytics pour l'admin
 - ⏱️ Durée: 3-4 heures
-- 📊 Impact: Important (ROI/business)
-- 🎯 Difficulté: Moyen (graphiques)
+-  Impact: Important (ROI/business)
+-  Difficulté: Moyen (graphiques)
 
 **Avantages**:
 - Montre valeur du projet
@@ -56,11 +56,11 @@ Analytics pour l'admin
 
 ---
 
-### **D) 📦 SUIVI LIVRAISON**
+### **D)  SUIVI LIVRAISON**
 Tracker de livraison pour clients
 - ⏱️ Durée: 2-3 heures
-- 📊 Impact: Important (UX)
-- 🎯 Difficulté: Moyen (UI timelines)
+-  Impact: Important (UX)
+-  Difficulté: Moyen (UI timelines)
 
 **Avantages**:
 - Réduit appels support
@@ -71,7 +71,7 @@ Tracker de livraison pour clients
 
 ---
 
-## 🏆 MA RECOMMANDATION
+##  MA RECOMMANDATION
 
 **→ Option B: WISHLIST**
 
@@ -92,7 +92,7 @@ Semaine 4: Notifications(4-5h) ✅ optionnel
 
 ---
 
-## 📋 CHECKLIST AVANT DE CONTINUER
+##  CHECKLIST AVANT DE CONTINUER
 
 - [x] Annulation de Commande fonctionne
 - [x] Tests passés
@@ -102,7 +102,7 @@ Semaine 4: Notifications(4-5h) ✅ optionnel
 
 ---
 
-## 📞 COMMENT RÉPONDRE?
+##  COMMENT RÉPONDRE?
 
 **Dites simplement**:
 
@@ -130,7 +130,7 @@ OK, Suivi Livraison
 
 ---
 
-## 📊 RÉSUMÉ SESSION
+##  RÉSUMÉ SESSION
 
 ```
 ✅ Bugs fixes: 4
@@ -144,7 +144,6 @@ Impact: TRÈS IMPORTANT
 
 ---
 
-**À vous de jouer!** 🚀
+**À vous de jouer!** 
 
 Quelle option choisissez-vous?
-
