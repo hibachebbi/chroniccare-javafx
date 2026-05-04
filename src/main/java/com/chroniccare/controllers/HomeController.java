@@ -19,9 +19,13 @@ import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
 import java.io.File;
+import javafx.scene.Scene;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -339,6 +343,36 @@ public class HomeController {
     private String capitalize(String s) {
         if (s == null || s.isEmpty()) return s;
         return Character.toUpperCase(s.charAt(0)) + s.substring(1).toLowerCase();
+    }
+    @FXML
+    private void goToForum() {
+        try {
+            String fxml = SessionManager.getInstance().isAdmin()
+                    ? "/com/chroniccare/forum.fxml"
+                    : "/com/chroniccare/forum-front.fxml";
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxml));
+            BorderPane forumPane = loader.load();
+
+            // Prendre seulement le centre du forum (sans sidebar ni topbar)
+            javafx.scene.Node centerContent = forumPane.getCenter();
+
+            if (pageTitle != null) pageTitle.setText("Forum");
+            setDashboardVisible(false);
+            setSuiviVisible(false);
+
+            VBox mainContent = (VBox) sidebarRoot.getScene().lookup("#mainContent");
+            if (mainContent != null && centerContent != null) {
+                // Garder la topbar de home (premier enfant) et remplacer le reste
+                if (mainContent.getChildren().size() > 1) {
+                    mainContent.getChildren().remove(1, mainContent.getChildren().size());
+                }
+                mainContent.getChildren().add(centerContent);
+            }
+        } catch (Exception e) {
+            System.err.println("Erreur navigation forum : " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private void showRewardPopup(User user) {

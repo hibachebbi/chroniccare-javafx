@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.chroniccare.controllers.AjouterPublicationController"
+      prefWidth="600" prefHeight="580" spacing="20"
+      style="-fx-background-color:#f1f5f9; -fx-padding:30;"
+      stylesheets="@styles.css, @home-styles.css">
+
+    <Label fx:id="labelTitre" text="Nouvelle publication" styleClass="page-title"/>
+    <Separator/>
+
+    <VBox styleClass="card" spacing="14">
+
+        <Label text="Titre *" styleClass="info-label"/>
+        <TextField fx:id="fieldTitre" promptText="Titre de la publication"
+                   style="-fx-background-radius:8px; -fx-border-radius:8px;
+                          -fx-border-color:#d1d5db; -fx-padding:10;"/>
+        <Label fx:id="erreurTitre" styleClass="error-label"
+               visible="false" managed="false"/>
+
+        <Label text="Catégorie *" styleClass="info-label"/>
+        <ComboBox fx:id="fieldCategorie" prefWidth="Infinity"
+                  promptText="Choisir une catégorie"
+                  style="-fx-background-radius:8px;"/>
+        <Label fx:id="erreurCategorie" styleClass="error-label"
+               visible="false" managed="false"/>
+
+        <Label text="Contenu *" styleClass="info-label"/>
+        <TextArea fx:id="fieldContenu" prefHeight="100"
+                  promptText="Écrivez votre publication..." wrapText="true"
+                  style="-fx-background-radius:8px; -fx-border-radius:8px;
+                         -fx-border-color:#d1d5db; -fx-padding:10;"/>
+        <Label fx:id="erreurContenu" styleClass="error-label"
+               visible="false" managed="false"/>
+
+        <Label text="Image (optionnel)" styleClass="info-label"/>
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <TextField fx:id="fieldImagePath"
+                       promptText="Aucune image sélectionnée"
+                       HBox.hgrow="ALWAYS" editable="false"
+                       style="-fx-background-radius:8px; -fx-border-radius:8px;
+                              -fx-border-color:#d1d5db; -fx-padding:10;"/>
+            <Button text="📁 Choisir"
+                    styleClass="btn-secondary"
+                    onAction="#choisirImage"/>
+            <Button text="✕"
+                    onAction="#supprimerImage"
+                    style="-fx-background-color:#fee2e2; -fx-text-fill:#dc2626;
+                           -fx-background-radius:8px; -fx-cursor:hand;
+                           -fx-border-width:0; -fx-padding:8 10;"/>
+        </HBox>
+
+        <Label text="Statut" styleClass="info-label"/>
+        <ComboBox fx:id="fieldStatut" prefWidth="Infinity"
+                  style="-fx-background-radius:8px;"/>
+
+        <Label fx:id="messageLabel" wrapText="true"
+               visible="false" managed="false"/>
+
+        <HBox spacing="12" alignment="CENTER_RIGHT">
+            <Button text="Annuler"
+                    styleClass="btn-secondary" onAction="#annuler"/>
+            <Button fx:id="btnSauvegarder" text="Publier"
+                    styleClass="btn-primary"  onAction="#sauvegarder"/>
+        </HBox>
+    </VBox>
+</VBox>

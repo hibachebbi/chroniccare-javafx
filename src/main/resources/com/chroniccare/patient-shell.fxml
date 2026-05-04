@@ -47,6 +47,9 @@
                         styleClass="nav-btn" onAction="#showRdv" maxWidth="Infinity"/>
                 <Button fx:id="btnConsultations" text="💬  Mes consultations"
                         styleClass="nav-btn" onAction="#showConsultations" maxWidth="Infinity"/>
+                <Label text="FORUM" styleClass="nav-section-label"/>
+                <Button text="💬  Forum"
+                        styleClass="nav-btn" onAction="#goToForum" maxWidth="Infinity"/>
             </VBox>
             <VBox styleClass="sidebar-bottom">
                 <Separator styleClass="sidebar-sep"/>

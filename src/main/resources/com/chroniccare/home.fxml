@@ -65,6 +65,14 @@
                         onAction="#showHome" maxWidth="Infinity"/>
                 <Button text="👤  Mon profil" styleClass="nav-btn, nav-track" userData="nut:profile"
                         onAction="#goToProfile" maxWidth="Infinity"/>
+                <Button fx:id="btnUsers" text="👥  Gestion Utilisateurs"
+                        styleClass="nav-btn"
+                        onAction="#goToUsers" maxWidth="Infinity"/>
+                <Label text="FORUM" styleClass="nav-section-label"/>
+                <Button text="💬  Forum"
+                        styleClass="nav-btn"
+                        onAction="#goToForum"
+                        maxWidth="Infinity"/>
                 <Label text="MES SOINS" styleClass="nav-section-label"/>
                 <Button text="📋  Mon suivi" styleClass="nav-btn, nav-track" userData="nut:suivi"
                         onAction="#goToNutritionHomeSuivi" maxWidth="Infinity"/>
@@ -95,6 +103,9 @@
                             onAction="#showEtatModule" maxWidth="Infinity"/>
                     <Button fx:id="btnCoachActivite" text="Activite" styleClass="nav-btn"
                             onAction="#showActiviteModule" maxWidth="Infinity"/>
+                    <Label text="FORUM" styleClass="nav-section-label"/>
+                    <Button text="💬  Forum" styleClass="nav-btn"
+                            onAction="#goToForum" maxWidth="Infinity"/>
                 </VBox>
                 <!-- Patient -->
                 <VBox fx:id="patientNav" spacing="2" visible="false" managed="false">
@@ -103,6 +114,7 @@
                             onAction="#showEtatModule" maxWidth="Infinity"/>
                     <Button fx:id="btnActivite" text="Activite" styleClass="nav-btn"
                             onAction="#showActiviteModule" maxWidth="Infinity"/>
+
                     <VBox fx:id="patientEventsNav" spacing="2">
                         <Button text="Evenements" styleClass="nav-btn"
                                 onAction="#goToPatientEvents" maxWidth="Infinity"/>

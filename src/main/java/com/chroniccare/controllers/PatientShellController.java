@@ -12,10 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 
 import java.io.File;
 import java.time.LocalDate;
@@ -350,6 +347,20 @@ public class PatientShellController {
         setActive(btnConsultations);
         pageTitle.setText("Mes consultations");
         loadContent("/com/chroniccare/patient-consultations.fxml");
+    }
+    @FXML
+    public void goToForum() {
+        pageTitle.setText("Forum");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/chroniccare/forum-front.fxml"));
+            BorderPane forumPane = loader.load();
+            javafx.scene.Node centerContent = forumPane.getCenter();
+            if (centerContent != null) {
+                contentPane.getChildren().setAll(centerContent);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

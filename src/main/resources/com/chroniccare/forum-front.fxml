@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.chroniccare.controllers.ForumFrontController"
+            prefWidth="1100" prefHeight="700"
+            stylesheets="@styles.css, @home-styles.css">
+
+    <left>
+        <VBox styleClass="sidebar" prefWidth="230" spacing="0">
+            <VBox styleClass="sidebar-brand" spacing="4">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="✚" styleClass="brand-icon"/>
+                    <Label text="ChronicCare" styleClass="brand-title"/>
+                </HBox>
+                <Label text="Suivi médical intelligent" styleClass="brand-subtitle"/>
+            </VBox>
+            <VBox styleClass="sidebar-user-card" spacing="6">
+                <Label fx:id="sidebarAvatar"    styleClass="sidebar-avatar"/>
+                <Label fx:id="sidebarUserName"  styleClass="sidebar-user-name"/>
+                <Label fx:id="sidebarRoleBadge" styleClass="sidebar-role-badge"/>
+            </VBox>
+            <Separator styleClass="sidebar-sep"/>
+            <VBox styleClass="nav-section" spacing="2" VBox.vgrow="ALWAYS">
+                <Label text="NAVIGATION" styleClass="nav-section-label"/>
+                <Button text="🏠  Accueil"    styleClass="nav-btn" maxWidth="Infinity"/>
+                <Label text="FORUM"           styleClass="nav-section-label"/>
+                <Button text="💬  Publications"
+                        styleClass="nav-btn, nav-btn-active" maxWidth="Infinity"/>
+                <Label text="MES SOINS"       styleClass="nav-section-label"/>
+                <Button text="📋  Mon Suivi"  styleClass="nav-btn" maxWidth="Infinity"/>
+                <Button text="🥗  Nutrition"  styleClass="nav-btn" maxWidth="Infinity"/>
+                <Button text="💊  Médicaments" styleClass="nav-btn" maxWidth="Infinity"/>
+            </VBox>
+            <VBox styleClass="sidebar-bottom">
+                <Separator styleClass="sidebar-sep"/>
+                <Button text="⏻  Déconnexion"
+                        styleClass="nav-btn, nav-btn-logout" maxWidth="Infinity"/>
+            </VBox>
+        </VBox>
+    </left>
+
+    <center>
+        <VBox styleClass="main-content" spacing="0">
+
+            <!-- TOPBAR -->
+            <HBox styleClass="topbar" alignment="CENTER_LEFT" spacing="16">
+                <Region HBox.hgrow="ALWAYS"/>
+                <TextField fx:id="fieldRecherche"
+                           promptText="Rechercher une publication..."
+                           prefWidth="220"
+                           style="-fx-background-radius:8px; -fx-border-radius:8px;
+                                  -fx-border-color:#d1d5db; -fx-padding:8 12;"/>
+
+                <!-- 🔔 BOUTON NOTIFICATION -->
+                <StackPane fx:id="notifBellContainer" style="-fx-cursor:hand;">
+                    <Button fx:id="btnNotification"
+                            text="🔔"
+                            onAction="#toggleNotifications"
+                            style="-fx-background-color:#f1f5f9;
+                                   -fx-background-radius:50%;
+                                   -fx-font-size:16px;
+                                   -fx-min-width:38px; -fx-min-height:38px;
+                                   -fx-max-width:38px; -fx-max-height:38px;
+                                   -fx-border-width:0; -fx-cursor:hand;"/>
+                    <Label fx:id="badgeNotif"
+                           text="0"
+                           visible="false"
+                           managed="false"
+                           style="-fx-background-color:#ef4444;
+                                  -fx-text-fill:white;
+                                  -fx-font-size:9px;
+                                  -fx-font-weight:bold;
+                                  -fx-background-radius:10px;
+                                  -fx-min-width:16px; -fx-min-height:16px;
+                                  -fx-max-width:16px; -fx-max-height:16px;
+                                  -fx-alignment:CENTER;
+                                  -fx-padding:0;"
+                           StackPane.alignment="TOP_RIGHT"/>
+                </StackPane>
+
+                <Button fx:id="btnAjouter"
+                        text="+ Nouvelle publication"
+                        styleClass="btn-primary"
+                        onAction="#ouvrirAjout"/>
+            </HBox>
+
+            <!-- CONTENU -->
+            <HBox spacing="20" style="-fx-padding:20;" VBox.vgrow="ALWAYS">
+
+                <!-- FEED PRINCIPAL -->
+                <ScrollPane fitToWidth="true" HBox.hgrow="ALWAYS"
+                            styleClass="content-scroll" prefWidth="700">
+                    <VBox fx:id="feedPublications" spacing="16"
+                          style="-fx-padding:4 4 20 4;"/>
+                </ScrollPane>
+
+                <!-- SIDEBAR DROITE -->
+                <VBox spacing="14" prefWidth="240">
+
+                    <!-- Stats -->
+                    <VBox styleClass="card" spacing="10">
+                        <Label text="Statistiques"
+                               style="-fx-font-size:12px; -fx-font-weight:bold;
+                                      -fx-text-fill:#374151;"/>
+                        <Separator/>
+                        <HBox alignment="CENTER_LEFT" spacing="8">
+                            <Label text="📢" style="-fx-font-size:14px;"/>
+                            <Label text="Publications" styleClass="stat-label" HBox.hgrow="ALWAYS"/>
+                            <Label fx:id="statPublications" text="0" styleClass="stat-value"
+                                   style="-fx-font-size:16px;"/>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" spacing="8">
+                            <Label text="💬" style="-fx-font-size:14px;"/>
+                            <Label text="Commentaires" styleClass="stat-label" HBox.hgrow="ALWAYS"/>
+                            <Label fx:id="statCommentaires" text="0" styleClass="stat-value"
+                                   style="-fx-font-size:16px;"/>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" spacing="8">
+                            <Label text="❤️" style="-fx-font-size:14px;"/>
+                            <Label text="Total likes" styleClass="stat-label" HBox.hgrow="ALWAYS"/>
+                            <Label fx:id="statLikes" text="0" styleClass="stat-value"
+                                   style="-fx-font-size:16px;"/>
+                        </HBox>
+                    </VBox>
+
+                    <!-- Filtres catégories -->
+                    <VBox styleClass="card" spacing="10">
+                        <Label text="Catégories"
+                               style="-fx-font-size:12px; -fx-font-weight:bold;
+                                      -fx-text-fill:#374151;"/>
+                        <Separator/>
+                        <FlowPane fx:id="flowCategories" hgap="6" vgap="6"/>
+                    </VBox>
+
+                    <!-- Filtre statut -->
+                    <VBox styleClass="card" spacing="10">
+                        <Label text="Statut"
+                               style="-fx-font-size:12px; -fx-font-weight:bold; -fx-text-fill:#374151;"/>
+                        <Separator/>
+                        <ComboBox fx:id="filtreStatut"
+                                  prefWidth="Infinity"
+                                  promptText="Tous les statuts"
+                                  onAction="#filtrerParStatut"
+                                  style="-fx-background-radius:8px;"/>
+                    </VBox>
+
+                    <!-- Tri -->
+                    <VBox styleClass="card" spacing="10">
+                        <Label text="Trier par"
+                               style="-fx-font-size:12px; -fx-font-weight:bold; -fx-text-fill:#374151;"/>
+                        <Separator/>
+                        <ComboBox fx:id="triPublications"
+                                  prefWidth="Infinity"
+                                  onAction="#trierPublications"
+                                  style="-fx-background-radius:8px;"/>
+                    </VBox>
+
+                </VBox>
+            </HBox>
+        </VBox>
+    </center>
+
+</BorderPane>
