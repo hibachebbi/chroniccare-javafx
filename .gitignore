@@ -45,3 +45,13 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+# Local secrets
+openai.properties
+google-oauth.properties
+smtp.properties
+smtp2.properties
+config/gemini.properties
+rdv/config/gemini.properties
+rdv/config/openai.properties
+

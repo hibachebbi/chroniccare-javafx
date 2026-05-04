@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.chroniccare.controllers.PatientConsultationsController"
+      styleClass="main-content" spacing="0"
+      stylesheets="@home-styles.css">
+
+    <HBox styleClass="topbar" alignment="CENTER_LEFT" spacing="16">
+        <VBox spacing="2">
+            <Label text="Mes consultations" styleClass="page-title"/>
+            <Label text="Comptes rendus, recommandations et plans alimentaires partages par votre nutritionniste."
+                   styleClass="patient-consult-topbar-sub" wrapText="true"/>
+        </VBox>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label fx:id="topbarDate" styleClass="topbar-date"/>
+        <HBox styleClass="topbar-user-pill" alignment="CENTER" spacing="8">
+            <Label fx:id="topbarAvatar" styleClass="topbar-avatar"/>
+            <Label fx:id="topbarUserName" styleClass="topbar-username"/>
+        </HBox>
+    </HBox>
+
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="content-scroll">
+        <VBox styleClass="patient-consult-body" spacing="20">
+
+            <HBox styleClass="consult-hero" alignment="CENTER_LEFT" spacing="22">
+                <VBox styleClass="consult-hero-left" spacing="8" HBox.hgrow="ALWAYS">
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Label text="ESPACE CONSULTATION" styleClass="consult-hero-kicker"/>
+                        <Label text="Historique securise" styleClass="consult-hero-chip"/>
+                    </HBox>
+                    <Label fx:id="heroPatientName" text="Vos consultations" styleClass="consult-hero-title" wrapText="true"/>
+                    <Label text="Retrouvez le detail de chaque consultation : resume, recommandations, plan alimentaire, objectifs."
+                           styleClass="consult-hero-lead" wrapText="true"/>
+                </VBox>
+                <StackPane styleClass="consult-hero-avatar-wrap" alignment="CENTER">
+                    <Label fx:id="heroAvatar" text="" styleClass="consult-hero-avatar"/>
+                </StackPane>
+            </HBox>
+
+            <HBox styleClass="consult-kpi-row" spacing="16">
+                <VBox styleClass="consult-kpi-card, kpi-blue" spacing="8" HBox.hgrow="ALWAYS">
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Label text="â—" styleClass="rdv-kpi-dot, dot-blue"/>
+                        <Label text="TOTAL" styleClass="rdv-kpi-label"/>
+                    </HBox>
+                    <Label fx:id="kpiTotalLabel" text="0" styleClass="rdv-kpi-value"/>
+                    <Label text="Consultations enregistrees" styleClass="rdv-kpi-sub"/>
+                </VBox>
+                <VBox styleClass="consult-kpi-card, kpi-amber" spacing="8" HBox.hgrow="ALWAYS">
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Label text="â—" styleClass="rdv-kpi-dot, dot-amber"/>
+                        <Label text="NON LUES" styleClass="rdv-kpi-label"/>
+                    </HBox>
+                    <Label fx:id="kpiUnreadLabel" text="0" styleClass="rdv-kpi-value"/>
+                    <Label text="A consulter" styleClass="rdv-kpi-sub"/>
+                </VBox>
+                <VBox styleClass="consult-kpi-card, kpi-violet" spacing="8" HBox.hgrow="ALWAYS">
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Label text="â—" styleClass="rdv-kpi-dot, dot-violet"/>
+                        <Label text="DERNIERE" styleClass="rdv-kpi-label"/>
+                    </HBox>
+                    <Label fx:id="kpiLastLabel" text="-" styleClass="rdv-kpi-value-sm"/>
+                    <Label text="Date la plus recente" styleClass="rdv-kpi-sub"/>
+                </VBox>
+            </HBox>
+
+            <VBox styleClass="consult-list-card" spacing="14">
+                <HBox alignment="CENTER_LEFT" spacing="14">
+                    <VBox spacing="3" HBox.hgrow="ALWAYS">
+                        <Label text="HISTORIQUE" styleClass="rdv-section-kicker"/>
+                        <Label text="Vos consultations" styleClass="card-title"/>
+                        <Label text="Selectionnez une ligne pour afficher le detail complet ci-dessous."
+                               styleClass="rdv-hint" wrapText="true"/>
+                    </VBox>
+                    <HBox spacing="10" alignment="CENTER_RIGHT">
+                        <Button fx:id="markAsReadButton" text="Marquer comme lu" styleClass="btn-secondary" onAction="#handleMarkAsRead"/>
+                        <Button fx:id="exportButton" text="Exporter en fichier" styleClass="btn-primary" onAction="#handleExport"/>
+                    </HBox>
+                </HBox>
+                <Separator/>
+                <StackPane>
+                    <TableView fx:id="consultationTable" styleClass="dashboard-table, patient-consult-table" prefHeight="240">
+                        <columns>
+                            <TableColumn fx:id="colDate" text="Date" prefWidth="170"/>
+                            <TableColumn fx:id="colNutritionist" text="Nutritionniste" prefWidth="240"/>
+                            <TableColumn fx:id="colStatus" text="Statut" prefWidth="160"/>
+                            <TableColumn fx:id="colTheme" text="Theme" prefWidth="320"/>
+                        </columns>
+                    </TableView>
+                    <VBox fx:id="emptyTableState" styleClass="rdv-table-empty" alignment="CENTER" spacing="8"
+                          visible="false" managed="false">
+                        <Label text="âœ¦" styleClass="rdv-table-empty-icon"/>
+                        <Label text="Pas encore de consultation" styleClass="rdv-table-empty-title"/>
+                        <Label text="Vos consultations apparaitront ici apres validation par votre nutritionniste."
+                               styleClass="rdv-table-empty-text" wrapText="true"/>
+                    </VBox>
+                </StackPane>
+            </VBox>
+
+            <VBox styleClass="consult-detail-card" spacing="18">
+                <VBox fx:id="emptySelectionState" styleClass="rdv-empty-state, consult-empty-state"
+                      alignment="CENTER" spacing="10" visible="false" managed="false">
+                    <Label text="â—·" styleClass="rdv-empty-icon"/>
+                    <Label text="Selectionnez une consultation" styleClass="rdv-empty-title"/>
+                    <Label text="Cliquez sur une ligne du tableau ci-dessus pour afficher son contenu."
+                           styleClass="rdv-empty-text" wrapText="true"/>
+                </VBox>
+
+                <VBox fx:id="selectedConsultationDetails" spacing="18">
+                    <HBox styleClass="consult-detail-head" alignment="CENTER_LEFT" spacing="14">
+                        <VBox spacing="4" HBox.hgrow="ALWAYS">
+                            <Label text="DETAIL DE LA CONSULTATION" styleClass="rdv-section-kicker"/>
+                            <Label fx:id="detailThemeLabel" text="-" styleClass="consult-detail-title" wrapText="true"/>
+                            <Label fx:id="detailNutritionistLabel" text="-" styleClass="consult-detail-sub"/>
+                        </VBox>
+                        <VBox alignment="CENTER_RIGHT" spacing="6">
+                            <Label fx:id="detailStatusLabel" styleClass="status-pill"/>
+                            <Label fx:id="detailReadLabel" styleClass="read-pill"/>
+                        </VBox>
+                    </HBox>
+
+                    <GridPane styleClass="consult-meta-grid" hgap="14" vgap="12">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="ALWAYS" minWidth="160" prefWidth="220"/>
+                            <ColumnConstraints hgrow="ALWAYS" minWidth="160" prefWidth="220"/>
+                            <ColumnConstraints hgrow="ALWAYS" minWidth="160" prefWidth="220"/>
+                        </columnConstraints>
+                        <VBox styleClass="consult-meta-tile" spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <Label text="Date de consultation" styleClass="info-label"/>
+                            <Label fx:id="detailDateLabel" styleClass="info-value"/>
+                        </VBox>
+                        <VBox styleClass="consult-meta-tile" spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <Label text="Prochain suivi" styleClass="info-label"/>
+                            <Label fx:id="detailFollowUpLabel" styleClass="info-value"/>
+                        </VBox>
+                        <VBox styleClass="consult-meta-tile" spacing="4" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                            <Label text="Source" styleClass="info-label"/>
+                            <Label text="Comptes rendus nutritionniste" styleClass="info-value" wrapText="true"/>
+                        </VBox>
+                    </GridPane>
+
+                    <VBox spacing="10">
+                        <Label text="Resume et recommandations" styleClass="consult-block-title"/>
+                        <HBox styleClass="consult-two-col" alignment="TOP_LEFT" spacing="18">
+                            <VBox styleClass="consult-text-block" spacing="6" HBox.hgrow="ALWAYS">
+                                <Label text="Resume de la consultation" styleClass="info-label"/>
+                                <TextArea fx:id="summaryArea" styleClass="consult-readonly-ta"
+                                          editable="false" wrapText="true" prefRowCount="6"/>
+                            </VBox>
+                            <VBox styleClass="consult-text-block" spacing="6" HBox.hgrow="ALWAYS">
+                                <Label text="Recommandations" styleClass="info-label"/>
+                                <TextArea fx:id="recommendationsArea" styleClass="consult-readonly-ta"
+                                          editable="false" wrapText="true" prefRowCount="6"/>
+                            </VBox>
+                        </HBox>
+                    </VBox>
+
+                    <VBox spacing="10">
+                        <Label text="Plan alimentaire et objectifs" styleClass="consult-block-title"/>
+                        <HBox styleClass="consult-two-col" alignment="TOP_LEFT" spacing="18">
+                            <VBox styleClass="consult-text-block" spacing="6" HBox.hgrow="ALWAYS">
+                                <Label text="Plan alimentaire" styleClass="info-label"/>
+                                <TextArea fx:id="mealPlanArea" styleClass="consult-readonly-ta"
+                                          editable="false" wrapText="true" prefRowCount="5"/>
+                            </VBox>
+                            <VBox styleClass="consult-text-block" spacing="6" HBox.hgrow="ALWAYS">
+                                <Label text="Objectifs" styleClass="info-label"/>
+                                <TextArea fx:id="objectivesArea" styleClass="consult-readonly-ta"
+                                          editable="false" wrapText="true" prefRowCount="5"/>
+                            </VBox>
+                        </HBox>
+                    </VBox>
+
+                    <VBox spacing="10">
+                        <Label text="Notes liees a votre suivi medical" styleClass="consult-block-title"/>
+                        <TextArea fx:id="medicalNotesArea" styleClass="consult-readonly-ta"
+                                  editable="false" wrapText="true" prefRowCount="4"/>
+                    </VBox>
+
+                    <VBox spacing="6">
+                        <Label fx:id="errorLabel" styleClass="error-label" wrapText="true"/>
+                        <Label fx:id="successLabel" styleClass="success-label" wrapText="true"/>
+                    </VBox>
+                </VBox>
+            </VBox>
+
+        </VBox>
+    </ScrollPane>
+</VBox>

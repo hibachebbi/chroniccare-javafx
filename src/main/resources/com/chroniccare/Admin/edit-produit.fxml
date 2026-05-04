@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.chroniccare.controllers.Admin.EditProduitController"
+      alignment="CENTER"
+      spacing="12"
+      style="-fx-padding: 40; -fx-background-color: #f0f4ff;">
+
+    <Label text="Modifier un produit"
+           style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #2563eb;"/>
+
+    <VBox spacing="5" style="-fx-pref-width: 380;">
+        <Label text="Nom" style="-fx-font-size: 13; -fx-font-weight: bold;"/>
+        <TextField fx:id="nomField" promptText="Nom du produit" style="-fx-pref-height: 38; -fx-font-size: 13;"/>
+    </VBox>
+
+    <VBox spacing="5" style="-fx-pref-width: 380;">
+        <Label text="Categorie" style="-fx-font-size: 13; -fx-font-weight: bold;"/>
+        <ComboBox fx:id="categorieCombo" promptText="Categorie" style="-fx-pref-width: 380; -fx-pref-height: 38;"/>
+    </VBox>
+
+    <VBox spacing="5" style="-fx-pref-width: 380;">
+        <Label text="Prix" style="-fx-font-size: 13; -fx-font-weight: bold;"/>
+        <TextField fx:id="prixField" promptText="0.00" style="-fx-pref-height: 38; -fx-font-size: 13;"/>
+    </VBox>
+
+    <VBox spacing="5" style="-fx-pref-width: 380;">
+        <Label text="Stock" style="-fx-font-size: 13; -fx-font-weight: bold;"/>
+        <TextField fx:id="stockField" promptText="0" style="-fx-pref-height: 38; -fx-font-size: 13;"/>
+    </VBox>
+
+    <VBox spacing="5" style="-fx-pref-width: 380;">
+        <Label text="Description" style="-fx-font-size: 13; -fx-font-weight: bold;"/>
+        <TextArea fx:id="descriptionField" promptText="Description" prefRowCount="4" wrapText="true" style="-fx-font-size: 13;"/>
+    </VBox>
+
+    <CheckBox fx:id="activeCheckBox" text="Produit actif" selected="true"/>
+
+    <Label fx:id="errorLabel" style="-fx-text-fill: red; -fx-font-size: 12;"/>
+
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Annuler" onAction="#goToList"
+                style="-fx-pref-width: 165; -fx-pref-height: 42; -fx-background-color: #6b7280; -fx-text-fill: white; -fx-font-size: 13; -fx-font-weight: bold; -fx-cursor: hand; -fx-background-radius: 8;"/>
+        <Button text="Enregistrer" onAction="#handleSave"
+                style="-fx-pref-width: 165; -fx-pref-height: 42; -fx-background-color: #2563eb; -fx-text-fill: white; -fx-font-size: 13; -fx-font-weight: bold; -fx-cursor: hand; -fx-background-radius: 8;"/>
+    </HBox>
+
+</VBox>
+

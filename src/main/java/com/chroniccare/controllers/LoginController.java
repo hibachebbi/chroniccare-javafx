@@ -78,7 +78,15 @@ public class LoginController {
             User refreshedUser = userService.findByEmail(email);
             SessionManager.getInstance().setCurrentUser(refreshedUser != null ? refreshedUser : user);
 
-            Parent root = FXMLLoader.load(getClass().getResource("/com/chroniccare/home.fxml"));
+            String targetFxml = "/com/chroniccare/home.fxml";
+            if (SessionManager.getInstance().isAdmin()) {
+                targetFxml = "/com/chroniccare/admin-shell.fxml";
+            } else if (SessionManager.getInstance().isNutritionniste()) {
+                targetFxml = "/com/chroniccare/nutri-shell.fxml";
+            } else if (SessionManager.getInstance().isPatient()) {
+                targetFxml = "/com/chroniccare/patient-shell.fxml";
+            }
+            Parent root = FXMLLoader.load(getClass().getResource(targetFxml));
             emailField.getScene().setRoot(root);
 
         } catch (Exception e) {
@@ -215,7 +223,15 @@ public class LoginController {
 
                 SessionManager.getInstance().setCurrentUser(user);
 
-                Parent root = FXMLLoader.load(getClass().getResource("/com/chroniccare/home.fxml"));
+                String targetFxml = "/com/chroniccare/home.fxml";
+                if (SessionManager.getInstance().isAdmin()) {
+                    targetFxml = "/com/chroniccare/admin-shell.fxml";
+                } else if (SessionManager.getInstance().isNutritionniste()) {
+                    targetFxml = "/com/chroniccare/nutri-shell.fxml";
+                } else if (SessionManager.getInstance().isPatient()) {
+                    targetFxml = "/com/chroniccare/patient-shell.fxml";
+                }
+                Parent root = FXMLLoader.load(getClass().getResource(targetFxml));
                 emailField.getScene().setRoot(root);
             } catch (Exception e) {
                 e.printStackTrace();

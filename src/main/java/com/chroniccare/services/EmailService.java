@@ -7,14 +7,19 @@ import jakarta.mail.PasswordAuthentication;
 import jakarta.mail.Session;
 import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeBodyPart;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.mail.internet.MimeMultipart;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Properties;
 
 public class EmailService {
@@ -213,7 +218,13 @@ public class EmailService {
             }
         }
 
-        return Paths.get(System.getProperty("user.dir"), "smtp.properties");
+        Path baseDir = Paths.get(System.getProperty("user.dir"));
+        Path smtp2Path = baseDir.resolve("smtp2.properties");
+        if (Files.exists(smtp2Path)) {
+            return smtp2Path;
+        }
+
+        return baseDir.resolve("smtp.properties");
     }
 
     private static String readEnvOrProperty(String key) {
@@ -231,5 +242,169 @@ public class EmailService {
     private static void appendMissing(StringBuilder sb, String key) {
         if (sb.length() > 0) sb.append(", ");
         sb.append(key);
+    }
+
+    /* ----- Inscription événement + QR (chroniccare-javafx, GMAIL_EMAIL / GMAIL_PASSWORD ou .env) ----- */
+
+    private static final String QR_SMTP_HOST = "smtp.gmail.com";
+    private static final String QR_SMTP_PORT = "587";
+    private static final Properties QR_DOT_ENV = loadQrDotEnv();
+    private static final String QR_FROM_EMAIL = resolveQrConfig("GMAIL_EMAIL");
+    private static final String QR_FROM_PASSWORD = resolveQrConfig("GMAIL_PASSWORD");
+
+    public static void sendRegistrationEmailWithQRCode(
+            String recipientEmail,
+            String recipientName,
+            String eventTitle,
+            String eventDate,
+            String eventLocation,
+            String qrCodePath) throws Exception {
+
+        if (QR_FROM_EMAIL == null || QR_FROM_EMAIL.isBlank()
+                || QR_FROM_PASSWORD == null || QR_FROM_PASSWORD.isBlank()) {
+            throw new IllegalStateException(
+                    "Variables GMAIL_EMAIL/GMAIL_PASSWORD introuvables. "
+                            + "Définis-les dans l'environnement ou dans un fichier .env à la racine du projet."
+            );
+        }
+
+        Session session = Session.getInstance(buildQrSmtpProps(), new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(QR_FROM_EMAIL, QR_FROM_PASSWORD);
+            }
+        });
+
+        Message message = new MimeMessage(session);
+        message.setFrom(new InternetAddress(QR_FROM_EMAIL, "ChronicCare"));
+        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipientEmail));
+        message.setSubject("Confirmation d'inscription - " + eventTitle);
+
+        MimeMultipart multipart = new MimeMultipart();
+
+        MimeBodyPart textPart = new MimeBodyPart();
+        String htmlContent = buildQrRegistrationEmailHtml(recipientName, eventTitle, eventDate, eventLocation);
+        textPart.setContent(htmlContent, "text/html; charset=utf-8");
+        multipart.addBodyPart(textPart);
+
+        if (qrCodePath != null && !qrCodePath.isBlank()) {
+            File qrFile = new File(qrCodePath);
+            if (qrFile.exists()) {
+                MimeBodyPart attachmentPart = new MimeBodyPart();
+                attachmentPart.attachFile(qrFile);
+                attachmentPart.setHeader("Content-ID", "<qrcode>");
+                multipart.addBodyPart(attachmentPart);
+            }
+        }
+
+        message.setContent(multipart);
+        Transport.send(message);
+    }
+
+    private static Properties buildQrSmtpProps() {
+        Properties props = new Properties();
+        props.put("mail.smtp.host", QR_SMTP_HOST);
+        props.put("mail.smtp.port", QR_SMTP_PORT);
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.starttls.required", "true");
+        props.put("mail.smtp.connectiontimeout", "5000");
+        props.put("mail.smtp.timeout", "5000");
+        return props;
+    }
+
+    private static String buildQrRegistrationEmailHtml(String name, String eventTitle, String eventDate, String eventLocation) {
+        return String.format("""
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="utf-8">
+                    <style>
+                        body { font-family: Arial, sans-serif; background-color: #f5f5f5; }
+                        .container { max-width: 600px; margin: 20px auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+                        h1 { color: #2c3e50; margin-bottom: 20px; }
+                        .event-info { background: #ecf0f1; padding: 15px; border-radius: 5px; margin: 20px 0; }
+                        .event-info p { margin: 8px 0; }
+                        .qr-section { text-align: center; margin: 30px 0; }
+                        .qr-section img { max-width: 250px; border: 2px solid #3498db; padding: 10px; }
+                        .footer { color: #7f8c8d; font-size: 12px; margin-top: 30px; text-align: center; border-top: 1px solid #ecf0f1; padding-top: 15px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <h1>Inscription confirmée ✓</h1>
+                        <p>Bonjour <strong>%s</strong>,</p>
+                        <p>Votre inscription à l'événement a été confirmée. Retrouvez tous les détails ci-dessous :</p>
+                        <div class="event-info">
+                            <p><strong>Événement :</strong> %s</p>
+                            <p><strong>Date :</strong> %s</p>
+                            <p><strong>Lieu :</strong> %s</p>
+                        </div>
+                        <p>Voici votre code QR d'accès à l'événement :</p>
+                        <div class="qr-section">
+                            <img src="cid:qrcode" alt="QR Code" />
+                        </div>
+                        <p>Présentez ce code QR le jour de l'événement pour valider votre présence.</p>
+                        <div class="footer">
+                            <p>ChronicCare - Gestion des événements de santé</p>
+                            <p>Ne répondez pas à ce mail automatique</p>
+                        </div>
+                    </div>
+                </body>
+                </html>
+                """, name, eventTitle, eventDate, eventLocation);
+    }
+
+    private static String resolveQrConfig(String key) {
+        String envValue = System.getenv(key);
+        if (envValue != null && !envValue.isBlank()) {
+            return envValue.trim();
+        }
+        String dotEnvValue = QR_DOT_ENV.getProperty(key);
+        if (dotEnvValue != null && !dotEnvValue.isBlank()) {
+            return dotEnvValue.trim();
+        }
+        return null;
+    }
+
+    private static Properties loadQrDotEnv() {
+        Properties properties = new Properties();
+        Path dotEnvPath = findQrDotEnvPath();
+        if (dotEnvPath == null) {
+            return properties;
+        }
+        try {
+            List<String> lines = Files.readAllLines(dotEnvPath, StandardCharsets.UTF_8);
+            for (String line : lines) {
+                String trimmedLine = line.trim();
+                if (trimmedLine.isEmpty() || trimmedLine.startsWith("#")) {
+                    continue;
+                }
+                int separatorIndex = trimmedLine.indexOf('=');
+                if (separatorIndex <= 0) {
+                    continue;
+                }
+                String k = trimmedLine.substring(0, separatorIndex).trim();
+                String v = trimmedLine.substring(separatorIndex + 1).trim();
+                if ((v.startsWith("\"") && v.endsWith("\"")) || (v.startsWith("'") && v.endsWith("'"))) {
+                    v = v.substring(1, v.length() - 1);
+                }
+                properties.setProperty(k, v);
+            }
+        } catch (IOException ignored) {
+        }
+        return properties;
+    }
+
+    private static Path findQrDotEnvPath() {
+        Path current = Path.of("").toAbsolutePath();
+        while (current != null) {
+            Path candidate = current.resolve(".env");
+            if (Files.exists(candidate)) {
+                return candidate;
+            }
+            current = current.getParent();
+        }
+        return null;
     }
 }

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.chroniccare.controllers.NutriShellController"
+            prefWidth="1200" prefHeight="760"
+            stylesheets="@home-styles.css">
+
+    <left>
+        <VBox fx:id="sidebarRoot" styleClass="sidebar" prefWidth="230" spacing="0">
+            <VBox styleClass="sidebar-brand" spacing="4">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="+" styleClass="brand-icon"/>
+                    <Label text="ChronicCare" styleClass="brand-title"/>
+                </HBox>
+                <Label text="Suivi medical intelligent" styleClass="brand-subtitle"/>
+            </VBox>
+            <VBox styleClass="sidebar-user-card" spacing="6" alignment="CENTER_LEFT">
+                <Label fx:id="sidebarAvatar" styleClass="sidebar-avatar"/>
+                <Label fx:id="sidebarUserName" styleClass="sidebar-user-name"/>
+                <Label fx:id="sidebarRoleBadge" styleClass="sidebar-role-badge, sidebar-role-nutritionniste"/>
+            </VBox>
+            <Separator styleClass="sidebar-sep"/>
+            <VBox styleClass="nav-section" spacing="2" VBox.vgrow="ALWAYS">
+                <Label text="NAVIGATION" styleClass="nav-section-label"/>
+                <Button fx:id="btnHome" text="🏠  Accueil"
+                        styleClass="nav-btn" onAction="#showHome" maxWidth="Infinity"/>
+                <Button fx:id="btnProfile" text="👤  Mon profil"
+                        styleClass="nav-btn" onAction="#showProfile" maxWidth="Infinity"/>
+                <Label text="MES OUTILS" styleClass="nav-section-label"/>
+                <Button fx:id="btnSuivi" text="📋  Mon suivi"
+                        styleClass="nav-btn" onAction="#showSuivi" maxWidth="Infinity"/>
+                <Button fx:id="btnEtat" text="📋  Etat patient"
+                        styleClass="nav-btn" onAction="#showEtat" maxWidth="Infinity"/>
+                <Button fx:id="btnActivite" text="🏃  Activite patient"
+                        styleClass="nav-btn" onAction="#showActivite" maxWidth="Infinity"/>
+                <Button fx:id="btnRdv" text="📆  RDV"
+                        styleClass="nav-btn" onAction="#showRdv" maxWidth="Infinity"/>
+            </VBox>
+            <VBox styleClass="sidebar-bottom">
+                <Separator styleClass="sidebar-sep"/>
+                <Button text="⏻  Deconnexion" styleClass="nav-btn, nav-btn-logout"
+                        onAction="#handleLogout" maxWidth="Infinity"/>
+            </VBox>
+        </VBox>
+    </left>
+
+    <center>
+        <VBox styleClass="main-content" spacing="0">
+            <HBox styleClass="topbar" alignment="CENTER_LEFT" spacing="16">
+                <Label fx:id="pageTitle" text="Tableau de bord" styleClass="page-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="topbarDate" styleClass="topbar-date"/>
+                <HBox styleClass="topbar-user-pill" alignment="CENTER" spacing="8">
+                    <Label fx:id="topbarAvatar" styleClass="topbar-avatar"/>
+                    <Label fx:id="topbarUserName" styleClass="topbar-username"/>
+                </HBox>
+            </HBox>
+            <StackPane fx:id="contentPane" VBox.vgrow="ALWAYS"/>
+        </VBox>
+    </center>
+
+</BorderPane>

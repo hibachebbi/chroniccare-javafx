@@ -229,6 +229,9 @@ public class UserService {
         String sql = "SELECT * FROM users " +
                 "WHERE security_manual_locked = 1 " +
                 "OR (security_blocked_until IS NOT NULL AND security_blocked_until > NOW()) " +
+                "OR (failed_login_count >= 5 AND security_block_reason IS NOT NULL) " +
+                "OR approval_status = 'rejected' " +
+                "OR is_active = 0 " +
                 "ORDER BY security_locked_at DESC, security_blocked_until DESC";
 
         PreparedStatement ps = conn.prepareStatement(sql);

@@ -5,12 +5,16 @@ import com.chroniccare.models.ProfileGroupRow;
 import com.chroniccare.models.User;
 import com.chroniccare.services.PatientSegmentationService;
 import com.chroniccare.utils.SessionManager;
+import com.chroniccare.utils.SidebarNavHighlight;
+import com.chroniccare.utils.SidebarRoleBadgeHelper;
+import com.chroniccare.utils.FxNavigation;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
+import javafx.scene.layout.VBox;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
@@ -21,6 +25,7 @@ import java.util.*;
 
 public class PatientSegmentationController {
 
+    @FXML private VBox sidebarRoot;
     @FXML private Label sidebarAvatar;
     @FXML private Label sidebarUserName;
     @FXML private Label sidebarRoleBadge;
@@ -79,12 +84,19 @@ public class PatientSegmentationController {
         String initials = getInitials(user);
         if (sidebarAvatar != null) sidebarAvatar.setText(initials);
         if (sidebarUserName != null) sidebarUserName.setText(user.getPrenom() + " " + user.getNom());
-        if (sidebarRoleBadge != null) sidebarRoleBadge.setText("Administrateur");
+        if (sidebarRoleBadge != null) {
+            sidebarRoleBadge.setText("Administrateur");
+            SidebarRoleBadgeHelper.applyRoleStyle(sidebarRoleBadge, user);
+        }
         if (topbarAvatar != null) topbarAvatar.setText(initials);
         if (topbarUserName != null) topbarUserName.setText(user.getPrenom() + " " + user.getNom());
         if (topbarDate != null) {
             DateTimeFormatter fmt = DateTimeFormatter.ofPattern("EEEE d MMMM yyyy", Locale.FRENCH);
             topbarDate.setText(LocalDate.now().format(fmt));
+        }
+
+        if (sidebarRoot != null) {
+            SidebarNavHighlight.activate(sidebarRoot, "adm:segment");
         }
 
         setupTables();
@@ -265,39 +277,15 @@ public class PatientSegmentationController {
         return split.length > 0 ? split[0].trim() : c;
     }
 
-    @FXML
-    public void goToHome() {
-        navigate("/com/chroniccare/home.fxml");
-    }
-
-    @FXML
-    public void goToUsers() {
-        navigate("/com/chroniccare/list-users.fxml");
-    }
-
-    @FXML
-    public void goToBlockedAccounts() {
-        navigate("/com/chroniccare/blocked-accounts.fxml");
-    }
-
-    @FXML
-    public void goToMedicalAudit() {
-        navigate("/com/chroniccare/medical-audit.fxml");
-    }
-
-    @FXML
-    public void goToPatientSegmentation() {
-    }
-
-    @FXML
-    public void goToStats() {
-        navigate("/com/chroniccare/stats.fxml");
-    }
-
-    @FXML
-    public void goToProfile() {
-        navigate("/com/chroniccare/list-users.fxml");
-    }
+    @FXML public void goToHome() { FxNavigation.navigateAdmin(getClass(), profilesTable, "home"); }
+    @FXML public void goToUsers() { FxNavigation.navigateAdmin(getClass(), profilesTable, "users"); }
+    @FXML public void goToBlockedAccounts() { FxNavigation.navigateAdmin(getClass(), profilesTable, "blocked"); }
+    @FXML public void goToMedicalAudit() { FxNavigation.navigateAdmin(getClass(), profilesTable, "audit"); }
+    @FXML public void goToPatientSegmentation() { FxNavigation.navigateAdmin(getClass(), profilesTable, "segment"); }
+    @FXML public void goToStats() { FxNavigation.navigateAdmin(getClass(), profilesTable, "stats"); }
+    @FXML public void goToAdminConsultLedger() { FxNavigation.navigateAdmin(getClass(), profilesTable, "consult"); }
+    @FXML public void goToAdminNutritionRdv() { FxNavigation.navigateAdmin(getClass(), profilesTable, "rdv"); }
+    @FXML public void goToProfile() { FxNavigation.navigateAdmin(getClass(), profilesTable, "profile"); }
 
     @FXML
     public void handleLogout() {

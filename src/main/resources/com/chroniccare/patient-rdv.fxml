@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.chroniccare.controllers.PatientRdvController"
+      styleClass="main-content" spacing="0"
+      stylesheets="@home-styles.css">
+
+    <HBox styleClass="topbar" alignment="CENTER_LEFT" spacing="16">
+        <VBox spacing="2">
+            <Label text="Rendez-vous nutrition" styleClass="page-title"/>
+            <Label text="Demandez, suivez et gerez vos rendez-vous avec votre nutritionniste."
+                   styleClass="patient-rdv-topbar-sub" wrapText="true"/>
+        </VBox>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label fx:id="topbarDate" styleClass="topbar-date"/>
+        <HBox styleClass="topbar-user-pill" alignment="CENTER" spacing="8">
+            <Label fx:id="topbarAvatar" styleClass="topbar-avatar"/>
+            <Label fx:id="topbarUserName" styleClass="topbar-username"/>
+        </HBox>
+    </HBox>
+
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="content-scroll">
+        <VBox styleClass="patient-rdv-body" spacing="20">
+
+            <HBox styleClass="rdv-hero" alignment="CENTER_LEFT" spacing="22">
+                <VBox styleClass="rdv-hero-left" spacing="8" HBox.hgrow="ALWAYS">
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Label text="ESPACE RENDEZ-VOUS" styleClass="rdv-hero-kicker"/>
+                        <Label text="Securise" styleClass="rdv-hero-chip"/>
+                    </HBox>
+                    <Label fx:id="heroPatientName" text="Bonjour" styleClass="rdv-hero-title" wrapText="true"/>
+                    <Label fx:id="heroSubtitle" text="Planifiez et suivez vos consultations nutrition en toute simplicite."
+                           styleClass="rdv-hero-lead" wrapText="true"/>
+                    <HBox styleClass="rdv-hero-actions" spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Reponse moyenne sous 24h" styleClass="rdv-hero-pill"/>
+                        <Label text="Confidentiel" styleClass="rdv-hero-pill"/>
+                        <Label text="Rappel automatique" styleClass="rdv-hero-pill"/>
+                    </HBox>
+                </VBox>
+                <StackPane styleClass="rdv-hero-avatar-wrap" alignment="CENTER">
+                    <Label fx:id="heroAvatar" text="" styleClass="rdv-hero-avatar"/>
+                </StackPane>
+            </HBox>
+
+            <HBox styleClass="rdv-kpi-row" spacing="16">
+                <VBox styleClass="rdv-kpi-card, kpi-amber" spacing="8" HBox.hgrow="ALWAYS">
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Label text="â—" styleClass="rdv-kpi-dot, dot-amber"/>
+                        <Label text="EN ATTENTE" styleClass="rdv-kpi-label"/>
+                    </HBox>
+                    <Label fx:id="kpiPendingLabel" text="0" styleClass="rdv-kpi-value"/>
+                    <Label text="Demandes en cours d'examen" styleClass="rdv-kpi-sub"/>
+                </VBox>
+                <VBox styleClass="rdv-kpi-card, kpi-emerald" spacing="8" HBox.hgrow="ALWAYS">
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Label text="â—" styleClass="rdv-kpi-dot, dot-emerald"/>
+                        <Label text="PLANIFIES" styleClass="rdv-kpi-label"/>
+                    </HBox>
+                    <Label fx:id="kpiPlannedLabel" text="0" styleClass="rdv-kpi-value"/>
+                    <Label text="Rendez-vous valides a venir" styleClass="rdv-kpi-sub"/>
+                </VBox>
+                <VBox styleClass="rdv-kpi-card, kpi-violet" spacing="8" HBox.hgrow="ALWAYS">
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Label text="â—" styleClass="rdv-kpi-dot, dot-violet"/>
+                        <Label text="TERMINES" styleClass="rdv-kpi-label"/>
+                    </HBox>
+                    <Label fx:id="kpiCompletedLabel" text="0" styleClass="rdv-kpi-value"/>
+                    <Label text="Consultations realisees" styleClass="rdv-kpi-sub"/>
+                </VBox>
+                <VBox styleClass="rdv-kpi-card, kpi-blue" spacing="8" HBox.hgrow="ALWAYS">
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Label text="â—" styleClass="rdv-kpi-dot, dot-blue"/>
+                        <Label text="TOTAL" styleClass="rdv-kpi-label"/>
+                    </HBox>
+                    <Label fx:id="kpiTotalLabel" text="0" styleClass="rdv-kpi-value"/>
+                    <Label text="Demandes envoyees au total" styleClass="rdv-kpi-sub"/>
+                </VBox>
+            </HBox>
+
+            <HBox spacing="20" alignment="TOP_LEFT">
+                <VBox styleClass="rdv-form-card" spacing="14" HBox.hgrow="ALWAYS">
+                    <HBox styleClass="rdv-form-card-header" alignment="CENTER_LEFT" spacing="14">
+                        <StackPane styleClass="rdv-step-bubble">
+                            <Label text="1" styleClass="rdv-step-bubble-text"/>
+                        </StackPane>
+                        <VBox spacing="3" HBox.hgrow="ALWAYS">
+                            <Label text="NOUVELLE DEMANDE" styleClass="rdv-section-kicker"/>
+                            <Label text="Demande de rendez-vous" styleClass="card-title"/>
+                        </VBox>
+                        <Label text="3 etapes" styleClass="rdv-step-counter"/>
+                    </HBox>
+                    <Separator styleClass="rdv-sep"/>
+                    <Label text="PROFESSIONNEL ET MOTIF" styleClass="rdv-block-title"/>
+                    <VBox styleClass="rdv-form-section" spacing="10">
+                        <VBox spacing="6">
+                            <Label text="Nutritionniste" styleClass="info-label"/>
+                            <ComboBox fx:id="nutritionistCombo" maxWidth="Infinity" styleClass="filter-combo"/>
+                        </VBox>
+                        <VBox spacing="6">
+                            <Label text="Motif de la consultation" styleClass="info-label"/>
+                            <TextArea fx:id="motifArea" styleClass="rdv-text-area" prefRowCount="4" wrapText="true"
+                                      promptText="Decrivez en quelques lignes la raison de votre demande..."/>
+                        </VBox>
+                    </VBox>
+                    <Label text="CRENEAU SOUHAITE" styleClass="rdv-block-title"/>
+                    <HBox styleClass="rdv-two-col" alignment="TOP_LEFT" spacing="14">
+                        <VBox spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="Date" styleClass="info-label"/>
+                            <DatePicker fx:id="requestedDatePicker" maxWidth="Infinity"/>
+                        </VBox>
+                        <VBox spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="Heure" styleClass="info-label"/>
+                            <ComboBox fx:id="requestedTimeCombo" maxWidth="Infinity" styleClass="filter-combo"/>
+                        </VBox>
+                    </HBox>
+                    <Label text="PRECISIONS" styleClass="rdv-block-title"/>
+                    <HBox styleClass="rdv-two-col" alignment="TOP_LEFT" spacing="14">
+                        <VBox spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="Niveau d'urgence" styleClass="info-label"/>
+                            <ComboBox fx:id="urgencyCombo" maxWidth="Infinity" styleClass="filter-combo"/>
+                        </VBox>
+                        <VBox spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="Type de suivi" styleClass="info-label"/>
+                            <ComboBox fx:id="followUpCombo" maxWidth="Infinity" styleClass="filter-combo"/>
+                        </VBox>
+                    </HBox>
+                    <VBox styleClass="rdv-medical-callout" spacing="6">
+                        <HBox alignment="CENTER_LEFT" spacing="8">
+                            <Label text="â¤" styleClass="rdv-callout-icon"/>
+                            <Label text="CONTEXTE MEDICAL" styleClass="info-label"/>
+                        </HBox>
+                        <Label fx:id="medicalSummaryLabel" wrapText="true" styleClass="rdv-callout-text"/>
+                    </VBox>
+                    <VBox spacing="4">
+                        <Label fx:id="errorLabel" styleClass="error-label" wrapText="true"/>
+                        <Label fx:id="successLabel" styleClass="success-label" wrapText="true"/>
+                    </VBox>
+                    <HBox styleClass="rdv-form-actions" alignment="CENTER_RIGHT" spacing="10">
+                        <Label text="Verifiez vos informations avant envoi" styleClass="rdv-form-hint"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button text="Envoyer la demande â†’" styleClass="btn-primary, rdv-submit-btn" onAction="#handleSubmit"/>
+                    </HBox>
+                </VBox>
+
+                <VBox styleClass="rdv-side-panel" spacing="14" minWidth="320" prefWidth="360" maxWidth="400">
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Label text="APERCU" styleClass="rdv-section-kicker"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label text="Detail" styleClass="rdv-side-tag"/>
+                    </HBox>
+                    <Label text="Demande selectionnee" styleClass="rdv-side-title"/>
+                    <Separator/>
+                    <VBox fx:id="emptySelectionState" styleClass="rdv-empty-state" alignment="CENTER" spacing="10"
+                          visible="false" managed="false">
+                        <Label text="â—·" styleClass="rdv-empty-icon"/>
+                        <Label text="Aucune demande selectionnee" styleClass="rdv-empty-title" wrapText="true"/>
+                        <Label text="Cliquez sur une ligne du tableau pour afficher les details ici."
+                               styleClass="rdv-empty-text" wrapText="true"/>
+                    </VBox>
+                    <VBox fx:id="selectedAppointmentDetails" spacing="14">
+                        <VBox spacing="6">
+                            <Label text="Statut" styleClass="info-label"/>
+                            <Label fx:id="selectedStatusLabel" styleClass="status-pill"/>
+                        </VBox>
+                        <VBox styleClass="rdv-side-tile" spacing="4">
+                            <Label text="Nutritionniste" styleClass="info-label"/>
+                            <Label fx:id="selectedNutritionistLabel" styleClass="info-value"/>
+                        </VBox>
+                        <VBox styleClass="rdv-side-tile" spacing="4">
+                            <Label text="Creneau demande" styleClass="info-label"/>
+                            <Label fx:id="selectedRequestedLabel" styleClass="info-value"/>
+                        </VBox>
+                        <VBox styleClass="rdv-side-tile" spacing="4">
+                            <Label text="Creneau retenu" styleClass="info-label"/>
+                            <Label fx:id="selectedScheduledLabel" styleClass="info-value"/>
+                        </VBox>
+                        <VBox styleClass="rdv-side-tile" spacing="4">
+                            <Label text="Type de suivi" styleClass="info-label"/>
+                            <Label fx:id="selectedFollowUpLabel" styleClass="info-value"/>
+                        </VBox>
+                        <VBox spacing="6" VBox.vgrow="ALWAYS">
+                            <Label text="Message du nutritionniste" styleClass="info-label"/>
+                            <TextArea fx:id="selectedResponseArea" styleClass="rdv-readonly-area"
+                                      editable="false" wrapText="true" prefRowCount="6"/>
+                        </VBox>
+                    </VBox>
+                </VBox>
+            </HBox>
+
+            <VBox styleClass="rdv-table-card" spacing="14">
+                <HBox alignment="CENTER_LEFT" spacing="14">
+                    <VBox spacing="3" HBox.hgrow="ALWAYS">
+                        <Label text="HISTORIQUE" styleClass="rdv-section-kicker"/>
+                        <Label text="Mes demandes de rendez-vous" styleClass="card-title"/>
+                        <Label text="Selectionnez une ligne pour mettre a jour le panneau de droite."
+                               styleClass="rdv-hint" wrapText="true"/>
+                    </VBox>
+                </HBox>
+                <Separator/>
+                <StackPane VBox.vgrow="ALWAYS">
+                    <TableView fx:id="appointmentTable" styleClass="dashboard-table, patient-rdv-table" prefHeight="300">
+                        <columns>
+                            <TableColumn fx:id="colNutritionist" text="Nutritionniste" prefWidth="240"/>
+                            <TableColumn fx:id="colRequested" text="Creneau souhaite" prefWidth="200"/>
+                            <TableColumn fx:id="colStatus" text="Statut" prefWidth="180"/>
+                            <TableColumn fx:id="colUrgency" text="Urgence" prefWidth="140"/>
+                        </columns>
+                    </TableView>
+                    <VBox fx:id="emptyTableState" styleClass="rdv-table-empty" alignment="CENTER" spacing="8"
+                          visible="false" managed="false">
+                        <Label text="âœ¦" styleClass="rdv-table-empty-icon"/>
+                        <Label text="Aucune demande pour le moment" styleClass="rdv-table-empty-title"/>
+                        <Label text="Remplissez le formulaire ci-dessus pour creer votre premiere demande."
+                               styleClass="rdv-table-empty-text" wrapText="true"/>
+                    </VBox>
+                </StackPane>
+            </VBox>
+        </VBox>
+    </ScrollPane>
+</VBox>

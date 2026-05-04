@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.chroniccare.controllers.EditEventController"
+            prefWidth="1200" prefHeight="760"
+            stylesheets="@home-styles.css">
+
+    <left>
+        <VBox styleClass="sidebar" prefWidth="230" spacing="0">
+            <VBox styleClass="sidebar-brand" spacing="4">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="+" styleClass="brand-icon"/>
+                    <Label text="ChronicCare" styleClass="brand-title"/>
+                </HBox>
+                <Label text="Suivi medical intelligent" styleClass="brand-subtitle"/>
+            </VBox>
+            <VBox styleClass="sidebar-user-card" spacing="6" alignment="CENTER_LEFT">
+                <Label fx:id="sidebarAvatar" styleClass="sidebar-avatar"/>
+                <Label fx:id="sidebarUserName" styleClass="sidebar-user-name"/>
+                <Label text="Coach" styleClass="sidebar-role-badge, sidebar-role-coach"/>
+            </VBox>
+            <Separator styleClass="sidebar-sep"/>
+            <VBox styleClass="nav-section" spacing="2" VBox.vgrow="ALWAYS">
+                <Button text="Evenements" styleClass="nav-btn, nav-btn-active" onAction="#goToList" maxWidth="Infinity"/>
+                <Button text="Exercices" styleClass="nav-btn" onAction="#goToExercises" maxWidth="Infinity"/>
+                <Button text="Mon Etat" styleClass="nav-btn" onAction="#goToHomeEtat" maxWidth="Infinity"/>
+                <Button text="Activite" styleClass="nav-btn" onAction="#goToHomeActivite" maxWidth="Infinity"/>
+                <Button text="Mon Profil" styleClass="nav-btn" onAction="#goToProfile" maxWidth="Infinity"/>
+            </VBox>
+            <VBox styleClass="sidebar-bottom">
+                <Separator styleClass="sidebar-sep"/>
+                <Button text="Deconnexion" styleClass="nav-btn, nav-btn-logout"
+                        onAction="#handleLogout" maxWidth="Infinity"/>
+            </VBox>
+        </VBox>
+    </left>
+
+    <center>
+        <VBox styleClass="main-content" spacing="0">
+            <HBox styleClass="topbar" alignment="CENTER_LEFT" spacing="16">
+                <Label text="Modifier un événement" styleClass="page-title, event-form-page-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="topbarDate" styleClass="topbar-date"/>
+                <HBox styleClass="topbar-user-pill" alignment="CENTER" spacing="8">
+                    <Label fx:id="topbarAvatar" styleClass="topbar-avatar"/>
+                    <Label fx:id="topbarUserName" styleClass="topbar-username"/>
+                </HBox>
+            </HBox>
+
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="content-scroll">
+                <VBox spacing="20" styleClass="dashboard-body">
+                    <HBox styleClass="welcome-banner" alignment="CENTER_LEFT" spacing="18">
+                        <VBox spacing="8">
+                            <Label text="Ajuste ton événement en confiance" styleClass="welcome-title"/>
+                            <Label text="Modifie planning, statut et details avec un rendu plus clair et rapide."
+                                   styleClass="welcome-subtitle" wrapText="true"/>
+                        </VBox>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="eventIdentityLabel" styleClass="status-chip, status-chip-pending"/>
+                    </HBox>
+
+                    <HBox spacing="14">
+                        <VBox styleClass="stat-card, stat-blue" spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="Duree session" styleClass="stat-label"/>
+                            <Label fx:id="sessionWindowInfoLabel" styleClass="stat-value"/>
+                            <Label text="Calcul automatique" styleClass="stat-sub"/>
+                        </VBox>
+                        <VBox styleClass="stat-card, stat-green" spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="Etat du formulaire" styleClass="stat-label"/>
+                            <Label fx:id="formStateLabel" styleClass="stat-value"/>
+                            <Label text="Pret a enregistrer" styleClass="stat-sub"/>
+                        </VBox>
+                    </HBox>
+
+                    <VBox styleClass="card, event-form-card" spacing="18">
+                        <Label text="Mets a jour ta session" styleClass="card-title"/>
+                        <GridPane hgap="16" vgap="16">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="50"/>
+                                <ColumnConstraints percentWidth="50"/>
+                            </columnConstraints>
+
+                            <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                <Label text="Titre" styleClass="info-label"/>
+                                <TextField fx:id="titreField" styleClass="filter-field"/>
+                            </VBox>
+                            <VBox spacing="6" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                <Label text="Statut" styleClass="info-label"/>
+                                <ComboBox fx:id="statutCombo" maxWidth="Infinity" styleClass="filter-combo"/>
+                            </VBox>
+                            <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                <Label text="Lieu" styleClass="info-label"/>
+                                <TextField fx:id="lieuField" styleClass="filter-field"/>
+                                <Label fx:id="locationApiLabel" styleClass="location-preview-label" wrapText="true" text="📍 Saisissez un lieu tunisien"/>
+                                <Label fx:id="weatherPreviewLabel" styleClass="weather-preview-label" wrapText="true" text="📍 Saisissez un lieu"/>
+                            </VBox>
+                            <VBox spacing="6" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                <Label text="Date debut" styleClass="info-label"/>
+                                <DatePicker fx:id="dateDebutPicker"/>
+                                <Label fx:id="holidayInfoLabel" styleClass="holiday-preview-label" wrapText="true" text="📅 Sélectionnez une date"/>
+                            </VBox>
+                            <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                                <Label text="Heure debut (HH:mm)" styleClass="info-label"/>
+                                <ComboBox fx:id="heureDebutCombo" maxWidth="Infinity" styleClass="filter-combo"/>
+                            </VBox>
+                            <VBox spacing="6" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                <Label text="Date fin" styleClass="info-label"/>
+                                <DatePicker fx:id="dateFinPicker"/>
+                            </VBox>
+                            <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="3">
+                                <Label text="Heure fin (HH:mm)" styleClass="info-label"/>
+                                <ComboBox fx:id="heureFinCombo" maxWidth="Infinity" styleClass="filter-combo"/>
+                            </VBox>
+                            <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="4" GridPane.columnSpan="2">
+                                <Label text="Description" styleClass="info-label"/>
+                                <TextArea fx:id="descriptionArea" prefRowCount="6" wrapText="true"/>
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <Button fx:id="suggestDescriptionButton" text="Suggérer via IA" styleClass="btn-ai"
+                                            onAction="#handleSuggestDescription"/>
+                                    <Label fx:id="aiSuggestionLabel" styleClass="ai-helper-label" wrapText="true"
+                                           text="L'IA peut reformuler la description selon les champs saisis."/>
+                                </HBox>
+                            </VBox>
+                        </GridPane>
+
+                        <Separator/>
+                        <Label text="Exercices associes" styleClass="card-title"/>
+                        <Label text="Coche les exercices à lier à cet événement." styleClass="info-label" wrapText="true"/>
+                        <TableView fx:id="exercisesTable" prefHeight="250.0" editable="true" styleClass="dashboard-table, edit-assignment-table">
+                            <columns>
+                                <TableColumn fx:id="selectedCol" text="Choisir" prefWidth="80"/>
+                                <TableColumn fx:id="exerciseNameCol" text="Exercice" prefWidth="220"/>
+                                <TableColumn fx:id="exerciseDurationCol" text="Duree" prefWidth="90"/>
+                                <TableColumn fx:id="exerciseRepetitionsCol" text="Repetitions" prefWidth="110"/>
+                                <TableColumn fx:id="exerciseEventCol" text="Événement actuel" prefWidth="220"/>
+                            </columns>
+                        </TableView>
+                        <Label fx:id="selectedExercisesInfoLabel" styleClass="info-label"/>
+
+                        <Label fx:id="formHintLabel" styleClass="inline-helper-label" wrapText="true"/>
+                        <Label fx:id="errorLabel" styleClass="error-label" wrapText="true" visible="false" managed="false"/>
+
+                        <HBox spacing="10">
+                            <Button text="Annuler" styleClass="btn-secondary" onAction="#goToList"/>
+                            <Button text="Enregistrer les modifications" styleClass="btn-primary" onAction="#handleSave"/>
+                        </HBox>
+                    </VBox>
+                </VBox>
+            </ScrollPane>
+        </VBox>
+    </center>
+
+</BorderPane>

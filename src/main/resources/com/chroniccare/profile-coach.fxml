@@ -1,42 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.chroniccare.controllers.ProfileCoachController"
-            prefWidth="1100" prefHeight="700"
+            prefWidth="1200" prefHeight="760"
             stylesheets="@home-styles.css">
 
     <left>
         <VBox styleClass="sidebar" prefWidth="230" spacing="0">
             <VBox styleClass="sidebar-brand" spacing="4">
                 <HBox alignment="CENTER_LEFT" spacing="10">
-                    <Label text="✚" styleClass="brand-icon"/>
+                    <Label text="+" styleClass="brand-icon"/>
                     <Label text="ChronicCare" styleClass="brand-title"/>
                 </HBox>
-                <Label text="Suivi médical intelligent" styleClass="brand-subtitle"/>
+                <Label text="Suivi medical intelligent" styleClass="brand-subtitle"/>
             </VBox>
-            <VBox styleClass="sidebar-user-card" spacing="6">
+            <VBox styleClass="sidebar-user-card" spacing="6" alignment="CENTER_LEFT">
                 <Label fx:id="sidebarAvatar" styleClass="sidebar-avatar"/>
                 <Label fx:id="sidebarUserName" styleClass="sidebar-user-name"/>
-                <Label text="Coach" styleClass="sidebar-role-badge"
-                       style="-fx-text-fill: #4ade80; -fx-background-color: #14532d;"/>
+                <Label text="Coach" styleClass="sidebar-role-badge, sidebar-role-coach"/>
             </VBox>
             <Separator styleClass="sidebar-sep"/>
             <VBox styleClass="nav-section" spacing="2" VBox.vgrow="ALWAYS">
-                <Label text="NAVIGATION" styleClass="nav-section-label"/>
-                <Button text="🏠  Accueil" styleClass="nav-btn"
-                        onAction="#goToHome" maxWidth="Infinity"/>
-                <Button text="👤  Mon Profil" styleClass="nav-btn, nav-btn-active"
-                        maxWidth="Infinity"/>
-                <Label text="MES OUTILS" styleClass="nav-section-label"/>
-                <Button text="👥  Mes Patients" styleClass="nav-btn" maxWidth="Infinity"/>
-                <Button text="📋  Programmes" styleClass="nav-btn" maxWidth="Infinity"/>
-                <Button text="📊  Statistiques" styleClass="nav-btn" maxWidth="Infinity"/>
+                <Button text="Evenements" styleClass="nav-btn"
+                        onAction="#goToCoachEvents" maxWidth="Infinity"/>
+                <Button text="Exercices" styleClass="nav-btn"
+                        onAction="#goToCoachExercises" maxWidth="Infinity"/>
+                <Button text="Mon Etat" styleClass="nav-btn"
+                        onAction="#goToHomeEtat" maxWidth="Infinity"/>
+                <Button text="Activite" styleClass="nav-btn"
+                        onAction="#goToHomeActivite" maxWidth="Infinity"/>
+                <Button text="Mon Profil" styleClass="nav-btn, nav-btn-active"
+                        onAction="#reloadProfile" maxWidth="Infinity"/>
             </VBox>
             <VBox styleClass="sidebar-bottom">
                 <Separator styleClass="sidebar-sep"/>
-                <Button text="⏻  Déconnexion" styleClass="nav-btn, nav-btn-logout"
+                <Button text="Deconnexion" styleClass="nav-btn, nav-btn-logout"
                         onAction="#handleLogout" maxWidth="Infinity"/>
             </VBox>
         </VBox>
@@ -45,7 +45,7 @@
     <center>
         <VBox styleClass="main-content" spacing="0">
             <HBox styleClass="topbar" alignment="CENTER_LEFT" spacing="16">
-                <Label text="Mon Profil Coach" styleClass="page-title"/>
+                <Label text="Mon profil coach" styleClass="page-title"/>
                 <Region HBox.hgrow="ALWAYS"/>
                 <Label fx:id="topbarDate" styleClass="topbar-date"/>
                 <HBox styleClass="topbar-user-pill" alignment="CENTER" spacing="8">
@@ -56,51 +56,60 @@
 
             <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="content-scroll">
                 <VBox spacing="20" styleClass="dashboard-body">
+                    <HBox styleClass="welcome-banner" alignment="CENTER_LEFT" spacing="18">
+                        <VBox spacing="8">
+                            <Label text="Ton espace profil coach" styleClass="welcome-title"/>
+                            <Label text="Mets a jour tes informations pour garder un compte fiable et professionnel."
+                                   styleClass="welcome-subtitle" wrapText="true"/>
+                        </VBox>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label text="Coach" styleClass="status-chip, status-chip-valid"/>
+                    </HBox>
 
-                    <HBox spacing="10" alignment="CENTER_LEFT">
-                        <Label text="🏃  Coach" styleClass="admin-badge"
-                               style="-fx-background-color: #16a34a;"/>
-                        <Label fx:id="statusLabel" styleClass="admin-badge"
-                               style="-fx-background-color: #22c55e;"/>
+                    <HBox spacing="14">
+                        <VBox styleClass="stat-card, stat-blue" spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="Statut du compte" styleClass="stat-label"/>
+                            <Label fx:id="statusLabel" styleClass="stat-value"/>
+                            <Label text="Validation de ton profil coach" styleClass="stat-sub"/>
+                        </VBox>
+                        <VBox styleClass="stat-card, stat-green" spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="Completude profil" styleClass="stat-label"/>
+                            <Label fx:id="completionLabel" styleClass="stat-value"/>
+                            <Label text="Champs personnels renseignes" styleClass="stat-sub"/>
+                        </VBox>
                     </HBox>
 
                     <HBox spacing="20">
-                        <VBox styleClass="card" spacing="16" HBox.hgrow="ALWAYS">
+                        <VBox styleClass="card, profile-card" spacing="16" HBox.hgrow="ALWAYS">
                             <Label text="Informations personnelles" styleClass="card-title"/>
                             <Separator/>
                             <HBox spacing="16">
                                 <VBox spacing="6" HBox.hgrow="ALWAYS">
                                     <Label text="Nom" styleClass="info-label"/>
-                                    <TextField fx:id="nomField" promptText="Votre nom"
-                                               style="-fx-pref-height: 38; -fx-font-size: 13; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #e2e8f0; -fx-border-width: 1.5;"/>
+                                    <TextField fx:id="nomField" promptText="Votre nom" styleClass="filter-field"/>
                                 </VBox>
                                 <VBox spacing="6" HBox.hgrow="ALWAYS">
-                                    <Label text="Prénom" styleClass="info-label"/>
-                                    <TextField fx:id="prenomField" promptText="Votre prénom"
-                                               style="-fx-pref-height: 38; -fx-font-size: 13; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #e2e8f0; -fx-border-width: 1.5;"/>
+                                    <Label text="Prenom" styleClass="info-label"/>
+                                    <TextField fx:id="prenomField" promptText="Votre prenom" styleClass="filter-field"/>
                                 </VBox>
                             </HBox>
                             <VBox spacing="6">
                                 <Label text="Email" styleClass="info-label"/>
-                                <TextField fx:id="emailField" promptText="Votre email"
-                                           style="-fx-pref-height: 38; -fx-font-size: 13; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #e2e8f0; -fx-border-width: 1.5;"/>
+                                <TextField fx:id="emailField" promptText="Votre email" styleClass="filter-field"/>
                             </VBox>
                             <HBox spacing="16">
                                 <VBox spacing="6" HBox.hgrow="ALWAYS">
-                                    <Label text="Téléphone" styleClass="info-label"/>
-                                    <TextField fx:id="telephoneField" promptText="8 chiffres"
-                                               style="-fx-pref-height: 38; -fx-font-size: 13; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #e2e8f0; -fx-border-width: 1.5;"/>
+                                    <Label text="Telephone" styleClass="info-label"/>
+                                    <TextField fx:id="telephoneField" promptText="8 chiffres" styleClass="filter-field"/>
                                 </VBox>
                                 <VBox spacing="6" HBox.hgrow="ALWAYS">
                                     <Label text="Genre" styleClass="info-label"/>
-                                    <ComboBox fx:id="genreCombo" maxWidth="Infinity"
-                                              style="-fx-pref-height: 38; -fx-font-size: 13;"/>
+                                    <ComboBox fx:id="genreCombo" maxWidth="Infinity" styleClass="filter-combo"/>
                                 </VBox>
                             </HBox>
                         </VBox>
 
-                        <VBox styleClass="card" spacing="16" prefWidth="300"
-                              style="-fx-background-color: #f0fdf4;">
+                        <VBox styleClass="card, profile-side-card" spacing="16" prefWidth="320">
                             <Label text="Informations professionnelles" styleClass="card-title"/>
                             <Separator/>
                             <VBox spacing="6">
@@ -108,20 +117,24 @@
                                 <Label fx:id="approvalLabel" styleClass="info-value"/>
                             </VBox>
                             <VBox styleClass="tip-item" spacing="6">
-                                <Label text="🏋️  Votre rôle" styleClass="tip-title"/>
-                                <Label text="En tant que Coach, vous guidez vos patients dans leur activité physique adaptée à leur condition."
+                                <Label text="Role coach" styleClass="tip-title"/>
+                                <Label text="Tu pilotes tes evenements, structures tes exercices et suis les inscriptions des patients."
+                                       styleClass="tip-text" wrapText="true"/>
+                            </VBox>
+                            <VBox styleClass="tip-item" spacing="6">
+                                <Label text="Bonnes pratiques" styleClass="tip-title"/>
+                                <Label text="Utilise un email valide et un telephone complet pour accelerer les validations."
                                        styleClass="tip-text" wrapText="true"/>
                             </VBox>
                         </VBox>
                     </HBox>
 
-                    <Label fx:id="errorLabel" styleClass="error-label" wrapText="true"/>
-                    <Label fx:id="successLabel" styleClass="success-label" wrapText="true"/>
+                    <Label fx:id="errorLabel" styleClass="error-label" wrapText="true" visible="false" managed="false"/>
+                    <Label fx:id="successLabel" styleClass="success-label" wrapText="true" visible="false" managed="false"/>
 
-                    <Button text="💾  Enregistrer les modifications"
-                            styleClass="btn-primary"
-                            onAction="#handleSave"
-                            style="-fx-pref-height: 44; -fx-font-size: 14; -fx-pref-width: 300;"/>
+                    <Button text="Enregistrer les modifications"
+                            styleClass="btn-primary, profile-save-btn"
+                            onAction="#handleSave"/>
                 </VBox>
             </ScrollPane>
         </VBox>

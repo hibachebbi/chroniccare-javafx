@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.chroniccare.controllers.Client.CommandeRapideController"
+      spacing="16"
+      style="-fx-padding: 24; -fx-background-color: #f0f4ff;">
+
+    <Label text="Commande rapide" style="-fx-font-size: 22; -fx-font-weight: bold; -fx-text-fill: #2563eb;"/>
+
+    <VBox spacing="6">
+        <Label text="Produit" style="-fx-font-size: 13; -fx-font-weight: bold;"/>
+        <Label fx:id="nomLabel" text="-" style="-fx-font-size: 14;"/>
+        <Label fx:id="categorieLabel" text="-" style="-fx-font-size: 12; -fx-text-fill: #555;"/>
+    </VBox>
+
+    <HBox spacing="12" alignment="CENTER_LEFT">
+        <Label text="Prix unitaire" style="-fx-font-size: 13; -fx-font-weight: bold;"/>
+        <Label fx:id="prixLabel" text="0.00"/>
+        <Label text="Stock" style="-fx-font-size: 13; -fx-font-weight: bold;"/>
+        <Label fx:id="stockLabel" text="0"/>
+    </HBox>
+
+    <Separator />
+
+    <HBox spacing="12" alignment="CENTER_LEFT">
+        <Label text="Quantite" style="-fx-font-size: 13; -fx-font-weight: bold;"/>
+        <Spinner fx:id="qtySpinner" prefWidth="120" />
+        <Label text="Paiement" style="-fx-font-size: 13; -fx-font-weight: bold;"/>
+        <ComboBox fx:id="paiementCombo" prefWidth="180" promptText="Paiement" />
+        <Label fx:id="totalLabel" text="Total: 0.00" style="-fx-font-size: 13; -fx-font-weight: bold;"/>
+    </HBox>
+
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button text="❤️ Ajouter aux favoris" fx:id="wishlistBtn" onAction="#toggleWishlist"
+                style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-padding: 8 16; -fx-background-radius: 8;"/>
+        <Button text="Retour" onAction="#goBack"
+                style="-fx-background-color: #6b7280; -fx-text-fill: white; -fx-padding: 8 16; -fx-background-radius: 8;"/>
+        <Button text="Confirmer" onAction="#confirmCommande"
+                style="-fx-background-color: #2563eb; -fx-text-fill: white; -fx-padding: 8 16; -fx-background-radius: 8;"/>
+    </HBox>
+
+</VBox>
+

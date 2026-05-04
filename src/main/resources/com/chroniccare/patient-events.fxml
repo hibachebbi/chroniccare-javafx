@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.chroniccare.controllers.PatientEventsController"
+      styleClass="dashboard-body" spacing="20"
+      stylesheets="@home-styles.css">
+
+    <HBox styleClass="welcome-banner" alignment="CENTER_LEFT" spacing="18">
+        <VBox spacing="8">
+            <Label text="Choisis ton prochain evenement" styleClass="welcome-title"/>
+            <Label text="Clique sur un evenement pour ouvrir sa page complete." styleClass="welcome-subtitle" wrapText="true"/>
+        </VBox>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="Mes inscriptions" styleClass="btn-secondary" onAction="#goToMyRegistrations"/>
+    </HBox>
+    <HBox spacing="14">
+        <VBox styleClass="stat-card, stat-blue" spacing="6" HBox.hgrow="ALWAYS">
+            <Label text="Evenements disponibles" styleClass="stat-label"/>
+            <Label fx:id="kpiTotalEventsLabel" styleClass="stat-value"/>
+            <Label text="Total consultable" styleClass="stat-sub"/>
+        </VBox>
+        <VBox styleClass="stat-card, stat-green" spacing="6" HBox.hgrow="ALWAYS">
+            <Label text="A venir" styleClass="stat-label"/>
+            <Label fx:id="kpiUpcomingEventsLabel" styleClass="stat-value"/>
+            <Label text="Date a partir d'aujourd'hui" styleClass="stat-sub"/>
+        </VBox>
+        <VBox styleClass="stat-card, stat-purple" spacing="6" HBox.hgrow="ALWAYS">
+            <Label text="Deja inscrits" styleClass="stat-label"/>
+            <Label fx:id="kpiRegisteredEventsLabel" styleClass="stat-value"/>
+            <Label text="Evenements deja reserves" styleClass="stat-sub"/>
+        </VBox>
+    </HBox>
+    <VBox styleClass="card" spacing="16">
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <TextField fx:id="searchField" promptText="Rechercher par titre, lieu, statut..." HBox.hgrow="ALWAYS" styleClass="filter-field"/>
+        </HBox>
+        <HBox spacing="8">
+            <Button fx:id="filterAllBtn" text="Tous" styleClass="quick-filter-chip" onAction="#handleFilterAll"/>
+            <Button fx:id="filterTodayBtn" text="Aujourd'hui" styleClass="quick-filter-chip" onAction="#handleFilterToday"/>
+            <Button fx:id="filterWeekBtn" text="Cette semaine" styleClass="quick-filter-chip" onAction="#handleFilterWeek"/>
+            <Button fx:id="filterRegisteredBtn" text="Deja inscrit" styleClass="quick-filter-chip" onAction="#handleFilterRegistered"/>
+        </HBox>
+        <TableView fx:id="eventsTable" VBox.vgrow="ALWAYS" styleClass="dashboard-table, exercises-main-table">
+            <columns>
+                <TableColumn fx:id="titreCol" text="Titre" prefWidth="240"/>
+                <TableColumn fx:id="lieuCol" text="Lieu" prefWidth="170"/>
+                <TableColumn fx:id="dateDebutCol" text="Debut" prefWidth="170"/>
+                <TableColumn fx:id="dateFinCol" text="Fin" prefWidth="170"/>
+                <TableColumn fx:id="statutCol" text="Statut" prefWidth="120"/>
+                <TableColumn fx:id="actionsCol" text="Action" prefWidth="130"/>
+            </columns>
+        </TableView>
+        <VBox fx:id="emptyStateBox" styleClass="empty-state-box" spacing="10" visible="false" managed="false">
+            <Label text="Aucun evenement ne correspond a ce filtre." styleClass="empty-state-title"/>
+        </VBox>
+        <Label fx:id="countLabel" styleClass="info-label"/>
+        <Label fx:id="messageLabel" styleClass="inline-helper-label" wrapText="true"/>
+    </VBox>
+</VBox>

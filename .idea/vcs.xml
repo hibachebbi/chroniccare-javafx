@@ -2,5 +2,8 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cc (1)/cc/chroniccare (4)/template" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/chroniccare-javafx" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/rdv" vcs="Git" />
   </component>
 </project>

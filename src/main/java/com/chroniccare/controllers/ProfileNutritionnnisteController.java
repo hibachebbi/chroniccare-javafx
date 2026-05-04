@@ -3,6 +3,7 @@ package com.chroniccare.controllers;
 import com.chroniccare.models.User;
 import com.chroniccare.services.UserService;
 import com.chroniccare.utils.SessionManager;
+import com.chroniccare.utils.FxNavigation;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -103,13 +104,19 @@ public class ProfileNutritionnnisteController {
 
     @FXML
     public void goToHome() {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/com/chroniccare/home.fxml"));
-            nomField.getScene().setRoot(root);
-        } catch (Exception e) {
-            if (errorLabel != null) errorLabel.setText("Erreur : " + e.getMessage());
-        }
+        FxNavigation.navigateNutri(getClass(), nomField, "home");
     }
+
+    @FXML
+    public void goToNutritionRdv() {
+        FxNavigation.navigateNutri(getClass(), nomField, "rdv");
+    }
+
+    @FXML
+    public void goToNutritionHomeSuivi() { FxNavigation.navigateNutri(getClass(), nomField, "suivi"); }
+    @FXML public void showEtatModule() { FxNavigation.navigateNutri(getClass(), nomField, "etat"); }
+    @FXML public void showActiviteModule() { FxNavigation.navigateNutri(getClass(), nomField, "activite"); }
+    @FXML public void goToProfile() { FxNavigation.navigateNutri(getClass(), nomField, "profile"); }
 
     @FXML
     public void handleLogout() {

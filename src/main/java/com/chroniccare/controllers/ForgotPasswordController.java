@@ -43,7 +43,7 @@ public class ForgotPasswordController {
             String missing = emailService.getMissingConfigKeys();
             String suffix = (missing == null || missing.isBlank()) ? "" : (" Manquant : " + missing + ".");
             String baseDir = System.getProperty("user.dir");
-            errorLabel.setText("Email non configuré." + suffix + " Configurez les variables d'environnement SMTP_* ou créez `smtp.properties` dans : " + baseDir);
+            errorLabel.setText("Email non configuré." + suffix + " Configurez les variables d'environnement SMTP_* ou créez `smtp2.properties` (ou `smtp.properties`) dans : " + baseDir);
             return;
         }
 
@@ -71,12 +71,28 @@ public class ForgotPasswordController {
     public void handleResetPassword() {
         clearMessages();
 
-        String token = tokenField.getText() == null ? "" : tokenField.getText().trim();
+        String email = emailField.getText() == null ? "" : emailField.getText().trim();
+        String token = normalizeResetToken(tokenField.getText());
         String newPassword = newPasswordField.getText();
         String confirm = confirmPasswordField.getText();
 
+        if (email.isBlank()) {
+            errorLabel.setText("Veuillez saisir votre email.");
+            return;
+        }
+
+        if (!email.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
+            errorLabel.setText("Email invalide.");
+            return;
+        }
+
         if (token.isBlank()) {
             errorLabel.setText("Veuillez coller le code reçu par email.");
+            return;
+        }
+
+        if (!token.matches("\\d{6}")) {
+            errorLabel.setText("Le code doit contenir exactement 6 chiffres.");
             return;
         }
 
@@ -91,9 +107,9 @@ public class ForgotPasswordController {
         }
 
         try {
-            boolean ok = passwordResetService.resetPassword(token, newPassword);
+            boolean ok = passwordResetService.resetPassword(email, token, newPassword);
             if (!ok) {
-                errorLabel.setText("Code invalide ou expiré.");
+                errorLabel.setText("Code invalide, expiré, ou non associé à cet email.");
                 return;
             }
 
@@ -129,5 +145,38 @@ public class ForgotPasswordController {
     private void clearMessages() {
         if (infoLabel != null) infoLabel.setText("");
         if (errorLabel != null) errorLabel.setText("");
+    }
+
+    private String normalizeResetToken(String rawValue) {
+        if (rawValue == null) {
+            return "";
+        }
+
+        String trimmed = rawValue.trim();
+        if (trimmed.isBlank()) {
+            return "";
+        }
+
+        String tokenFromUrl = extractTokenQueryParam(trimmed);
+        if (!tokenFromUrl.isBlank()) {
+            trimmed = tokenFromUrl;
+        }
+
+        return trimmed.replaceAll("\\s+", "");
+    }
+
+    private String extractTokenQueryParam(String value) {
+        int tokenIndex = value.indexOf("token=");
+        if (tokenIndex < 0) {
+            return "";
+        }
+
+        String tokenPart = value.substring(tokenIndex + "token=".length());
+        int ampIndex = tokenPart.indexOf('&');
+        if (ampIndex >= 0) {
+            tokenPart = tokenPart.substring(0, ampIndex);
+        }
+
+        return tokenPart.trim();
     }
 }

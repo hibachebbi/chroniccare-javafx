@@ -1,179 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.geometry.*?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.chroniccare.controllers.PatientSegmentationController"
-            prefWidth="1100" prefHeight="700"
-            stylesheets="@home-styles.css">
-
-    <left>
-        <VBox styleClass="sidebar" prefWidth="230" spacing="0">
-            <VBox styleClass="sidebar-brand" spacing="4">
+<ScrollPane xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.chroniccare.controllers.PatientSegmentationController"
+      fitToWidth="true" styleClass="content-scroll"
+      stylesheets="@home-styles.css">
+        <VBox spacing="20" styleClass="dashboard-body">
+            <VBox styleClass="card" spacing="14">
                 <HBox alignment="CENTER_LEFT" spacing="10">
-                    <Label text="+" styleClass="brand-icon"/>
-                    <Label text="ChronicCare" styleClass="brand-title"/>
+                    <Label text="Regroupements" styleClass="card-title"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="Rafraîchir" styleClass="btn-secondary" onAction="#refresh"/>
                 </HBox>
-                <Label text="Segmentation patients" styleClass="brand-subtitle"/>
+                <Separator/>
+                <TabPane style="-fx-background-color: transparent;">
+                    <tabs>
+                        <Tab text="Profils similaires" closable="false">
+                            <content>
+                                <TableView fx:id="profilesTable" styleClass="modern-table" prefHeight="320">
+                                    <columns>
+                                        <TableColumn fx:id="groupCol" text="Profil" prefWidth="260"/>
+                                        <TableColumn fx:id="countCol" text="Patients" prefWidth="90"/>
+                                        <TableColumn fx:id="sampleCol" text="Exemples" prefWidth="520"/>
+                                    </columns>
+                                </TableView>
+                            </content>
+                        </Tab>
+                        <Tab text="Niveau de risque" closable="false">
+                            <content>
+                                <VBox spacing="10" style="-fx-padding: 8;">
+                                    <HBox spacing="10">
+                                        <Label fx:id="riskLowBadge" style="-fx-background-color:#dcfce7; -fx-text-fill:#15803d; -fx-font-weight:bold; -fx-padding:6 12; -fx-background-radius:999;"/>
+                                        <Label fx:id="riskMediumBadge" style="-fx-background-color:#fef3c7; -fx-text-fill:#b45309; -fx-font-weight:bold; -fx-padding:6 12; -fx-background-radius:999;"/>
+                                        <Label fx:id="riskHighBadge" style="-fx-background-color:#fee2e2; -fx-text-fill:#b91c1c; -fx-font-weight:bold; -fx-padding:6 12; -fx-background-radius:999;"/>
+                                    </HBox>
+                                    <TableView fx:id="riskTable" styleClass="modern-table" prefHeight="320">
+                                        <columns>
+                                            <TableColumn fx:id="patientRiskCol" text="Patient" prefWidth="160"/>
+                                            <TableColumn fx:id="conditionRiskCol" text="Condition" prefWidth="220"/>
+                                            <TableColumn fx:id="secondaryRiskCol" text="Comorbidités" prefWidth="90"/>
+                                            <TableColumn fx:id="riskLevelCol" text="Risque" prefWidth="90"/>
+                                            <TableColumn fx:id="riskScoreCol" text="Score" prefWidth="70"/>
+                                            <TableColumn fx:id="riskDetailsCol" text="Raisons" prefWidth="410"/>
+                                        </columns>
+                                    </TableView>
+                                </VBox>
+                            </content>
+                        </Tab>
+                        <Tab text="Comportement" closable="false">
+                            <content>
+                                <VBox spacing="10" style="-fx-padding: 8;">
+                                    <HBox spacing="10">
+                                        <Label fx:id="behaviorVeryActiveBadge" style="-fx-background-color:#dbeafe; -fx-text-fill:#1d4ed8; -fx-font-weight:bold; -fx-padding:6 12; -fx-background-radius:999;"/>
+                                        <Label fx:id="behaviorActiveBadge" style="-fx-background-color:#dcfce7; -fx-text-fill:#15803d; -fx-font-weight:bold; -fx-padding:6 12; -fx-background-radius:999;"/>
+                                        <Label fx:id="behaviorOccasionalBadge" style="-fx-background-color:#fef3c7; -fx-text-fill:#b45309; -fx-font-weight:bold; -fx-padding:6 12; -fx-background-radius:999;"/>
+                                        <Label fx:id="behaviorInactiveBadge" style="-fx-background-color:#e5e7eb; -fx-text-fill:#374151; -fx-font-weight:bold; -fx-padding:6 12; -fx-background-radius:999;"/>
+                                    </HBox>
+                                    <TableView fx:id="behaviorTable" styleClass="modern-table" prefHeight="320">
+                                        <columns>
+                                            <TableColumn fx:id="patientBehaviorCol" text="Patient" prefWidth="160"/>
+                                            <TableColumn fx:id="segmentCol" text="Segment" prefWidth="120"/>
+                                            <TableColumn fx:id="viewsCol" text="Vues(30j)" prefWidth="90"/>
+                                            <TableColumn fx:id="updatesCol" text="Maj(30j)" prefWidth="90"/>
+                                            <TableColumn fx:id="activityScoreCol" text="Score" prefWidth="70"/>
+                                            <TableColumn fx:id="lastActivityCol" text="Dernière activité" prefWidth="150"/>
+                                            <TableColumn fx:id="behaviorDetailsCol" text="Détails" prefWidth="230"/>
+                                        </columns>
+                                    </TableView>
+                                </VBox>
+                            </content>
+                        </Tab>
+                    </tabs>
+                </TabPane>
+                <Label text="Note : segmentation indicative basée sur les informations déclarées."
+                       style="-fx-text-fill: #64748b; -fx-font-size: 11px;" wrapText="true"/>
             </VBox>
-
-            <VBox styleClass="sidebar-user-card" spacing="6">
-                <Label fx:id="sidebarAvatar" styleClass="sidebar-avatar"/>
-                <Label fx:id="sidebarUserName" styleClass="sidebar-user-name"/>
-                <Label fx:id="sidebarRoleBadge" text="Administrateur" styleClass="sidebar-role-badge"/>
-            </VBox>
-
-            <Separator styleClass="sidebar-sep"/>
-
-            <VBox styleClass="nav-section" spacing="2" VBox.vgrow="ALWAYS">
-                <Label text="NAVIGATION" styleClass="nav-section-label"/>
-
-                <Button text="🏠  Accueil"
-                        styleClass="nav-btn"
-                        onAction="#goToHome"
-                        maxWidth="Infinity"/>
-
-                <Button text="👤  Mon Profil"
-                        styleClass="nav-btn"
-                        onAction="#goToProfile"
-                        maxWidth="Infinity"/>
-
-                <Button text="👥  Gestion Utilisateurs"
-                        styleClass="nav-btn"
-                        onAction="#goToUsers"
-                        maxWidth="Infinity"/>
-
-                <Button text="🔒  Comptes bloqués"
-                        styleClass="nav-btn"
-                        onAction="#goToBlockedAccounts"
-                        maxWidth="Infinity"/>
-
-                <Button text="📝  Audit médical"
-                        styleClass="nav-btn"
-                        onAction="#goToMedicalAudit"
-                        maxWidth="Infinity"/>
-
-                <Button text="🧩  Segmentation patients"
-                        styleClass="nav-btn, nav-btn-active"
-                        onAction="#goToPatientSegmentation"
-                        maxWidth="Infinity"/>
-
-                <Button text="📊  Statistiques"
-                        styleClass="nav-btn"
-                        onAction="#goToStats"
-                        maxWidth="Infinity"/>
-            </VBox>
-
-            <VBox styleClass="sidebar-bottom">
-                <Separator styleClass="sidebar-sep"/>
-                <Button text="⏻  Déconnexion"
-                        styleClass="nav-btn, nav-btn-logout"
-                        onAction="#handleLogout"
-                        maxWidth="Infinity"/>
-            </VBox>
+            <Label fx:id="errorLabel" styleClass="error-label" wrapText="true"/>
         </VBox>
-    </left>
-
-    <center>
-        <VBox styleClass="main-content" spacing="0">
-            <HBox styleClass="topbar" alignment="CENTER_LEFT" spacing="16">
-                <Label text="Segmentation patients" styleClass="page-title"/>
-                <Region HBox.hgrow="ALWAYS"/>
-                <Label fx:id="topbarDate" styleClass="topbar-date"/>
-                <HBox styleClass="topbar-user-pill" alignment="CENTER" spacing="8">
-                    <Label fx:id="topbarAvatar" styleClass="topbar-avatar"/>
-                    <Label fx:id="topbarUserName" styleClass="topbar-username"/>
-                </HBox>
-            </HBox>
-
-            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="content-scroll">
-                <VBox spacing="20" styleClass="dashboard-body">
-                    <VBox styleClass="card" spacing="14">
-                        <HBox alignment="CENTER_LEFT" spacing="10">
-                            <Label text="Regroupements" styleClass="card-title"/>
-                            <Region HBox.hgrow="ALWAYS"/>
-                            <Button text="Rafraîchir" styleClass="btn-secondary" onAction="#refresh"/>
-                        </HBox>
-                        <Separator/>
-
-                        <TabPane style="-fx-background-color: transparent;">
-                            <tabs>
-                                <Tab text="Profils similaires" closable="false">
-                                    <content>
-                                        <TableView fx:id="profilesTable" styleClass="modern-table" prefHeight="320">
-                                            <columns>
-                                                <TableColumn fx:id="groupCol" text="Profil" prefWidth="260"/>
-                                                <TableColumn fx:id="countCol" text="Patients" prefWidth="90"/>
-                                                <TableColumn fx:id="sampleCol" text="Exemples" prefWidth="520"/>
-                                            </columns>
-                                        </TableView>
-                                    </content>
-                                </Tab>
-
-                                <Tab text="Niveau de risque" closable="false">
-                                    <content>
-                                        <VBox spacing="10" style="-fx-padding: 8;">
-                                            <HBox spacing="10">
-                                                <Label fx:id="riskLowBadge"
-                                                       style="-fx-background-color:#dcfce7; -fx-text-fill:#15803d; -fx-font-weight:bold; -fx-padding:6 12; -fx-background-radius:999;"/>
-                                                <Label fx:id="riskMediumBadge"
-                                                       style="-fx-background-color:#fef3c7; -fx-text-fill:#b45309; -fx-font-weight:bold; -fx-padding:6 12; -fx-background-radius:999;"/>
-                                                <Label fx:id="riskHighBadge"
-                                                       style="-fx-background-color:#fee2e2; -fx-text-fill:#b91c1c; -fx-font-weight:bold; -fx-padding:6 12; -fx-background-radius:999;"/>
-                                            </HBox>
-                                            <TableView fx:id="riskTable" styleClass="modern-table" prefHeight="320">
-                                                <columns>
-                                                    <TableColumn fx:id="patientRiskCol" text="Patient" prefWidth="160"/>
-                                                    <TableColumn fx:id="conditionRiskCol" text="Condition" prefWidth="220"/>
-                                                    <TableColumn fx:id="secondaryRiskCol" text="Comorbidités" prefWidth="90"/>
-                                                    <TableColumn fx:id="riskLevelCol" text="Risque" prefWidth="90"/>
-                                                    <TableColumn fx:id="riskScoreCol" text="Score" prefWidth="70"/>
-                                                    <TableColumn fx:id="riskDetailsCol" text="Raisons" prefWidth="410"/>
-                                                </columns>
-                                            </TableView>
-                                        </VBox>
-                                    </content>
-                                </Tab>
-
-                                <Tab text="Comportement" closable="false">
-                                    <content>
-                                        <VBox spacing="10" style="-fx-padding: 8;">
-                                            <HBox spacing="10">
-                                                <Label fx:id="behaviorVeryActiveBadge"
-                                                       style="-fx-background-color:#dbeafe; -fx-text-fill:#1d4ed8; -fx-font-weight:bold; -fx-padding:6 12; -fx-background-radius:999;"/>
-                                                <Label fx:id="behaviorActiveBadge"
-                                                       style="-fx-background-color:#dcfce7; -fx-text-fill:#15803d; -fx-font-weight:bold; -fx-padding:6 12; -fx-background-radius:999;"/>
-                                                <Label fx:id="behaviorOccasionalBadge"
-                                                       style="-fx-background-color:#fef3c7; -fx-text-fill:#b45309; -fx-font-weight:bold; -fx-padding:6 12; -fx-background-radius:999;"/>
-                                                <Label fx:id="behaviorInactiveBadge"
-                                                       style="-fx-background-color:#e5e7eb; -fx-text-fill:#374151; -fx-font-weight:bold; -fx-padding:6 12; -fx-background-radius:999;"/>
-                                            </HBox>
-                                            <TableView fx:id="behaviorTable" styleClass="modern-table" prefHeight="320">
-                                                <columns>
-                                                    <TableColumn fx:id="patientBehaviorCol" text="Patient" prefWidth="160"/>
-                                                    <TableColumn fx:id="segmentCol" text="Segment" prefWidth="120"/>
-                                                    <TableColumn fx:id="viewsCol" text="Vues(30j)" prefWidth="90"/>
-                                                    <TableColumn fx:id="updatesCol" text="Maj(30j)" prefWidth="90"/>
-                                                    <TableColumn fx:id="activityScoreCol" text="Score" prefWidth="70"/>
-                                                    <TableColumn fx:id="lastActivityCol" text="Dernière activité" prefWidth="150"/>
-                                                    <TableColumn fx:id="behaviorDetailsCol" text="Détails" prefWidth="230"/>
-                                                </columns>
-                                            </TableView>
-                                        </VBox>
-                                    </content>
-                                </Tab>
-                            </tabs>
-                        </TabPane>
-
-                        <Label text="Note : cette segmentation est indicative (basée sur les informations déclarées et l'activité dans l'application)."
-                               style="-fx-text-fill: #64748b; -fx-font-size: 11px;" wrapText="true"/>
-                    </VBox>
-
-                    <Label fx:id="errorLabel" styleClass="error-label" wrapText="true"/>
-                </VBox>
-            </ScrollPane>
-        </VBox>
-    </center>
-
-</BorderPane>
+    </ScrollPane>

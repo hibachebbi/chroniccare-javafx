@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.chroniccare.controllers.NutritionConsultationController"
+            prefWidth="1200" prefHeight="780"
+            stylesheets="@home-styles.css">
+
+    <left>
+        <VBox fx:id="sidebarRoot" styleClass="sidebar" prefWidth="230" spacing="0">
+            <VBox styleClass="sidebar-brand" spacing="4">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="+" styleClass="brand-icon"/>
+                    <Label text="ChronicCare" styleClass="brand-title"/>
+                </HBox>
+                <Label text="Suivi medical intelligent" styleClass="brand-subtitle"/>
+            </VBox>
+            <VBox styleClass="sidebar-user-card" spacing="6" alignment="CENTER_LEFT">
+                <StackPane maxWidth="48" minWidth="48" prefWidth="48"
+                           maxHeight="48" minHeight="48" prefHeight="48"
+                           alignment="TOP_LEFT">
+                    <Label fx:id="sidebarAvatar" styleClass="sidebar-avatar"/>
+                </StackPane>
+                <Label fx:id="sidebarUserName" styleClass="sidebar-user-name"/>
+                <Label fx:id="sidebarRoleBadge" text="Nutritionniste"
+                       styleClass="sidebar-role-badge, sidebar-role-nutritionniste"/>
+            </VBox>
+            <Separator styleClass="sidebar-sep"/>
+            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="sidebar-nav-scroll"
+                        VBox.vgrow="ALWAYS" minViewportHeight="0">
+                <StackPane>
+                    <VBox fx:id="nutritionNavHost" spacing="0">
+                        <fx:include source="include/sidebar-nutritionniste-links.fxml"/>
+                    </VBox>
+                    <VBox fx:id="adminNavHost" spacing="0" visible="false" managed="false">
+                        <fx:include source="include/sidebar-admin-links.fxml"/>
+                    </VBox>
+                </StackPane>
+            </ScrollPane>
+            <VBox styleClass="sidebar-bottom">
+                <Separator styleClass="sidebar-sep"/>
+                <Button text="Deconnexion" styleClass="nav-btn, nav-btn-logout" onAction="#handleLogout" maxWidth="Infinity"/>
+            </VBox>
+        </VBox>
+    </left>
+
+    <center>
+        <VBox styleClass="main-content" spacing="0">
+            <HBox styleClass="topbar" alignment="CENTER_LEFT" spacing="16">
+                <Label text="Dossier consultation" styleClass="page-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="topbarDate" styleClass="topbar-date"/>
+                <HBox styleClass="topbar-user-pill" alignment="CENTER" spacing="8">
+                    <Label fx:id="topbarAvatar" styleClass="topbar-avatar"/>
+                    <Label fx:id="topbarUserName" styleClass="topbar-username"/>
+                </HBox>
+            </HBox>
+
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="content-scroll">
+                <VBox spacing="20" styleClass="dashboard-body">
+                    <VBox styleClass="card, card-tips" spacing="14">
+                        <Label text="Contexte patient" styleClass="card-title"/>
+                        <Separator/>
+                        <HBox spacing="22">
+                            <VBox spacing="6">
+                                <Label text="Patient" styleClass="info-label"/>
+                                <Label fx:id="patientNameLabel" styleClass="info-value"/>
+                            </VBox>
+                            <VBox spacing="6">
+                                <Label text="Creneau" styleClass="info-label"/>
+                                <Label fx:id="requestedSlotLabel" styleClass="info-value"/>
+                            </VBox>
+                            <VBox spacing="6">
+                                <Label text="Type de suivi" styleClass="info-label"/>
+                                <Label fx:id="followUpTypeLabel" styleClass="info-value"/>
+                            </VBox>
+                        </HBox>
+                        <VBox spacing="6">
+                            <Label text="Conditions / maladies" styleClass="info-label"/>
+                            <Label fx:id="medicalContextLabel" wrapText="true" styleClass="info-value"/>
+                        </VBox>
+                        <VBox spacing="6">
+                            <Label text="Historique recent" styleClass="info-label"/>
+                            <Label fx:id="historyLabel" wrapText="true" styleClass="stat-sub"/>
+                        </VBox>
+                    </VBox>
+
+                    <VBox styleClass="card, card-tips" spacing="14">
+                        <Label text="Assistance nutrition produit" styleClass="card-title"/>
+                        <Separator/>
+                        <HBox spacing="12" alignment="CENTER_LEFT">
+                            <TextField fx:id="foodSearchField" promptText="Ex. yaourt nature, muesli, cereales" HBox.hgrow="ALWAYS"/>
+                            <Button text="Rechercher" styleClass="btn-secondary" onAction="#handleSearchFood"/>
+                            <Button text="Inserer dans recommandations" styleClass="btn-primary" onAction="#handleInsertFoodIntoRecommendations"/>
+                        </HBox>
+                        <Label fx:id="foodSearchStatusLabel" styleClass="stat-sub" wrapText="true" text="Recherche Open Food Facts non lancee."/>
+                        <HBox spacing="22">
+                            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                                <Label text="Produit" styleClass="info-label"/>
+                                <Label fx:id="productNameLabel" styleClass="info-value" wrapText="true" text="-"/>
+                            </VBox>
+                            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                                <Label text="Marque" styleClass="info-label"/>
+                                <Label fx:id="productBrandLabel" styleClass="info-value" wrapText="true" text="-"/>
+                            </VBox>
+                            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                                <Label text="Nutri-Score" styleClass="info-label"/>
+                                <Label fx:id="productNutriScoreLabel" styleClass="info-value" text="-"/>
+                            </VBox>
+                        </HBox>
+                        <HBox spacing="22">
+                            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                                <Label text="Calories" styleClass="info-label"/>
+                                <Label fx:id="productCaloriesLabel" styleClass="info-value" text="-"/>
+                            </VBox>
+                            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                                <Label text="Sucres" styleClass="info-label"/>
+                                <Label fx:id="productSugarsLabel" styleClass="info-value" text="-"/>
+                            </VBox>
+                            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                                <Label text="Lipides" styleClass="info-label"/>
+                                <Label fx:id="productFatLabel" styleClass="info-value" text="-"/>
+                            </VBox>
+                            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                                <Label text="Proteines" styleClass="info-label"/>
+                                <Label fx:id="productProteinsLabel" styleClass="info-value" text="-"/>
+                            </VBox>
+                        </HBox>
+                        <VBox spacing="6">
+                            <Label text="Ingredients" styleClass="info-label"/>
+                            <Label fx:id="productIngredientsLabel" styleClass="info-value" wrapText="true" text="-"/>
+                        </VBox>
+                    </VBox>
+
+                    <VBox styleClass="card" spacing="16">
+                        <Label text="Saisie de la consultation" styleClass="card-title"/>
+                        <Separator/>
+                        <HBox spacing="12" alignment="CENTER_LEFT">
+                            <Button text="Generer avec Gemini" styleClass="btn-secondary" onAction="#handleGenerateWithAi"/>
+                            <Label fx:id="aiStatusLabel" styleClass="stat-sub" wrapText="true" text="Gemini non lance."/>
+                        </HBox>
+                        <VBox spacing="6">
+                            <Label text="Theme" styleClass="info-label"/>
+                            <TextField fx:id="themeField" styleClass="filter-field"/>
+                        </VBox>
+                        <HBox spacing="16">
+                            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                                <Label text="Observations / resume" styleClass="info-label"/>
+                                <TextArea fx:id="summaryArea" wrapText="true" prefRowCount="6"/>
+                            </VBox>
+                            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                                <Label text="Recommandations" styleClass="info-label"/>
+                                <TextArea fx:id="recommendationsArea" wrapText="true" prefRowCount="6"/>
+                            </VBox>
+                        </HBox>
+                        <HBox spacing="16">
+                            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                                <Label text="Plan alimentaire" styleClass="info-label"/>
+                                <TextArea fx:id="mealPlanArea" wrapText="true" prefRowCount="6"/>
+                            </VBox>
+                            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                                <Label text="Objectifs" styleClass="info-label"/>
+                                <TextArea fx:id="objectivesArea" wrapText="true" prefRowCount="6"/>
+                            </VBox>
+                        </HBox>
+                        <HBox spacing="16">
+                            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                                <Label text="Notes liees a la condition medicale" styleClass="info-label"/>
+                                <TextArea fx:id="medicalNotesArea" wrapText="true" prefRowCount="4"/>
+                            </VBox>
+                            <VBox spacing="6" prefWidth="240">
+                                <Label text="Date de suivi" styleClass="info-label"/>
+                                <DatePicker fx:id="followUpDatePicker" maxWidth="Infinity"/>
+                            </VBox>
+                        </HBox>
+                        <Label fx:id="errorLabel" styleClass="error-label" wrapText="true"/>
+                        <Label fx:id="successLabel" styleClass="success-label" wrapText="true"/>
+                        <Button text="Valider la consultation" styleClass="btn-primary" onAction="#handleSaveConsultation"/>
+                    </VBox>
+                </VBox>
+            </ScrollPane>
+        </VBox>
+    </center>
+</BorderPane>

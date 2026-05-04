@@ -1,129 +1,64 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.chroniccare.controllers.ProfileNutritionnnisteController"
-            prefWidth="1100" prefHeight="700"
-            stylesheets="@home-styles.css">
-
-    <left>
-        <VBox styleClass="sidebar" prefWidth="230" spacing="0">
-            <VBox styleClass="sidebar-brand" spacing="4">
-                <HBox alignment="CENTER_LEFT" spacing="10">
-                    <Label text="✚" styleClass="brand-icon"/>
-                    <Label text="ChronicCare" styleClass="brand-title"/>
-                </HBox>
-                <Label text="Suivi médical intelligent" styleClass="brand-subtitle"/>
-            </VBox>
-            <VBox styleClass="sidebar-user-card" spacing="6">
-                <Label fx:id="sidebarAvatar" styleClass="sidebar-avatar"/>
-                <Label fx:id="sidebarUserName" styleClass="sidebar-user-name"/>
-                <Label text="Nutritionniste" styleClass="sidebar-role-badge"
-                       style="-fx-text-fill: #fbbf24; -fx-background-color: #78350f;"/>
-            </VBox>
-            <Separator styleClass="sidebar-sep"/>
-            <VBox styleClass="nav-section" spacing="2" VBox.vgrow="ALWAYS">
-                <Label text="NAVIGATION" styleClass="nav-section-label"/>
-                <Button text="🏠  Accueil" styleClass="nav-btn"
-                        onAction="#goToHome" maxWidth="Infinity"/>
-                <Button text="👤  Mon Profil" styleClass="nav-btn, nav-btn-active"
-                        maxWidth="Infinity"/>
-                <Label text="MES OUTILS" styleClass="nav-section-label"/>
-                <Button text="🥗  Plans nutritionnels" styleClass="nav-btn" maxWidth="Infinity"/>
-                <Button text="👥  Mes Patients" styleClass="nav-btn" maxWidth="Infinity"/>
-                <Button text="📊  Suivi alimentaire" styleClass="nav-btn" maxWidth="Infinity"/>
-            </VBox>
-            <VBox styleClass="sidebar-bottom">
-                <Separator styleClass="sidebar-sep"/>
-                <Button text="⏻  Déconnexion" styleClass="nav-btn, nav-btn-logout"
-                        onAction="#handleLogout" maxWidth="Infinity"/>
-            </VBox>
-        </VBox>
-    </left>
-
-    <center>
-        <VBox styleClass="main-content" spacing="0">
-            <HBox styleClass="topbar" alignment="CENTER_LEFT" spacing="16">
-                <Label text="Mon Profil Nutritionniste" styleClass="page-title"/>
-                <Region HBox.hgrow="ALWAYS"/>
-                <Label fx:id="topbarDate" styleClass="topbar-date"/>
-                <HBox styleClass="topbar-user-pill" alignment="CENTER" spacing="8">
-                    <Label fx:id="topbarAvatar" styleClass="topbar-avatar"/>
-                    <Label fx:id="topbarUserName" styleClass="topbar-username"/>
-                </HBox>
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.chroniccare.controllers.ProfileNutritionnnisteController"
+      styleClass="dashboard-body" spacing="20"
+      stylesheets="@home-styles.css">
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="ðŸ¥—  Nutritionniste" styleClass="admin-badge" style="-fx-background-color: #d97706;"/>
+                <Label fx:id="statusLabel" styleClass="admin-badge" style="-fx-background-color: #22c55e;"/>
             </HBox>
-
-            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="content-scroll">
-                <VBox spacing="20" styleClass="dashboard-body">
-
-                    <HBox spacing="10" alignment="CENTER_LEFT">
-                        <Label text="🥗  Nutritionniste" styleClass="admin-badge"
-                               style="-fx-background-color: #d97706;"/>
-                        <Label fx:id="statusLabel" styleClass="admin-badge"
-                               style="-fx-background-color: #22c55e;"/>
-                    </HBox>
-
-                    <HBox spacing="20">
-                        <VBox styleClass="card" spacing="16" HBox.hgrow="ALWAYS">
-                            <Label text="Informations personnelles" styleClass="card-title"/>
-                            <Separator/>
-                            <HBox spacing="16">
-                                <VBox spacing="6" HBox.hgrow="ALWAYS">
-                                    <Label text="Nom" styleClass="info-label"/>
-                                    <TextField fx:id="nomField" promptText="Votre nom"
-                                               style="-fx-pref-height: 38; -fx-font-size: 13; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #e2e8f0; -fx-border-width: 1.5;"/>
-                                </VBox>
-                                <VBox spacing="6" HBox.hgrow="ALWAYS">
-                                    <Label text="Prénom" styleClass="info-label"/>
-                                    <TextField fx:id="prenomField" promptText="Votre prénom"
-                                               style="-fx-pref-height: 38; -fx-font-size: 13; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #e2e8f0; -fx-border-width: 1.5;"/>
-                                </VBox>
-                            </HBox>
-                            <VBox spacing="6">
-                                <Label text="Email" styleClass="info-label"/>
-                                <TextField fx:id="emailField" promptText="Votre email"
-                                           style="-fx-pref-height: 38; -fx-font-size: 13; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #e2e8f0; -fx-border-width: 1.5;"/>
-                            </VBox>
-                            <HBox spacing="16">
-                                <VBox spacing="6" HBox.hgrow="ALWAYS">
-                                    <Label text="Téléphone" styleClass="info-label"/>
-                                    <TextField fx:id="telephoneField" promptText="8 chiffres"
-                                               style="-fx-pref-height: 38; -fx-font-size: 13; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #e2e8f0; -fx-border-width: 1.5;"/>
-                                </VBox>
-                                <VBox spacing="6" HBox.hgrow="ALWAYS">
-                                    <Label text="Genre" styleClass="info-label"/>
-                                    <ComboBox fx:id="genreCombo" maxWidth="Infinity"
-                                              style="-fx-pref-height: 38; -fx-font-size: 13;"/>
-                                </VBox>
-                            </HBox>
+            <HBox spacing="20">
+                <VBox styleClass="card" spacing="16" HBox.hgrow="ALWAYS">
+                    <Label text="Informations personnelles" styleClass="card-title"/>
+                    <Separator/>
+                    <HBox spacing="16">
+                        <VBox spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="Nom" styleClass="info-label"/>
+                            <TextField fx:id="nomField" promptText="Votre nom"
+                                       style="-fx-pref-height: 38; -fx-font-size: 13; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #e2e8f0; -fx-border-width: 1.5;"/>
                         </VBox>
-
-                        <VBox styleClass="card, card-tips" spacing="16" prefWidth="300">
-                            <Label text="Informations professionnelles" styleClass="card-title"/>
-                            <Separator/>
-                            <VBox spacing="6">
-                                <Label text="Statut d'approbation" styleClass="info-label"/>
-                                <Label fx:id="approvalLabel" styleClass="info-value"/>
-                            </VBox>
-                            <VBox styleClass="tip-item" spacing="6">
-                                <Label text="🥦  Votre rôle" styleClass="tip-title"/>
-                                <Label text="En tant que Nutritionniste, vous créez des plans alimentaires adaptés à la condition médicale de chaque patient."
-                                       styleClass="tip-text" wrapText="true"/>
-                            </VBox>
+                        <VBox spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="PrÃ©nom" styleClass="info-label"/>
+                            <TextField fx:id="prenomField" promptText="Votre prÃ©nom"
+                                       style="-fx-pref-height: 38; -fx-font-size: 13; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #e2e8f0; -fx-border-width: 1.5;"/>
                         </VBox>
                     </HBox>
-
-                    <Label fx:id="errorLabel" styleClass="error-label" wrapText="true"/>
-                    <Label fx:id="successLabel" styleClass="success-label" wrapText="true"/>
-
-                    <Button text="💾  Enregistrer les modifications"
-                            styleClass="btn-primary"
-                            onAction="#handleSave"
-                            style="-fx-pref-height: 44; -fx-font-size: 14; -fx-pref-width: 300;"/>
+                    <VBox spacing="6">
+                        <Label text="Email" styleClass="info-label"/>
+                        <TextField fx:id="emailField" promptText="Votre email"
+                                   style="-fx-pref-height: 38; -fx-font-size: 13; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #e2e8f0; -fx-border-width: 1.5;"/>
+                    </VBox>
+                    <HBox spacing="16">
+                        <VBox spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="TÃ©lÃ©phone" styleClass="info-label"/>
+                            <TextField fx:id="telephoneField" promptText="8 chiffres"
+                                       style="-fx-pref-height: 38; -fx-font-size: 13; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #e2e8f0; -fx-border-width: 1.5;"/>
+                        </VBox>
+                        <VBox spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="Genre" styleClass="info-label"/>
+                            <ComboBox fx:id="genreCombo" maxWidth="Infinity" style="-fx-pref-height: 38; -fx-font-size: 13;"/>
+                        </VBox>
+                    </HBox>
                 </VBox>
-            </ScrollPane>
-        </VBox>
-    </center>
-
-</BorderPane>
+                <VBox styleClass="card, card-tips" spacing="16" prefWidth="300">
+                    <Label text="Informations professionnelles" styleClass="card-title"/>
+                    <Separator/>
+                    <VBox spacing="6">
+                        <Label text="Statut d'approbation" styleClass="info-label"/>
+                        <Label fx:id="approvalLabel" styleClass="info-value"/>
+                    </VBox>
+                    <VBox styleClass="tip-item" spacing="6">
+                        <Label text="ðŸ¥¦  Votre rÃ´le" styleClass="tip-title"/>
+                        <Label text="En tant que Nutritionniste, vous crÃ©ez des plans alimentaires adaptÃ©s Ã  la condition mÃ©dicale de chaque patient."
+                               styleClass="tip-text" wrapText="true"/>
+                    </VBox>
+                </VBox>
+            </HBox>
+            <Label fx:id="errorLabel" styleClass="error-label" wrapText="true"/>
+            <Label fx:id="successLabel" styleClass="success-label" wrapText="true"/>
+            <Button text="ðŸ’¾  Enregistrer les modifications" styleClass="btn-primary"
+                    onAction="#handleSave" style="-fx-pref-height: 44; -fx-font-size: 14; -fx-pref-width: 300;"/>
+</VBox>

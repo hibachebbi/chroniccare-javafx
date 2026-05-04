@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.chroniccare.controllers.NutritionRdvController"
+      fitToWidth="true" styleClass="content-scroll"
+      stylesheets="@home-styles.css">
+        <VBox spacing="20" styleClass="dashboard-body">
+            <VBox styleClass="card" spacing="16">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="File des demandes patients" styleClass="card-title"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label text="Les rendez-vous en attente sont tries en premier." styleClass="stat-sub"/>
+                </HBox>
+                <Separator/>
+                <TableView fx:id="appointmentTable" styleClass="dashboard-table" prefHeight="260">
+                    <columns>
+                        <TableColumn fx:id="colPatient" text="Patient" prefWidth="190"/>
+                        <TableColumn fx:id="colMotif" text="Motif" prefWidth="300"/>
+                        <TableColumn fx:id="colRequested" text="Creneau demande" prefWidth="180"/>
+                        <TableColumn fx:id="colUrgency" text="Urgence" prefWidth="130"/>
+                        <TableColumn fx:id="colStatus" text="Statut" prefWidth="170"/>
+                    </columns>
+                </TableView>
+            </VBox>
+
+            <HBox spacing="18">
+                <VBox styleClass="card" spacing="16" HBox.hgrow="ALWAYS">
+                    <Label text="Contexte patient" styleClass="card-title"/>
+                    <Separator/>
+                    <HBox spacing="24">
+                        <VBox spacing="6"><Label text="Patient" styleClass="info-label"/><Label fx:id="patientLabel" styleClass="info-value"/></VBox>
+                        <VBox spacing="6"><Label text="Type de suivi" styleClass="info-label"/><Label fx:id="followUpLabel" styleClass="info-value"/></VBox>
+                        <VBox spacing="6"><Label text="Statut" styleClass="info-label"/><Label fx:id="statusLabel" styleClass="info-value"/></VBox>
+                    </HBox>
+                    <VBox spacing="6">
+                        <Label text="Condition / contexte medical" styleClass="info-label"/>
+                        <Label fx:id="medicalContextLabel" wrapText="true" styleClass="info-value"/>
+                    </VBox>
+                    <VBox spacing="6">
+                        <Label text="Motif de la demande" styleClass="info-label"/>
+                        <TextArea fx:id="motifArea" editable="false" wrapText="true" prefRowCount="5"/>
+                    </VBox>
+                </VBox>
+
+                <VBox styleClass="card, card-tips" spacing="16" prefWidth="340">
+                    <Label text="Decision" styleClass="card-title"/>
+                    <Separator/>
+                    <HBox spacing="12">
+                        <VBox spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="Date retenue" styleClass="info-label"/>
+                            <DatePicker fx:id="decisionDatePicker" maxWidth="Infinity"/>
+                        </VBox>
+                        <VBox spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="Heure" styleClass="info-label"/>
+                            <ComboBox fx:id="decisionTimeCombo" maxWidth="Infinity" styleClass="filter-combo"/>
+                        </VBox>
+                    </HBox>
+                    <VBox spacing="6">
+                        <Label text="Message au patient" styleClass="info-label"/>
+                        <TextArea fx:id="responseArea" wrapText="true" prefRowCount="7"/>
+                    </VBox>
+                    <HBox spacing="10">
+                        <Button fx:id="acceptButton" text="Accepter" styleClass="btn-primary" onAction="#handleAccept"/>
+                        <Button fx:id="proposeButton" text="Proposer un autre creneau" styleClass="btn-secondary" onAction="#handleProposeAnotherSlot"/>
+                    </HBox>
+                    <HBox spacing="10">
+                        <Button fx:id="refuseButton" text="Refuser" styleClass="btn-secondary" onAction="#handleRefuse"/>
+                        <Button fx:id="openConsultationButton" text="Ouvrir consultation" styleClass="btn-primary" onAction="#handleOpenConsultation"/>
+                    </HBox>
+                    <Label fx:id="errorLabel" styleClass="error-label" wrapText="true"/>
+                    <Label fx:id="successLabel" styleClass="success-label" wrapText="true"/>
+                </VBox>
+            </HBox>
+        </VBox>
+    </ScrollPane>
+</ScrollPane>

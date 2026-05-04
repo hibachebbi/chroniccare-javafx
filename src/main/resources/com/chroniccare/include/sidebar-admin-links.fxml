@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      spacing="2"
+      styleClass="nav-section">
+    <Label text="TABLEAU DE BORD" styleClass="nav-section-label"/>
+    <Button text="🏠  Accueil" styleClass="nav-btn, nav-track" userData="adm:home"
+            onAction="#goToHome" maxWidth="Infinity"/>
+    <Button text="👤  Mon profil" styleClass="nav-btn, nav-track" userData="adm:profile"
+            onAction="#goToProfile" maxWidth="Infinity"/>
+
+    <Label text="ADMINISTRATION" styleClass="nav-section-label"/>
+    <Button text="👥  Gestion utilisateurs" styleClass="nav-btn, nav-track" userData="adm:users"
+            onAction="#goToUsers" maxWidth="Infinity"/>
+    <Button text="🔒  Comptes bloqués" styleClass="nav-btn, nav-track" userData="adm:blocked"
+            onAction="#goToBlockedAccounts" maxWidth="Infinity"/>
+    <Button text="📝  Audit médical" styleClass="nav-btn, nav-track" userData="adm:audit"
+            onAction="#goToMedicalAudit" maxWidth="Infinity"/>
+    <Button text="🧩  Segmentation patients" styleClass="nav-btn, nav-track" userData="adm:segment"
+            onAction="#goToPatientSegmentation" maxWidth="Infinity"/>
+    <Button text="📊  Statistiques" styleClass="nav-btn, nav-track" userData="adm:stats"
+            onAction="#goToStats" maxWidth="Infinity"/>
+
+    <Label text="NUTRITION" styleClass="nav-section-label"/>
+    <Button text="📋  Consultations patient" styleClass="nav-btn, nav-track" userData="adm:consult"
+            onAction="#goToAdminConsultLedger" maxWidth="Infinity"/>
+    <Button text="📆  RDV nutrition" styleClass="nav-btn, nav-track" userData="adm:nutrdv"
+            onAction="#goToAdminNutritionRdv" maxWidth="Infinity"/>
+</VBox>

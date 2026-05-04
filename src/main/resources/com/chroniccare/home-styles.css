@@ -56,13 +56,34 @@
     -fx-text-fill: #f1f5f9;
 }
 
+/* Pilule role : forme commune ; couleurs par combinaison avec sidebar-role-* */
 .sidebar-role-badge {
     -fx-font-size: 10px;
     -fx-font-weight: bold;
-    -fx-text-fill: #3b82f6;
-    -fx-background-color: #1e3a5f;
     -fx-background-radius: 12px;
     -fx-padding: 3 10;
+    -fx-text-fill: #cbd5e1;
+    -fx-background-color: #334155;
+}
+
+.sidebar-role-badge.sidebar-role-coach {
+    -fx-text-fill: #4ade80;
+    -fx-background-color: #14532d;
+}
+
+.sidebar-role-badge.sidebar-role-patient {
+    -fx-text-fill: #93c5fd;
+    -fx-background-color: #1e3a8a;
+}
+
+.sidebar-role-badge.sidebar-role-admin {
+    -fx-text-fill: #e9d5ff;
+    -fx-background-color: #581c87;
+}
+
+.sidebar-role-badge.sidebar-role-nutritionniste {
+    -fx-text-fill: #fbbf24;
+    -fx-background-color: #78350f;
 }
 
 .sidebar-sep {
@@ -97,6 +118,11 @@
     -fx-text-fill: #e2e8f0;
 }
 
+.nav-sub-btn {
+    -fx-padding: 8 14 8 26;
+    -fx-font-size: 12px;
+}
+
 .nav-btn-active {
     -fx-background-color: #1e3a5f;
     -fx-text-fill: #60a5fa;
@@ -114,6 +140,44 @@
 
 .sidebar-bottom {
     -fx-padding: 8 10 16 10;
+}
+
+.nav-track {
+    /* Marque les boutons gérés par SidebarNavHighlight (lookup .nav-track) */
+}
+
+.sidebar-nav-scroll {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.sidebar-nav-scroll .viewport {
+    -fx-background-color: transparent;
+}
+
+.sidebar-nav-scroll > .corner {
+    -fx-background-color: transparent;
+}
+
+.sidebar-nav-scroll .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-padding: 6 4 6 0;
+}
+
+.sidebar-nav-scroll .scroll-bar:vertical .track {
+    -fx-background-color: #162033;
+    -fx-background-radius: 999px;
+}
+
+.sidebar-nav-scroll .scroll-bar:vertical .thumb {
+    -fx-background-color: #334155;
+    -fx-background-radius: 999px;
+}
+
+.sidebar-nav-scroll .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #475569;
 }
 
 .main-content {
@@ -189,6 +253,7 @@
 .banner-emoji {
     -fx-font-size: 52px;
     -fx-opacity: 0.9;
+    -fx-text-fill: rgba(255, 255, 255, 0.92);
 }
 
 .stat-card {
@@ -205,7 +270,11 @@
 .stat-purple { -fx-border-color: #a855f7; }
 .stat-orange { -fx-border-color: #f97316; }
 
-.stat-icon  { -fx-font-size: 18px; }
+.stat-icon {
+    -fx-font-size: 18px;
+    -fx-text-fill: #94a3b8;
+    -fx-font-weight: bold;
+}
 
 .stat-label {
     -fx-font-size: 11px;
@@ -235,6 +304,8 @@
 
 .card-icon {
     -fx-font-size: 20px;
+    -fx-text-fill: #94a3b8;
+    -fx-font-weight: bold;
 }
 
 .card-title {
@@ -317,6 +388,47 @@
 }
 
 .btn-secondary:hover { -fx-background-color: #f9fafb; }
+
+.btn-neutral {
+    -fx-background-color: #f1f5f9;
+    -fx-text-fill: #334155;
+    -fx-font-size: 13px;
+    -fx-font-weight: 700;
+    -fx-background-radius: 10px;
+    -fx-padding: 10 18;
+    -fx-cursor: hand;
+    -fx-border-color: #cbd5e1;
+    -fx-border-width: 1;
+    -fx-border-radius: 10px;
+}
+
+.btn-neutral:hover {
+    -fx-background-color: #e2e8f0;
+    -fx-border-color: #94a3b8;
+}
+
+.btn-neutral:pressed {
+    -fx-background-color: #cbd5e1;
+}
+
+.btn-danger {
+    -fx-background-color: #ef4444;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: 700;
+    -fx-background-radius: 10px;
+    -fx-padding: 10 18;
+    -fx-cursor: hand;
+    -fx-border-width: 0;
+}
+
+.btn-danger:hover {
+    -fx-background-color: #dc2626;
+}
+
+.btn-danger:pressed {
+    -fx-background-color: #b91c1c;
+}
 
 .error-label {
     -fx-text-fill: #dc2626;
@@ -479,4 +591,1695 @@
     -fx-padding: 5 12 5 12;
     -fx-font-size: 12px;
     -fx-font-weight: bold;
+}
+
+/* =========================
+   Module chroniccare-javafx (patient événements / inscriptions / détail, coach, formulaires)
+   Copié depuis chroniccare-javafx/home-styles.css pour alignement visuel.
+   ========================= */
+
+.btn-ai {
+    -fx-background-color: linear-gradient(to right, #0f766e, #0d9488);
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8px;
+    -fx-padding: 10 18;
+    -fx-cursor: hand;
+    -fx-border-width: 0;
+}
+
+.btn-ai:hover {
+    -fx-background-color: linear-gradient(to right, #115e59, #0f766e);
+}
+
+.btn-ai:disabled {
+    -fx-opacity: 0.7;
+}
+
+.ai-helper-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f766e;
+    -fx-background-color: #ecfeff;
+    -fx-background-radius: 999px;
+    -fx-padding: 7 12;
+    -fx-border-color: #99f6e4;
+    -fx-border-width: 1;
+    -fx-border-radius: 999px;
+}
+
+.filter-field,
+.filter-combo {
+    -fx-pref-height: 40px;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: #dbe4f0;
+    -fx-border-width: 1px;
+    -fx-background-color: #f8fafc;
+    -fx-padding: 0 12;
+}
+
+.field-invalid {
+    -fx-border-color: #ef4444 !important;
+    -fx-border-width: 1.8 !important;
+    -fx-effect: dropshadow(gaussian, rgba(239,68,68,0.28), 8, 0.15, 0, 0);
+}
+
+.text-area.field-invalid {
+    -fx-border-color: #ef4444 !important;
+    -fx-border-width: 1.8 !important;
+}
+
+.text-area.field-invalid .content {
+    -fx-background-color: #fff5f5;
+}
+
+.quick-filter-chip {
+    -fx-background-color: #eef2ff;
+    -fx-text-fill: #334155;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 999px;
+    -fx-padding: 7 14;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+}
+
+.quick-filter-chip:hover {
+    -fx-background-color: #e0e7ff;
+}
+
+.quick-filter-chip-active {
+    -fx-background-color: #1d4ed8;
+    -fx-text-fill: white;
+}
+
+.dashboard-table {
+    -fx-background-color: white;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
+.dashboard-table .column-header-background {
+    -fx-background-color: #f8fafc;
+    -fx-background-radius: 10px 10px 0 0;
+}
+
+.dashboard-table .column-header,
+.dashboard-table .filler {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent #e2e8f0 transparent;
+}
+
+.dashboard-table .column-header .label {
+    -fx-text-fill: #475569;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.dashboard-table .table-row-cell {
+    -fx-border-color: transparent;
+    -fx-background-color: white;
+}
+
+.dashboard-table .table-row-cell.row-status-pending {
+    -fx-background-color: #fffef8;
+}
+
+.dashboard-table .table-row-cell.row-status-valid {
+    -fx-background-color: #f5fff7;
+}
+
+.dashboard-table .table-row-cell.row-status-cancelled {
+    -fx-background-color: #fff7f7;
+}
+
+.dashboard-table .table-row-cell:filled:selected {
+    -fx-background-color: #dbeafe;
+}
+
+.dashboard-table .table-cell {
+    -fx-text-fill: #1e293b;
+    -fx-border-color: transparent;
+    -fx-padding: 10 8;
+}
+
+.exercises-main-table .table-cell {
+    -fx-font-size: 13px;
+    -fx-padding: 10 8;
+}
+
+.exercises-main-table .column-header .label {
+    -fx-font-size: 12px;
+}
+
+.table-action-primary,
+.table-action-danger,
+.table-action-secondary {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6px;
+    -fx-cursor: hand;
+    -fx-padding: 7 10;
+}
+
+.table-action-primary {
+    -fx-background-color: #2563eb;
+    -fx-text-fill: white;
+}
+
+.table-action-danger {
+    -fx-background-color: #ef4444;
+    -fx-text-fill: white;
+}
+
+.table-action-secondary {
+    -fx-background-color: #e2e8f0;
+    -fx-text-fill: #1e293b;
+}
+
+.status-chip {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 999px;
+    -fx-padding: 4 10;
+}
+
+.status-chip-pending {
+    -fx-background-color: #fef3c7;
+    -fx-text-fill: #92400e;
+}
+
+.status-chip-valid {
+    -fx-background-color: #dcfce7;
+    -fx-text-fill: #166534;
+}
+
+.status-chip-cancelled {
+    -fx-background-color: #fee2e2;
+    -fx-text-fill: #991b1b;
+}
+
+.empty-state-box {
+    -fx-background-color: #f8fafc;
+    -fx-background-radius: 12px;
+    -fx-padding: 22;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 1;
+    -fx-border-radius: 12px;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.empty-state-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f172a;
+}
+
+.empty-state-subtitle {
+    -fx-font-size: 13px;
+    -fx-text-fill: #64748b;
+}
+
+.event-form-card {
+    -fx-padding: 26;
+}
+
+.event-form-page-title {
+    -fx-font-size: 24px;
+}
+
+.exercise-form-page-title {
+    -fx-font-size: 24px;
+}
+
+.event-form-card .card-title {
+    -fx-font-size: 20px;
+}
+
+.event-form-card .info-label {
+    -fx-font-size: 13px;
+}
+
+.event-form-card .text-field,
+.event-form-card .combo-box,
+.event-form-card .date-picker {
+    -fx-pref-height: 40px;
+    -fx-font-size: 14px;
+}
+
+.event-form-card .text-area {
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: #dbe4f0;
+    -fx-background-color: #f8fafc;
+    -fx-font-size: 14px;
+}
+
+.event-form-card .text-area .content {
+    -fx-background-color: #f8fafc;
+    -fx-background-radius: 8px;
+}
+
+.exercise-form-card .card-title {
+    -fx-font-size: 20px;
+}
+
+.exercise-form-card .info-label {
+    -fx-font-size: 13px;
+}
+
+.exercise-form-card .text-field,
+.exercise-form-card .combo-box,
+.exercise-form-card .date-picker {
+    -fx-pref-height: 40px;
+    -fx-font-size: 14px;
+}
+
+.exercise-form-card .text-area {
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: #dbe4f0;
+    -fx-background-color: #f8fafc;
+    -fx-font-size: 14px;
+}
+
+.exercise-form-card .text-area .content {
+    -fx-background-color: #f8fafc;
+    -fx-background-radius: 8px;
+}
+
+.inline-helper-label {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2563eb;
+    -fx-background-color: #eff6ff;
+    -fx-background-radius: 8px;
+    -fx-padding: 8 12;
+}
+
+.weather-detail-panel {
+    -fx-background-color: linear-gradient(to right, #eff6ff, #eef2ff);
+    -fx-background-radius: 12px;
+    -fx-padding: 12 14;
+    -fx-border-color: #bfdbfe;
+    -fx-border-radius: 12px;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(37,99,235,0.12), 10, 0, 0, 2);
+}
+
+.map-panel {
+    -fx-background-color: linear-gradient(to bottom right, #f8fafc, #eff6ff);
+    -fx-background-radius: 14px;
+    -fx-padding: 12 14 14 14;
+    -fx-border-color: #cbd5e1;
+    -fx-border-radius: 14px;
+    -fx-border-width: 1;
+}
+
+.map-panel .web-view {
+    -fx-background-color: white;
+    -fx-background-radius: 12px;
+    -fx-border-color: #dbe4f0;
+    -fx-border-radius: 12px;
+    -fx-border-width: 1;
+}
+
+.event-detail-card {
+    -fx-padding: 22 24 24 24;
+}
+
+.event-detail-card-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: 800;
+}
+
+.event-detail-label {
+    -fx-font-size: 15px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #334155;
+}
+
+.event-detail-value {
+    -fx-font-size: 21px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #0f172a;
+}
+
+.event-detail-text {
+    -fx-font-size: 15px;
+    -fx-text-fill: #475569;
+    -fx-line-spacing: 2px;
+}
+
+.event-description-text {
+    -fx-font-size: 16px;
+    -fx-text-fill: #334155;
+}
+
+.event-detail-weather-value {
+    -fx-font-size: 15px;
+}
+
+.event-detail-helper {
+    -fx-font-size: 14px;
+    -fx-padding: 10 14;
+}
+
+.weather-detail-title {
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1d4ed8;
+    -fx-letter-spacing: 0.8px;
+}
+
+.weather-detail-value {
+    -fx-font-size: 13px;
+    -fx-text-fill: #0f172a;
+    -fx-font-weight: 600;
+}
+
+.weather-preview-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1e3a8a;
+    -fx-background-color: linear-gradient(to right, #eff6ff, #e0e7ff);
+    -fx-background-radius: 999px;
+    -fx-padding: 7 12;
+    -fx-border-color: #c7d2fe;
+    -fx-border-radius: 999px;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(30,58,138,0.10), 8, 0, 0, 1);
+}
+
+.location-preview-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #065f46;
+    -fx-background-color: linear-gradient(to right, #ecfdf5, #d1fae5);
+    -fx-background-radius: 999px;
+    -fx-padding: 7 12;
+    -fx-border-color: #6ee7b7;
+    -fx-border-radius: 999px;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(6,95,70,0.10), 8, 0, 0, 1);
+}
+
+.holiday-preview-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #7c2d12;
+    -fx-background-color: linear-gradient(to right, #fff7ed, #ffedd5);
+    -fx-background-radius: 999px;
+    -fx-padding: 7 12;
+    -fx-border-color: #fdba74;
+    -fx-border-radius: 999px;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(124,45,18,0.10), 8, 0, 0, 1);
+}
+
+.video-panel {
+    -fx-background-color: #faf5ff;
+    -fx-background-radius: 14px;
+    -fx-padding: 14 16;
+    -fx-border-color: #e9d5ff;
+    -fx-border-radius: 14px;
+    -fx-border-width: 1;
+}
+
+.video-title {
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #7e22ce;
+    -fx-letter-spacing: 0.6px;
+}
+
+.compact-table {
+    -fx-fixed-cell-size: 38px;
+}
+
+.compact-table .table-cell {
+    -fx-padding: 6 8;
+    -fx-font-size: 12px;
+}
+
+.compact-table .column-header .label {
+    -fx-font-size: 11px;
+}
+
+.compact-table .check-box-table-cell {
+    -fx-alignment: CENTER;
+}
+
+.edit-assignment-table {
+    -fx-fixed-cell-size: 42px;
+}
+
+.edit-assignment-table .table-cell {
+    -fx-font-size: 14px;
+    -fx-padding: 8 8;
+}
+
+.edit-assignment-table .column-header .label {
+    -fx-font-size: 13px;
+}
+
+.edit-assignment-table .check-box-table-cell {
+    -fx-alignment: CENTER;
+}
+
+.profile-card .text-field,
+.profile-card .combo-box {
+    -fx-pref-height: 40px;
+    -fx-font-size: 14px;
+}
+
+.profile-side-card {
+    -fx-background-color: #f0fdf4;
+}
+
+.profile-save-btn {
+    -fx-pref-height: 44px;
+    -fx-font-size: 14px;
+    -fx-pref-width: 320px;
+}
+
+/* =========================
+   MODULE SUIVI : ETAT & ACTIVITE
+   ========================= */
+
+.suivi-host {
+    -fx-background-color: linear-gradient(to bottom right, #ffffff, #f5f9ff);
+    -fx-border-color: #dbeafe;
+    -fx-border-width: 1;
+    -fx-border-radius: 16px;
+    -fx-background-radius: 16px;
+    -fx-padding: 22;
+    -fx-effect: dropshadow(gaussian, rgba(15, 23, 42, 0.08), 18, 0, 0, 4);
+}
+
+.suivi-shell {
+    -fx-spacing: 18;
+}
+
+/* Bandeau d'en-tete (gradient bleu, comme welcome-banner) */
+.suivi-header {
+    -fx-background-color: linear-gradient(to right, #1d4ed8, #2563eb, #3b82f6);
+    -fx-background-radius: 14px;
+    -fx-padding: 22 26;
+    -fx-effect: dropshadow(gaussian, rgba(37,99,235,0.32), 16, 0, 0, 4);
+}
+
+.suivi-header-icon {
+    -fx-font-size: 30px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-color: rgba(255, 255, 255, 0.18);
+    -fx-background-radius: 14px;
+    -fx-min-width: 48px;
+    -fx-min-height: 48px;
+    -fx-max-width: 48px;
+    -fx-max-height: 48px;
+    -fx-alignment: CENTER;
+}
+
+.suivi-header-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.suivi-header-subtitle {
+    -fx-font-size: 13px;
+    -fx-text-fill: rgba(255, 255, 255, 0.86);
+}
+
+.suivi-header-badge {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+    -fx-text-fill: white;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 999px;
+    -fx-padding: 6 14;
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-border-radius: 999px;
+    -fx-border-width: 1;
+}
+
+.suivi-badge {
+    -fx-background-color: #dbeafe;
+    -fx-text-fill: #1d4ed8;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 999px;
+    -fx-padding: 6 12;
+}
+
+.suivi-summary-card {
+    -fx-background-color: linear-gradient(to bottom right, #ffffff, #f8fafc);
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 1;
+    -fx-border-radius: 14px;
+    -fx-background-radius: 14px;
+    -fx-padding: 16;
+}
+
+.suivi-summary-title {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #64748b;
+}
+
+.suivi-summary-value {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f172a;
+}
+
+.suivi-summary-subtitle {
+    -fx-font-size: 12px;
+    -fx-text-fill: #94a3b8;
+}
+
+/* Cartes formulaire et tableau (.card est deja stylise dans l'app) */
+.suivi-form-card {
+    -fx-background-color: linear-gradient(to bottom right, #ffffff, #fbfdff);
+    -fx-border-color: #e0e7ff;
+    -fx-border-width: 0 0 0 4;
+    -fx-border-radius: 14px;
+    -fx-background-radius: 14px;
+}
+
+.suivi-table-card {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #dbeafe;
+    -fx-border-width: 1;
+    -fx-border-radius: 14px;
+    -fx-background-radius: 14px;
+}
+
+.suivi-actions {
+    -fx-padding: 10 0 2 0;
+    -fx-alignment: CENTER_LEFT;
+    -fx-spacing: 10;
+}
+
+.suivi-toolbar {
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 8 0 6 0;
+    -fx-spacing: 10;
+}
+
+/* Boutons Etat / Activite : hauteur, arrondi, ombre legeres */
+.suivi-form-card .suivi-actions .button,
+.suivi-table-card .suivi-toolbar .button {
+    -fx-min-height: 40px;
+    -fx-pref-height: 40px;
+    -fx-padding: 10 20;
+    -fx-background-radius: 10px;
+    -fx-font-weight: 700;
+    -fx-cursor: hand;
+}
+
+.suivi-form-card .suivi-actions .btn-primary,
+.suivi-table-card .suivi-toolbar .btn-primary {
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(37, 99, 235, 0.28), 10, 0.25, 0, 2);
+}
+
+.suivi-form-card .suivi-actions .btn-primary:hover,
+.suivi-table-card .suivi-toolbar .btn-primary:hover {
+    -fx-effect: dropshadow(gaussian, rgba(29, 78, 216, 0.38), 12, 0.25, 0, 3);
+}
+
+.suivi-form-card .suivi-actions .btn-primary:pressed,
+.suivi-table-card .suivi-toolbar .btn-primary:pressed {
+    -fx-background-color: #1e40af;
+    -fx-effect: dropshadow(gaussian, rgba(30, 64, 175, 0.25), 6, 0.2, 0, 1);
+}
+
+.suivi-form-card .suivi-actions .btn-danger,
+.suivi-table-card .suivi-toolbar .btn-danger {
+    -fx-effect: dropshadow(gaussian, rgba(239, 68, 68, 0.35), 10, 0.25, 0, 2);
+}
+
+.suivi-form-card .suivi-actions .btn-danger:hover,
+.suivi-table-card .suivi-toolbar .btn-danger:hover {
+    -fx-effect: dropshadow(gaussian, rgba(220, 38, 38, 0.42), 12, 0.25, 0, 3);
+}
+
+.suivi-form-card .suivi-actions .btn-neutral,
+.suivi-table-card .suivi-toolbar .btn-neutral {
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+}
+
+/* Bouton « Consulter » dans le tableau Etat */
+.suivi-table .table-cell .button {
+    -fx-min-height: 32px;
+    -fx-pref-height: 32px;
+    -fx-padding: 6 14;
+    -fx-font-size: 12px;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+}
+
+.suivi-toolbar-label {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #64748b;
+    -fx-letter-spacing: 0.4px;
+}
+
+.suivi-search-field,
+.suivi-filter-combo {
+    -fx-background-color: #f8fafc;
+    -fx-background-radius: 10px;
+    -fx-border-color: #cbd5e1;
+    -fx-border-radius: 10px;
+    -fx-border-width: 1;
+    -fx-padding: 10 12;
+    -fx-font-size: 13px;
+}
+
+.suivi-search-field:focused,
+.suivi-filter-combo:focused {
+    -fx-border-color: #3b82f6;
+    -fx-effect: dropshadow(gaussian, rgba(59, 130, 246, 0.25), 8, 0, 0, 0);
+}
+
+.suivi-search-field {
+    -fx-prompt-text-fill: #94a3b8;
+}
+
+.suivi-filter-combo {
+    -fx-min-width: 170px;
+}
+
+.suivi-reset-btn {
+    -fx-padding: 10 16;
+}
+
+.suivi-help-text {
+    -fx-text-fill: #475569;
+    -fx-font-size: 12px;
+}
+
+/* Champs internes des formulaires suivi */
+.suivi-form-card .text-field,
+.suivi-form-card .combo-box,
+.suivi-form-card .date-picker,
+.suivi-form-card .text-area {
+    -fx-background-color: #f8fafc;
+    -fx-background-radius: 10px;
+    -fx-border-color: #cbd5e1;
+    -fx-border-radius: 10px;
+    -fx-border-width: 1;
+    -fx-padding: 8 12;
+    -fx-font-size: 13px;
+    -fx-text-fill: #0f172a;
+    -fx-prompt-text-fill: #94a3b8;
+}
+
+.suivi-form-card .text-area {
+    -fx-padding: 0;
+}
+
+.suivi-form-card .text-area .content {
+    -fx-background-color: #f8fafc;
+    -fx-background-radius: 10px;
+    -fx-padding: 10 12;
+}
+
+.suivi-form-card .text-field:focused,
+.suivi-form-card .combo-box:focused,
+.suivi-form-card .date-picker:focused,
+.suivi-form-card .text-area:focused {
+    -fx-border-color: #3b82f6;
+    -fx-effect: dropshadow(gaussian, rgba(59, 130, 246, 0.25), 8, 0, 0, 0);
+}
+
+.suivi-form-card .label {
+    -fx-text-fill: #1e293b;
+    -fx-font-size: 12px;
+}
+
+.suivi-form-card .combo-box .arrow-button {
+    -fx-background-color: transparent;
+}
+
+.suivi-form-card .combo-box .arrow {
+    -fx-background-color: #64748b;
+}
+
+.suivi-form-card .date-picker .arrow-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0 6;
+}
+
+/* Tableau : header bleu clair, lignes alternees, hover doux */
+.suivi-table {
+    -fx-background-color: white;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 12px;
+    -fx-background-radius: 12px;
+    -fx-padding: 0;
+}
+
+.suivi-table .column-header-background {
+    -fx-background-color: linear-gradient(to bottom, #eff6ff, #e0ecff);
+    -fx-background-radius: 12px 12px 0 0;
+    -fx-border-color: transparent transparent #c7dbff transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.suivi-table .column-header,
+.suivi-table .filler {
+    -fx-background-color: transparent;
+    -fx-size: 44px;
+}
+
+.suivi-table .column-header .label {
+    -fx-text-fill: #1d4ed8;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-wrap-text: true;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 8 10;
+}
+
+.suivi-table .table-cell {
+    -fx-text-fill: #1e293b;
+    -fx-font-size: 12px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 10 12;
+    -fx-border-color: transparent;
+}
+
+.suivi-cell-text {
+    -fx-text-fill: #1e293b;
+    -fx-font-size: 12px;
+    -fx-line-spacing: 2px;
+}
+
+.suivi-table .table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent #eef2ff transparent;
+    -fx-cell-size: 58px;
+}
+
+.suivi-table .table-row-cell:odd {
+    -fx-background-color: #fafcff;
+}
+
+.suivi-table .table-row-cell:hover {
+    -fx-background-color: #eef4ff;
+}
+
+.suivi-table .table-row-cell:selected {
+    -fx-background-color: linear-gradient(to right, #dbeafe, #e0e7ff);
+}
+
+.suivi-table .table-row-cell:selected .table-cell,
+.suivi-table .table-row-cell:selected .suivi-cell-text {
+    -fx-text-fill: #1e3a8a;
+    -fx-font-weight: bold;
+}
+
+.suivi-table .table-row-cell:empty {
+    -fx-background-color: white;
+}
+
+.suivi-table .scroll-bar:vertical,
+.suivi-table .scroll-bar:horizontal {
+    -fx-background-color: transparent;
+}
+
+/* Onglets pill */
+.suivi-tabs {
+    -fx-tab-min-height: 38px;
+    -fx-tab-max-height: 38px;
+}
+
+.suivi-tabs > .tab-header-area {
+    -fx-padding: 0 0 6 0;
+}
+
+.suivi-tabs > .tab-header-area .tab-header-background {
+    -fx-background-color: transparent;
+}
+
+.suivi-tabs > .tab-header-area .headers-region {
+    -fx-padding: 0;
+}
+
+.suivi-tabs > .tab-header-area .tab {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 999px;
+    -fx-padding: 8 22;
+    -fx-border-color: #c7dbff;
+    -fx-border-width: 1;
+    -fx-border-radius: 999px;
+    -fx-cursor: hand;
+}
+
+.suivi-tabs > .tab-header-area .tab:hover {
+    -fx-background-color: #eff6ff;
+}
+
+.suivi-tabs > .tab-header-area .tab:selected {
+    -fx-background-color: linear-gradient(to right, #1d4ed8, #2563eb);
+    -fx-border-color: transparent;
+    -fx-effect: dropshadow(gaussian, rgba(37,99,235,0.35), 10, 0, 0, 3);
+}
+
+.suivi-tabs > .tab-header-area .tab .tab-label {
+    -fx-text-fill: #1e3a8a;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+.suivi-tabs > .tab-header-area .tab:selected .tab-label {
+    -fx-text-fill: white;
+}
+
+.suivi-tabs > .tab-header-area .tab .focus-indicator {
+    -fx-border-width: 0;
+}
+
+/* ========== Patient : Prendre RDV & Mes consultations (PREMIUM v2) ========== */
+
+.patient-rdv-body,
+.patient-consult-body {
+    -fx-padding: 26 30 38 30;
+    -fx-background-color: #f1f5f9;
+}
+
+/* ----- Hero ----- */
+.rdv-hero,
+.consult-hero {
+    -fx-background-color: linear-gradient(to right, #0b1226, #16204a, #1d4ed8);
+    -fx-background-radius: 22px;
+    -fx-padding: 28 32 28 32;
+    -fx-effect: dropshadow(gaussian, rgba(15, 23, 42, 0.32), 28, 0, 0, 10);
+    -fx-border-color: rgba(255,255,255,0.10);
+    -fx-border-radius: 22px;
+    -fx-border-width: 1;
+}
+
+
+.rdv-hero-kicker,
+.consult-hero-kicker {
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #93c5fd;
+    -fx-letter-spacing: 0.16em;
+}
+
+.rdv-hero-chip,
+.consult-hero-chip {
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #bfdbfe;
+    -fx-background-color: rgba(255,255,255,0.10);
+    -fx-background-radius: 999px;
+    -fx-padding: 4 10;
+    -fx-border-color: rgba(255,255,255,0.18);
+    -fx-border-radius: 999px;
+    -fx-border-width: 1;
+}
+
+.rdv-hero-title,
+.consult-hero-title {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-padding: 4 0 0 0;
+}
+
+.rdv-hero-lead,
+.consult-hero-lead {
+    -fx-font-size: 13.5px;
+    -fx-text-fill: #cbd5e1;
+    -fx-wrap-text: true;
+    -fx-max-width: 720;
+}
+
+.rdv-hero-actions {
+    -fx-padding: 8 0 0 0;
+}
+
+.rdv-hero-pill {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #e0e7ff;
+    -fx-background-color: rgba(255,255,255,0.08);
+    -fx-background-radius: 999px;
+    -fx-padding: 6 12;
+    -fx-border-color: rgba(255,255,255,0.14);
+    -fx-border-radius: 999px;
+    -fx-border-width: 1;
+}
+
+.rdv-hero-avatar-wrap,
+.consult-hero-avatar-wrap {
+    -fx-min-width: 88;
+    -fx-min-height: 88;
+    -fx-pref-width: 88;
+    -fx-pref-height: 88;
+    -fx-max-width: 88;
+    -fx-max-height: 88;
+    -fx-background-color: linear-gradient(to bottom right, #60a5fa, #2563eb);
+    -fx-background-radius: 50%;
+    -fx-effect: dropshadow(gaussian, rgba(37, 99, 235, 0.45), 20, 0, 0, 6);
+    -fx-border-color: rgba(255,255,255,0.35);
+    -fx-border-radius: 50%;
+    -fx-border-width: 3;
+}
+
+.rdv-hero-avatar,
+.consult-hero-avatar {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+/* ----- KPI cards ----- */
+.rdv-kpi-row,
+.consult-kpi-row {
+    -fx-padding: 0;
+}
+
+.rdv-kpi-card,
+.consult-kpi-card {
+    -fx-background-color: white;
+    -fx-background-radius: 16px;
+    -fx-padding: 18 20 18 20;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 16px;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(15, 23, 42, 0.06), 12, 0, 0, 3);
+    -fx-min-height: 110;
+}
+
+.rdv-kpi-label {
+    -fx-font-size: 10.5px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #64748b;
+    -fx-letter-spacing: 0.12em;
+}
+
+.rdv-kpi-value {
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f172a;
+}
+
+.rdv-kpi-value-sm {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f172a;
+}
+
+.rdv-kpi-sub {
+    -fx-font-size: 11.5px;
+    -fx-text-fill: #94a3b8;
+}
+
+.rdv-kpi-dot {
+    -fx-font-size: 14px;
+}
+.dot-amber   { -fx-text-fill: #f59e0b; }
+.dot-emerald { -fx-text-fill: #10b981; }
+.dot-violet  { -fx-text-fill: #8b5cf6; }
+.dot-blue    { -fx-text-fill: #2563eb; }
+
+.kpi-amber   { -fx-border-color: #fde68a; -fx-background-color: linear-gradient(to bottom right, #fffbeb, #ffffff); }
+.kpi-emerald { -fx-border-color: #a7f3d0; -fx-background-color: linear-gradient(to bottom right, #ecfdf5, #ffffff); }
+.kpi-violet  { -fx-border-color: #ddd6fe; -fx-background-color: linear-gradient(to bottom right, #f5f3ff, #ffffff); }
+.kpi-blue    { -fx-border-color: #bfdbfe; -fx-background-color: linear-gradient(to bottom right, #eff6ff, #ffffff); }
+
+/* ----- Form card ----- */
+.rdv-form-card {
+    -fx-background-color: white;
+    -fx-background-radius: 18px;
+    -fx-padding: 24 26 26 26;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 18px;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(15, 23, 42, 0.07), 18, 0, 0, 4);
+}
+
+.rdv-form-card-header {
+    -fx-padding: 0 0 6 0;
+}
+
+.rdv-step-bubble {
+    -fx-min-width: 36;
+    -fx-min-height: 36;
+    -fx-pref-width: 36;
+    -fx-pref-height: 36;
+    -fx-max-width: 36;
+    -fx-max-height: 36;
+    -fx-background-color: linear-gradient(to bottom right, #2563eb, #1d4ed8);
+    -fx-background-radius: 12px;
+    -fx-effect: dropshadow(gaussian, rgba(37,99,235,0.35), 10, 0, 0, 3);
+}
+
+.rdv-step-bubble-text {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.rdv-step-counter {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1d4ed8;
+    -fx-background-color: #eff6ff;
+    -fx-background-radius: 999px;
+    -fx-padding: 5 12;
+}
+
+.rdv-section-kicker {
+    -fx-font-size: 10.5px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2563eb;
+    -fx-letter-spacing: 0.14em;
+}
+
+.rdv-sep {
+    -fx-padding: 2 0 6 0;
+}
+
+.rdv-block-title {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #475569;
+    -fx-letter-spacing: 0.10em;
+    -fx-padding: 14 0 4 0;
+}
+
+.rdv-form-section {
+    -fx-padding: 2 0 0 0;
+}
+
+.rdv-two-col {
+    -fx-spacing: 14;
+}
+
+.rdv-medical-callout {
+    -fx-background-color: linear-gradient(to right, #eff6ff, #f8fafc);
+    -fx-background-radius: 14px;
+    -fx-padding: 14 16;
+    -fx-border-color: #bfdbfe;
+    -fx-border-radius: 14px;
+    -fx-border-width: 1;
+    -fx-spacing: 8;
+}
+
+.rdv-callout-icon {
+    -fx-font-size: 14px;
+    -fx-text-fill: #ef4444;
+}
+
+.rdv-callout-text {
+    -fx-font-size: 13px;
+    -fx-text-fill: #1e293b;
+    -fx-font-weight: bold;
+}
+
+.rdv-text-area,
+.rdv-readonly-area,
+.consult-readonly-ta {
+    -fx-background-radius: 12px;
+    -fx-background-color: #f8fafc;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 12px;
+    -fx-border-width: 1;
+    -fx-padding: 6;
+    -fx-font-size: 13px;
+    -fx-text-fill: #334155;
+}
+
+.rdv-text-area .content,
+.rdv-readonly-area .content,
+.consult-readonly-ta .content {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 10px;
+}
+
+.rdv-text-area:focused,
+.rdv-readonly-area:focused,
+.consult-readonly-ta:focused {
+    -fx-border-color: #93c5fd;
+    -fx-effect: dropshadow(gaussian, rgba(59,130,246,0.18), 8, 0, 0, 0);
+}
+
+.rdv-form-actions {
+    -fx-padding: 18 0 0 0;
+}
+
+.rdv-form-hint {
+    -fx-font-size: 11.5px;
+    -fx-text-fill: #94a3b8;
+}
+
+.rdv-submit-btn {
+    -fx-min-width: 220;
+    -fx-padding: 12 22;
+    -fx-background-color: linear-gradient(to right, #1d4ed8, #2563eb);
+    -fx-effect: dropshadow(gaussian, rgba(37,99,235,0.40), 14, 0, 0, 4);
+}
+
+.rdv-submit-btn:hover {
+    -fx-background-color: linear-gradient(to right, #1e40af, #1d4ed8);
+}
+
+/* ----- Side panel (RDV) ----- */
+.rdv-side-panel {
+    -fx-background-color: linear-gradient(to bottom, #ffffff 0%, #f8fafc 100%);
+    -fx-background-radius: 18px;
+    -fx-padding: 22 22 22 22;
+    -fx-spacing: 14;
+    -fx-border-color: #bfdbfe;
+    -fx-border-radius: 18px;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(37, 99, 235, 0.12), 18, 0, 0, 4);
+}
+
+.rdv-side-tag {
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #64748b;
+    -fx-background-color: #e2e8f0;
+    -fx-background-radius: 999px;
+    -fx-padding: 4 10;
+}
+
+.rdv-side-title {
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f172a;
+}
+
+.rdv-side-tile {
+    -fx-background-color: #f8fafc;
+    -fx-background-radius: 12px;
+    -fx-padding: 12 14;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 12px;
+    -fx-border-width: 1;
+}
+
+/* Empty states */
+.rdv-empty-state {
+    -fx-padding: 30 16 30 16;
+    -fx-background-color: #f8fafc;
+    -fx-background-radius: 14px;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 14px;
+    -fx-border-width: 1;
+    -fx-border-style: dashed;
+}
+
+.rdv-empty-icon {
+    -fx-font-size: 32px;
+    -fx-text-fill: #94a3b8;
+}
+
+.rdv-empty-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #334155;
+    -fx-text-alignment: center;
+}
+
+.rdv-empty-text {
+    -fx-font-size: 12px;
+    -fx-text-fill: #94a3b8;
+    -fx-text-alignment: center;
+}
+
+.rdv-table-empty {
+    -fx-background-color: #f8fafc;
+    -fx-padding: 50 20 50 20;
+}
+
+.rdv-table-empty-icon {
+    -fx-font-size: 36px;
+    -fx-text-fill: #cbd5e1;
+}
+
+.rdv-table-empty-title {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #334155;
+}
+
+.rdv-table-empty-text {
+    -fx-font-size: 12.5px;
+    -fx-text-fill: #94a3b8;
+    -fx-text-alignment: center;
+    -fx-max-width: 360;
+}
+
+/* ----- Status pills ----- */
+.status-pill {
+    -fx-font-size: 11.5px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 999px;
+    -fx-padding: 6 14;
+    -fx-text-fill: #475569;
+    -fx-background-color: #e2e8f0;
+}
+
+.status-pill.status-pending {
+    -fx-text-fill: #92400e;
+    -fx-background-color: #fef3c7;
+}
+
+.status-pill.status-planned {
+    -fx-text-fill: #065f46;
+    -fx-background-color: #d1fae5;
+}
+
+.status-pill.status-refused {
+    -fx-text-fill: #991b1b;
+    -fx-background-color: #fee2e2;
+}
+
+.status-pill.status-completed {
+    -fx-text-fill: #5b21b6;
+    -fx-background-color: #ede9fe;
+}
+
+.status-pill.status-reschedule {
+    -fx-text-fill: #1e3a8a;
+    -fx-background-color: #dbeafe;
+}
+
+.read-pill {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 999px;
+    -fx-padding: 4 12;
+}
+
+.read-pill-yes {
+    -fx-text-fill: #065f46;
+    -fx-background-color: #d1fae5;
+}
+
+.read-pill-no {
+    -fx-text-fill: #92400e;
+    -fx-background-color: #fef3c7;
+}
+
+/* ----- Table card ----- */
+.rdv-table-card,
+.consult-list-card,
+.consult-detail-card {
+    -fx-background-color: white;
+    -fx-background-radius: 18px;
+    -fx-padding: 22 24 24 24;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 18px;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(15, 23, 42, 0.07), 16, 0, 0, 4);
+}
+
+.rdv-hint {
+    -fx-font-size: 12px;
+    -fx-text-fill: #94a3b8;
+}
+
+.patient-rdv-table,
+.patient-consult-table {
+    -fx-pref-height: 300;
+}
+
+.patient-rdv-table .table-row-cell,
+.patient-consult-table .table-row-cell {
+    -fx-cell-size: 38px;
+}
+
+.patient-rdv-table .table-row-cell:filled:hover,
+.patient-consult-table .table-row-cell:filled:hover {
+    -fx-background-color: #f8fafc;
+}
+
+.patient-rdv-table .table-row-cell:filled:selected,
+.patient-consult-table .table-row-cell:filled:selected {
+    -fx-background-color: #dbeafe;
+    -fx-text-fill: #1e3a8a;
+}
+
+/* ----- Consult detail card content ----- */
+.consult-detail-head {
+    -fx-padding: 0 0 4 0;
+}
+
+.consult-detail-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f172a;
+}
+
+.consult-detail-sub {
+    -fx-font-size: 13px;
+    -fx-text-fill: #64748b;
+}
+
+.consult-empty-state {
+    -fx-padding: 40 20 40 20;
+}
+
+.consult-meta-grid {
+    -fx-padding: 4 0 6 0;
+}
+
+.consult-meta-tile {
+    -fx-background-color: #f8fafc;
+    -fx-background-radius: 14px;
+    -fx-padding: 14 16;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 14px;
+    -fx-border-width: 1;
+}
+
+.consult-meta-tile .info-label {
+    -fx-text-fill: #64748b;
+}
+
+.consult-block-title {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f172a;
+    -fx-padding: 6 0 4 14;
+    -fx-border-color: transparent transparent transparent #2563eb;
+    -fx-border-width: 0 0 0 4;
+}
+
+.consult-text-block {
+    -fx-spacing: 8;
+}
+
+.consult-two-col {
+    -fx-spacing: 18;
+}
+
+/* ========== Patient : Prendre RDV & Mes consultations (premium) ========== */
+
+.patient-rdv-topbar-sub,
+.patient-consult-topbar-sub {
+    -fx-font-size: 12px;
+    -fx-text-fill: #64748b;
+}
+
+.patient-rdv-body,
+.patient-consult-body {
+    -fx-padding: 24 28 36 28;
+    -fx-spacing: 22;
+}
+
+.patient-rdv-hero,
+.patient-consult-hero {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #0f172a 0%, #1e3a5f 45%, #1d4ed8 100%);
+    -fx-background-radius: 16px;
+    -fx-padding: 22 28 24 28;
+    -fx-effect: dropshadow(gaussian, rgba(15, 23, 42, 0.25), 20, 0, 0, 6);
+}
+
+.patient-rdv-hero-kicker,
+.patient-consult-hero-kicker {
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #93c5fd;
+    -fx-letter-spacing: 0.12em;
+}
+
+.patient-rdv-hero-title,
+.patient-consult-hero-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-padding: 6 0 0 0;
+}
+
+.patient-rdv-hero-lead,
+.patient-consult-hero-lead {
+    -fx-font-size: 13px;
+    -fx-text-fill: #cbd5e1;
+    -fx-wrap-text: true;
+    -fx-max-width: 720;
+}
+
+.patient-rdv-hero-badge,
+.patient-consult-hero-badge {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1e3a8a;
+    -fx-background-color: #eff6ff;
+    -fx-background-radius: 999px;
+    -fx-padding: 6 14;
+}
+
+.patient-rdv-form-card {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 16px;
+    -fx-padding: 22 24 24 24;
+    -fx-effect: dropshadow(gaussian, rgba(15, 23, 42, 0.08), 14, 0, 0, 3);
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 16px;
+    -fx-border-width: 1;
+}
+
+.patient-rdv-side-panel {
+    -fx-background-color: linear-gradient(to bottom, #f8fafc, #f1f5f9);
+    -fx-background-radius: 16px;
+    -fx-padding: 20 22 22 22;
+    -fx-spacing: 14;
+    -fx-effect: dropshadow(gaussian, rgba(37, 99, 235, 0.12), 16, 0, 0, 2);
+    -fx-border-color: #bfdbfe;
+    -fx-border-radius: 16px;
+    -fx-border-width: 1;
+    -fx-min-width: 300;
+    -fx-pref-width: 340;
+    -fx-max-width: 400;
+}
+
+.patient-rdv-side-panel .card-title {
+    -fx-text-fill: #1e3a8a;
+}
+
+.rdv-form-card-header {
+    -fx-padding: 0 0 4 0;
+}
+
+.rdv-section-kicker {
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2563eb;
+    -fx-letter-spacing: 0.08em;
+}
+
+.rdv-sep {
+    -fx-padding: 0 0 8 0;
+}
+
+.rdv-block-title {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #475569;
+    -fx-padding: 12 0 4 0;
+}
+
+.rdv-form-section {
+    -fx-spacing: 8;
+    -fx-padding: 4 0 0 0;
+}
+
+.rdv-two-col {
+    -fx-spacing: 16;
+}
+
+.rdv-medical-callout {
+    -fx-background-color: linear-gradient(to right, #eff6ff, #f8fafc);
+    -fx-background-radius: 12px;
+    -fx-padding: 14 16;
+    -fx-border-color: #bfdbfe;
+    -fx-border-radius: 12px;
+    -fx-border-width: 1;
+    -fx-spacing: 8;
+}
+
+.rdv-medical-callout .info-label {
+    -fx-text-fill: #1d4ed8;
+}
+
+.rdv-text-area,
+.rdv-readonly-area {
+    -fx-background-radius: 10px;
+    -fx-background-color: white;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 10px;
+    -fx-border-width: 1;
+    -fx-padding: 8;
+    -fx-font-size: 13px;
+    -fx-text-fill: #334155;
+}
+
+.rdv-text-area .content,
+.rdv-readonly-area .content {
+    -fx-background-color: #ffffff;
+}
+
+.rdv-readonly-area {
+    -fx-background-color: #f1f5f9;
+}
+
+.rdv-readonly-area .content {
+    -fx-background-color: #f8fafc;
+}
+
+.rdv-form-actions {
+    -fx-padding: 16 0 0 0;
+}
+
+.rdv-submit-btn {
+    -fx-min-width: 200;
+}
+
+.patient-rdv-table-section {
+    -fx-padding: 20 22 22 22;
+    -fx-background-radius: 16px;
+    -fx-effect: dropshadow(gaussian, rgba(15, 23, 42, 0.06), 12, 0, 0, 2);
+}
+
+.patient-rdv-table,
+.patient-consult-table {
+    -fx-pref-height: 300;
+}
+
+.patient-rdv-table .table-row-cell:filled:selected,
+.patient-consult-table .table-row-cell:filled:selected {
+    -fx-background-color: #dbeafe;
+}
+
+/* Mes consultations */
+.patient-consult-list-card {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 16px;
+    -fx-padding: 20 22 18 22;
+    -fx-effect: dropshadow(gaussian, rgba(15, 23, 42, 0.07), 12, 0, 0, 3);
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 16px;
+    -fx-border-width: 1;
+}
+
+.consult-toolbar {
+    -fx-alignment: CENTER_LEFT;
+    -fx-spacing: 12;
+    -fx-padding: 0 0 4 0;
+}
+
+.consult-toolbar-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f172a;
+}
+
+.consult-toolbar-hint {
+    -fx-font-size: 11px;
+    -fx-text-fill: #94a3b8;
+}
+
+.consult-toolbar-actions {
+    -fx-spacing: 10;
+    -fx-alignment: CENTER_RIGHT;
+}
+
+.patient-consult-detail-card {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 16px;
+    -fx-padding: 22 24 26 24;
+    -fx-spacing: 18;
+    -fx-effect: dropshadow(gaussian, rgba(15, 23, 42, 0.07), 14, 0, 0, 4);
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 16px;
+    -fx-border-width: 1;
+}
+
+.consult-detail-head {
+    -fx-spacing: 6;
+}
+
+.consult-detail-head-title {
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f172a;
+}
+
+.consult-detail-head-sub {
+    -fx-font-size: 12px;
+    -fx-text-fill: #64748b;
+}
+
+.consult-meta-grid {
+    -fx-hgap: 14;
+    -fx-vgap: 12;
+    -fx-padding: 4 0 8 0;
+}
+
+.consult-meta-tile {
+    -fx-background-color: #f8fafc;
+    -fx-background-radius: 12px;
+    -fx-padding: 12 14;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 12px;
+    -fx-border-width: 1;
+    -fx-spacing: 4;
+}
+
+.consult-meta-tile .info-label {
+    -fx-text-fill: #64748b;
+}
+
+.consult-meta-tile .info-value {
+    -fx-font-size: 13px;
+}
+
+.consult-block-title {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f172a;
+    -fx-padding: 4 0 2 12;
+    -fx-border-color: transparent transparent transparent #2563eb;
+    -fx-border-width: 0 0 0 3;
+}
+
+.consult-text-block {
+    -fx-spacing: 8;
+}
+
+.consult-readonly-ta {
+    -fx-background-color: #f1f5f9;
+    -fx-background-radius: 10px;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 10px;
+    -fx-border-width: 1;
+    -fx-padding: 8;
+    -fx-font-size: 13px;
+    -fx-text-fill: #334155;
+}
+
+.consult-readonly-ta .content {
+    -fx-background-color: #fafbfc;
+}
+
+.consult-two-col {
+    -fx-spacing: 18;
 }

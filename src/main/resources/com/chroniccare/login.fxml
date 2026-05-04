@@ -22,7 +22,7 @@
             <Label text="ChronicCare"
                    style="-fx-font-size: 32; -fx-font-weight: bold; -fx-text-fill: white;"/>
 
-            <Label text="Plateforme de suivi medical pour patients atteints de maladies chroniques."
+            <Label text="Plateforme de suivi médical pour patients atteints de maladies chroniques."
                    style="-fx-font-size: 14; -fx-text-fill: rgba(255,255,255,0.85);
                           -fx-wrap-text: true; -fx-text-alignment: center;"
                    wrapText="true"/>
@@ -34,7 +34,7 @@
                                   -fx-text-fill: white; -fx-font-weight: bold;
                                   -fx-background-radius: 50%; -fx-padding: 4 8;
                                   -fx-font-size: 11;"/>
-                    <Label text="Suivi personnalise de votre sante"
+                    <Label text="Suivi personnalisé de votre santé"
                            style="-fx-text-fill: rgba(255,255,255,0.9); -fx-font-size: 13;"/>
                 </HBox>
                 <HBox spacing="12" alignment="CENTER_LEFT">
@@ -75,7 +75,7 @@
             <VBox spacing="6" style="-fx-padding: 0 0 32 0;">
                 <Label text="Bon retour !"
                        style="-fx-font-size: 26; -fx-font-weight: bold; -fx-text-fill: #0f172a;"/>
-                <Label text="Connectez-vous a votre espace sante"
+                <Label text="Connectez-vous à votre espace santé"
                        style="-fx-font-size: 13; -fx-text-fill: #64748b;"/>
             </VBox>
 
@@ -103,16 +103,15 @@
                                       -fx-padding: 0 14; -fx-background-color: #f8fafc;"/>
             </VBox>
 
-            <!-- Forgot password -->
             <HBox alignment="CENTER_RIGHT" style="-fx-pref-width: 360; -fx-padding: 0 0 8 0;">
                 <Hyperlink text="Mot de passe oublié ?"
                            onAction="#goToForgotPassword"
-                           style="-fx-font-size: 12; -fx-text-fill: #2563eb; -fx-border-width: 0;"/>
+                           style="-fx-font-size: 12; -fx-text-fill: #2563eb;
+                                  -fx-font-weight: bold; -fx-border-width: 0;"/>
             </HBox>
 
             <!-- Error -->
             <Label fx:id="errorLabel"
-                   wrapText="true"
                    style="-fx-text-fill: #dc2626; -fx-font-size: 12;
                           -fx-pref-width: 360; -fx-padding: 4 0 8 0;"/>
 
@@ -132,30 +131,27 @@
                 <Separator HBox.hgrow="ALWAYS"/>
             </HBox>
 
-            <!-- Google button -->
             <Button text="Continuer avec Google"
                     onAction="#handleGoogleLogin"
                     style="-fx-pref-width: 360; -fx-pref-height: 44;
                            -fx-background-color: white; -fx-text-fill: #0f172a;
                            -fx-font-size: 13; -fx-font-weight: bold;
                            -fx-cursor: hand; -fx-background-radius: 10;
-                           -fx-border-color: #e2e8f0; -fx-border-width: 1.5;"/>
-
-            <Label text=""
-                   style="-fx-pref-height: 10;"/>
+                           -fx-border-color: #cbd5e1; -fx-border-radius: 10;
+                           -fx-border-width: 1.2;"/>
 
             <!-- Register link -->
             <VBox alignment="CENTER" spacing="4">
                 <Label text="Pas encore de compte ?"
                        style="-fx-font-size: 13; -fx-text-fill: #64748b;"/>
-                <Hyperlink text="Creer un compte gratuitement"
+                <Hyperlink text="Créer un compte gratuitement"
                            onAction="#goToRegister"
                            style="-fx-font-size: 13; -fx-text-fill: #2563eb;
                                   -fx-font-weight: bold; -fx-border-width: 0;"/>
             </VBox>
 
             <!-- Footer -->
-            <Label text="ChronicCare - Votre sante, notre priorite"
+            <Label text="ChronicCare - Votre santé, notre priorité"
                    style="-fx-font-size: 11; -fx-text-fill: #cbd5e1;
                           -fx-padding: 40 0 0 0;"/>
 

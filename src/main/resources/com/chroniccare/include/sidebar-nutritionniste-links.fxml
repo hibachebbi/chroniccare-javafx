@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      spacing="2"
+      styleClass="nav-section">
+    <Label text="NAVIGATION" styleClass="nav-section-label"/>
+    <Button text="🏠  Accueil" styleClass="nav-btn, nav-track" userData="nut:home"
+            onAction="#goToHome" maxWidth="Infinity"/>
+    <Button text="👤  Mon profil" styleClass="nav-btn, nav-track" userData="nut:profile"
+            onAction="#goToProfile" maxWidth="Infinity"/>
+
+    <Label text="MES SOINS" styleClass="nav-section-label"/>
+    <Button text="📋  Mon suivi" styleClass="nav-btn, nav-track" userData="nut:suivi"
+            onAction="#goToNutritionHomeSuivi" maxWidth="Infinity"/>
+    <Button text="📋  État patient" styleClass="nav-btn, nav-track" userData="nut:etat"
+            onAction="#showEtatModule" maxWidth="Infinity"/>
+    <Button text="🏃  Activité patient" styleClass="nav-btn, nav-track" userData="nut:activite"
+            onAction="#showActiviteModule" maxWidth="Infinity"/>
+    <Button text="📆  RDV" styleClass="nav-btn, nav-track" userData="nut:rdv"
+            onAction="#goToRdv" maxWidth="Infinity"/>
+</VBox>

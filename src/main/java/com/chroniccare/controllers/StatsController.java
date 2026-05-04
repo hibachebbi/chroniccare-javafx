@@ -1,9 +1,11 @@
 package com.chroniccare.controllers;
 import javafx.application.Platform;
-import javafx.scene.control.Button;
 import com.chroniccare.models.User;
 import com.chroniccare.services.UserService;
 import com.chroniccare.utils.SessionManager;
+import com.chroniccare.utils.SidebarNavHighlight;
+import com.chroniccare.utils.SidebarRoleBadgeHelper;
+import com.chroniccare.utils.FxNavigation;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -31,7 +33,7 @@ public class StatsController {
     @FXML private Label topbarAvatar;
     @FXML private Label topbarUserName;
 
-    @FXML private Button btnUsers;
+    @FXML private VBox sidebarRoot;
     @FXML private Label statTotal;
     @FXML private Label statHommes;
     @FXML private Label statFemmes;
@@ -68,16 +70,17 @@ public class StatsController {
         }
         // Topbar et sidebar
         String initials = getInitials(user);
-        sidebarAvatar.setText(initials);
-        sidebarUserName.setText(user.getPrenom() + " " + user.getNom());
-        sidebarRoleBadge.setText(getRoleLabel(user));
-        topbarAvatar.setText(initials);
-        topbarUserName.setText(user.getPrenom() + " " + user.getNom());
+        if (sidebarAvatar != null) sidebarAvatar.setText(initials);
+        if (sidebarUserName != null) sidebarUserName.setText(user.getPrenom() + " " + user.getNom());
+        if (sidebarRoleBadge != null) { sidebarRoleBadge.setText(getRoleLabel(user)); SidebarRoleBadgeHelper.applyRoleStyle(sidebarRoleBadge, user); }
+        if (topbarAvatar != null) topbarAvatar.setText(initials);
+        if (topbarUserName != null) topbarUserName.setText(user.getPrenom() + " " + user.getNom());
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("EEEE d MMMM yyyy", Locale.FRENCH);
-        topbarDate.setText(LocalDate.now().format(fmt));
+        if (topbarDate != null) topbarDate.setText(LocalDate.now().format(fmt));
 
-        // Bouton utilisateurs visible uniquement pour admin
-        // (btnUsers est un Label dans le FXML, on le gère via le contrôleur parent)
+        if (sidebarRoot != null) {
+            SidebarNavHighlight.activate(sidebarRoot, "adm:stats");
+        }
 
         try {
             List<User> users = userService.getAll();
@@ -215,72 +218,31 @@ public class StatsController {
     // --- Navigation ---
 
     @FXML
-    public void goToHome() {
-        naviguer("/com/chroniccare/home.fxml");
-    }
+    public void goToHome() { FxNavigation.navigateAdmin(getClass(), canvasRoles, "home"); }
 
     @FXML
-    public void goToProfile() {
-        String fxml;
-        if (SessionManager.getInstance().isPatient())
-            fxml = "/com/chroniccare/profile-patient.fxml";
-        else if (SessionManager.getInstance().isCoach())
-            fxml = "/com/chroniccare/profile-coach.fxml";
-        else if (SessionManager.getInstance().isNutritionniste())
-            fxml = "/com/chroniccare/profile-nutritionniste.fxml";
-        else
-            fxml = "/com/chroniccare/list-users.fxml";
-        naviguer(fxml);
-    }
+    public void goToProfile() { FxNavigation.navigateAdmin(getClass(), canvasRoles, "profile"); }
 
     @FXML
-    public void goToUsers() {
-        naviguer("/com/chroniccare/list-users.fxml");
-    }
-
+    public void goToUsers() { FxNavigation.navigateAdmin(getClass(), canvasRoles, "users"); }
 
     @FXML
-    public void goToBlockedAccounts() {
-        if (!SessionManager.getInstance().isAdmin()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Accès refusé");
-            alert.setHeaderText(null);
-            alert.setContentText("Seul l'administrateur peut accéder aux comptes bloqués.");
-            alert.show();
-            Platform.runLater(this::goToHome);
-            return;
-        }
-        naviguer("/com/chroniccare/blocked-accounts.fxml");
-    }
+    public void goToBlockedAccounts() { FxNavigation.navigateAdmin(getClass(), canvasRoles, "blocked"); }
 
     @FXML
-    public void goToMedicalAudit() {
-        if (!SessionManager.getInstance().isAdmin()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Accès refusé");
-            alert.setHeaderText(null);
-            alert.setContentText("Seul l'administrateur peut accéder à l'audit médical.");
-            alert.show();
-            Platform.runLater(this::goToHome);
-            return;
-        }
-        naviguer("/com/chroniccare/medical-audit.fxml");
-    }
+    public void goToMedicalAudit() { FxNavigation.navigateAdmin(getClass(), canvasRoles, "audit"); }
 
     @FXML
-    public void goToPatientSegmentation() {
-        if (!SessionManager.getInstance().isAdmin()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Accès refusé");
-            alert.setHeaderText(null);
-            alert.setContentText("Seul l'administrateur peut accéder à la segmentation patients.");
-            alert.show();
-            Platform.runLater(this::goToHome);
-            return;
-        }
-        naviguer("/com/chroniccare/patient-segmentation.fxml");
-    }
+    public void goToPatientSegmentation() { FxNavigation.navigateAdmin(getClass(), canvasRoles, "segment"); }
 
+    @FXML
+    public void goToStats() { FxNavigation.navigateAdmin(getClass(), canvasRoles, "stats"); }
+
+    @FXML
+    public void goToAdminConsultLedger() { FxNavigation.navigateAdmin(getClass(), canvasRoles, "consult"); }
+
+    @FXML
+    public void goToAdminNutritionRdv() { FxNavigation.navigateAdmin(getClass(), canvasRoles, "rdv"); }
 
     @FXML
     public void handleLogout() {

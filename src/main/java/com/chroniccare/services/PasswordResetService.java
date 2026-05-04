@@ -14,11 +14,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Base64;
 
 public class PasswordResetService {
 
-    private static final int TOKEN_BYTES = 32;
+    private static final int RESET_CODE_LENGTH = 6;
     private static final int TOKEN_TTL_MINUTES = 30;
 
     private final Connection conn = MyDatabase.getInstance().getConnection();
@@ -106,14 +105,28 @@ public class PasswordResetService {
             ps.executeUpdate();
         }
 
+        System.out.println("[PasswordReset] Code genere pour " + user.getEmail()
+                + " | code=" + token
+                + " | hash=" + tokenHash
+                + " | expireAt=" + expiresAt);
+
         return new ResetToken(user.getId(), user.getEmail(), token, expiresAt);
     }
 
     public boolean resetPassword(String token, String newPassword) throws SQLException {
+        return resetPassword(null, token, newPassword);
+    }
+
+    public boolean resetPassword(String email, String token, String newPassword) throws SQLException {
         ensureSchema();
         if (conn == null) return false;
         if (token == null || token.isBlank()) return false;
         if (newPassword == null || newPassword.length() < 8) return false;
+
+        String normalizedEmail = email == null ? null : email.trim();
+        if (normalizedEmail != null && normalizedEmail.isBlank()) {
+            normalizedEmail = null;
+        }
 
         String tokenHash = sha256Hex(token.trim());
         String hashedPassword = PasswordUtils.hash(newPassword);
@@ -124,29 +137,75 @@ public class PasswordResetService {
         try {
             Integer tokenId = null;
             Integer userId = null;
+            Timestamp expiresAt = null;
+            Timestamp usedAt = null;
 
-            String selectSql = """
-                    SELECT id, user_id
-                    FROM password_reset_tokens
-                    WHERE token_hash = ?
-                      AND used_at IS NULL
-                      AND expires_at > NOW()
-                    ORDER BY created_at DESC
-                    LIMIT 1
-                    FOR UPDATE
-                    """;
+            if (normalizedEmail != null) {
+                String selectSql = """
+                        SELECT prt.id, prt.user_id, prt.expires_at, prt.used_at
+                        FROM password_reset_tokens prt
+                        JOIN users u ON u.id = prt.user_id
+                        WHERE prt.token_hash = ?
+                          AND u.email = ?
+                        ORDER BY prt.created_at DESC
+                        LIMIT 1
+                        """;
 
-            try (PreparedStatement ps = conn.prepareStatement(selectSql)) {
-                ps.setString(1, tokenHash);
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next()) {
-                        tokenId = rs.getInt("id");
-                        userId = rs.getInt("user_id");
+                try (PreparedStatement ps = conn.prepareStatement(selectSql)) {
+                    ps.setString(1, tokenHash);
+                    ps.setString(2, normalizedEmail);
+                    try (ResultSet rs = ps.executeQuery()) {
+                        if (rs.next()) {
+                            tokenId = rs.getInt("id");
+                            userId = rs.getInt("user_id");
+                            expiresAt = rs.getTimestamp("expires_at");
+                            usedAt = rs.getTimestamp("used_at");
+                        }
+                    }
+                }
+            } else {
+                String selectSql = """
+                        SELECT id, user_id, expires_at, used_at
+                        FROM password_reset_tokens
+                        WHERE token_hash = ?
+                        ORDER BY created_at DESC
+                        LIMIT 1
+                        """;
+
+                try (PreparedStatement ps = conn.prepareStatement(selectSql)) {
+                    ps.setString(1, tokenHash);
+                    try (ResultSet rs = ps.executeQuery()) {
+                        if (rs.next()) {
+                            tokenId = rs.getInt("id");
+                            userId = rs.getInt("user_id");
+                            expiresAt = rs.getTimestamp("expires_at");
+                            usedAt = rs.getTimestamp("used_at");
+                        }
                     }
                 }
             }
 
             if (tokenId == null || userId == null) {
+                System.out.println("[PasswordReset] Aucun token trouve pour email="
+                        + normalizedEmail + " | code=" + token.trim() + " | hash=" + tokenHash);
+                conn.rollback();
+                return false;
+            }
+
+            Timestamp now = new Timestamp(System.currentTimeMillis());
+            if (usedAt != null) {
+                System.out.println("[PasswordReset] Token deja utilise | tokenId=" + tokenId
+                        + " | email=" + normalizedEmail
+                        + " | usedAt=" + usedAt);
+                conn.rollback();
+                return false;
+            }
+
+            if (expiresAt == null || !expiresAt.after(now)) {
+                System.out.println("[PasswordReset] Token expire | tokenId=" + tokenId
+                        + " | email=" + normalizedEmail
+                        + " | expiresAt=" + expiresAt
+                        + " | now=" + now);
                 conn.rollback();
                 return false;
             }
@@ -163,6 +222,9 @@ public class PasswordResetService {
             }
 
             conn.commit();
+            System.out.println("[PasswordReset] Mot de passe reinitialise | tokenId=" + tokenId
+                    + " | userId=" + userId
+                    + " | email=" + normalizedEmail);
             return true;
         } catch (SQLException e) {
             conn.rollback();
@@ -173,9 +235,17 @@ public class PasswordResetService {
     }
 
     private static String generateToken() {
-        byte[] bytes = new byte[TOKEN_BYTES];
-        new SecureRandom().nextBytes(bytes);
-        return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
+        char[] digits = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+        SecureRandom random = new SecureRandom();
+
+        for (int i = digits.length - 1; i > 0; i--) {
+            int j = random.nextInt(i + 1);
+            char tmp = digits[i];
+            digits[i] = digits[j];
+            digits[j] = tmp;
+        }
+
+        return new String(digits, 0, RESET_CODE_LENGTH);
     }
 
     private static String sha256Hex(String value) {
@@ -192,4 +262,3 @@ public class PasswordResetService {
         }
     }
 }
-

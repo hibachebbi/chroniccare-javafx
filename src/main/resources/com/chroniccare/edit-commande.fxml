@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.chroniccare.controllers.Admin.EditCommandeController"
+      alignment="CENTER"
+      spacing="12"
+      style="-fx-padding: 40; -fx-background-color: #f0f4ff;">
+
+    <Label text="Modifier une commande"
+           style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #2563eb;"/>
+
+    <VBox spacing="5" style="-fx-pref-width: 380;">
+        <Label text="Statut" style="-fx-font-size: 13; -fx-font-weight: bold;"/>
+        <ComboBox fx:id="statutCombo" promptText="Statut" style="-fx-pref-width: 380; -fx-pref-height: 38;"/>
+    </VBox>
+
+    <VBox spacing="5" style="-fx-pref-width: 380;">
+        <Label text="Paiement" style="-fx-font-size: 13; -fx-font-weight: bold;"/>
+        <ComboBox fx:id="paiementCombo" promptText="Paiement" style="-fx-pref-width: 380; -fx-pref-height: 38;"/>
+    </VBox>
+
+    <Label fx:id="errorLabel" style="-fx-text-fill: red; -fx-font-size: 12;"/>
+
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Annuler" onAction="#goToList"
+                style="-fx-pref-width: 165; -fx-pref-height: 42; -fx-background-color: #6b7280; -fx-text-fill: white; -fx-font-size: 13; -fx-font-weight: bold; -fx-cursor: hand; -fx-background-radius: 8;"/>
+        <Button fx:id="saveButton" text="Enregistrer" onAction="#handleSave"
+                style="-fx-pref-width: 165; -fx-pref-height: 42; -fx-background-color: #2563eb; -fx-text-fill: white; -fx-font-size: 13; -fx-font-weight: bold; -fx-cursor: hand; -fx-background-radius: 8;"/>
+    </HBox>
+
+</VBox>
+

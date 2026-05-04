@@ -11,7 +11,11 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import com.chroniccare.utils.SessionManager;
+import com.chroniccare.utils.FxNavigation;
+import com.chroniccare.utils.SidebarNavHighlight;
+import com.chroniccare.utils.SidebarRoleBadgeHelper;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -37,6 +41,7 @@ public class ListUsersController {
     @FXML private ComboBox<String> roleFilter;
     @FXML private Label pageLabel;
     @FXML private Label countLabel;
+    @FXML private VBox sidebarRoot;
     @FXML private Label sidebarAvatar;
     @FXML private Label sidebarUserName;
     @FXML private Label sidebarRoleBadge;
@@ -67,16 +72,13 @@ public class ListUsersController {
         User currentUser = SessionManager.getInstance().getCurrentUser();
         if (currentUser != null) {
             String initials = getInitials(currentUser);
-
-            sidebarAvatar.setText(initials);
-            sidebarUserName.setText(currentUser.getPrenom() + " " + currentUser.getNom());
-            sidebarRoleBadge.setText(getRoleLabel(currentUser));
-
-            topbarAvatar.setText(initials);
-            topbarUserName.setText(currentUser.getPrenom() + " " + currentUser.getNom());
-
+            if (sidebarAvatar != null) sidebarAvatar.setText(initials);
+            if (sidebarUserName != null) sidebarUserName.setText(currentUser.getPrenom() + " " + currentUser.getNom());
+            if (sidebarRoleBadge != null) { sidebarRoleBadge.setText(getRoleLabel(currentUser)); SidebarRoleBadgeHelper.applyRoleStyle(sidebarRoleBadge, currentUser); }
+            if (topbarAvatar != null) topbarAvatar.setText(initials);
+            if (topbarUserName != null) topbarUserName.setText(currentUser.getPrenom() + " " + currentUser.getNom());
             DateTimeFormatter fmt = DateTimeFormatter.ofPattern("EEEE d MMMM yyyy", Locale.FRENCH);
-            topbarDate.setText(LocalDate.now().format(fmt));
+            if (topbarDate != null) topbarDate.setText(LocalDate.now().format(fmt));
         }
         idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         nomCol.setCellValueFactory(new PropertyValueFactory<>("nom"));
@@ -189,6 +191,9 @@ public class ListUsersController {
         });
 
         loadUsers();
+        if (sidebarRoot != null) {
+            SidebarNavHighlight.activate(sidebarRoot, "adm:users");
+        }
     }
 
     private void handleAssignBadge(User user) {
@@ -331,64 +336,30 @@ public class ListUsersController {
     @FXML
     public void goToAdd() {
         try {
-            Parent root = FXMLLoader.load(
-                    getClass().getResource("/com/chroniccare/add-user.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/com/chroniccare/add-user.fxml"));
             usersTable.getScene().setRoot(root);
         } catch (Exception e) {
             System.err.println("Erreur navigation : " + e.getMessage());
         }
     }
-    @FXML
-    public void goToHome() {
-        try {
-            Parent root = FXMLLoader.load(
-                    getClass().getResource("/com/chroniccare/home.fxml"));
-            usersTable.getScene().setRoot(root);
-        } catch (Exception e) {
-            System.err.println("Erreur navigation : " + e.getMessage());
-        }
-    }
+
+    @FXML public void goToHome() { FxNavigation.navigateAdmin(getClass(), usersTable, "home"); }
+    @FXML public void goToUsers() { FxNavigation.navigateAdmin(getClass(), usersTable, "users"); }
+    @FXML public void goToAdminConsultLedger() { FxNavigation.navigateAdmin(getClass(), usersTable, "consult"); }
+    @FXML public void goToAdminNutritionRdv() { FxNavigation.navigateAdmin(getClass(), usersTable, "rdv"); }
+    @FXML public void goToProfile() { FxNavigation.navigateAdmin(getClass(), usersTable, "profile"); }
+    @FXML public void goToStats() { FxNavigation.navigateAdmin(getClass(), usersTable, "stats"); }
+    @FXML public void goToBlockedAccounts() { FxNavigation.navigateAdmin(getClass(), usersTable, "blocked"); }
+    @FXML public void goToMedicalAudit() { FxNavigation.navigateAdmin(getClass(), usersTable, "audit"); }
+    @FXML public void goToPatientSegmentation() { FxNavigation.navigateAdmin(getClass(), usersTable, "segment"); }
+
     @FXML
     public void goToLogin() {
         try {
-            Parent root = FXMLLoader.load(
-                    getClass().getResource("/com/chroniccare/login.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/com/chroniccare/login.fxml"));
             usersTable.getScene().setRoot(root);
         } catch (Exception e) {
             System.err.println("Erreur navigation : " + e.getMessage());
-        }
-    }
-
-    @FXML
-    public void goToProfile() {
-        try {
-            String fxml;
-            if (SessionManager.getInstance().isPatient()) {
-                fxml = "/com/chroniccare/profile-patient.fxml";
-            } else if (SessionManager.getInstance().isCoach()) {
-                fxml = "/com/chroniccare/profile-coach.fxml";
-            } else if (SessionManager.getInstance().isNutritionniste()) {
-                fxml = "/com/chroniccare/profile-nutritionniste.fxml";
-            } else if (SessionManager.getInstance().isAdmin()) {
-                fxml = "/com/chroniccare/list-users.fxml";
-            } else {
-                fxml = "/com/chroniccare/profile-patient.fxml";
-            }
-
-            Parent root = FXMLLoader.load(getClass().getResource(fxml));
-            usersTable.getScene().setRoot(root);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    public void goToStats() {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/com/chroniccare/stats.fxml"));
-            usersTable.getScene().setRoot(root);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -397,59 +368,6 @@ public class ListUsersController {
         try {
             SessionManager.getInstance().logout();
             Parent root = FXMLLoader.load(getClass().getResource("/com/chroniccare/login.fxml"));
-            usersTable.getScene().setRoot(root);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    @FXML
-    public void goToBlockedAccounts() {
-        if (!SessionManager.getInstance().isAdmin()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Accès refusé");
-            alert.setHeaderText(null);
-            alert.setContentText("Seul l'administrateur peut accéder aux comptes bloqués.");
-            alert.showAndWait();
-            return;
-        }
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/com/chroniccare/blocked-accounts.fxml"));
-            usersTable.getScene().setRoot(root);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    public void goToMedicalAudit() {
-        if (!SessionManager.getInstance().isAdmin()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Accès refusé");
-            alert.setHeaderText(null);
-            alert.setContentText("Seul l'administrateur peut accéder à l'audit médical.");
-            alert.showAndWait();
-            return;
-        }
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/com/chroniccare/medical-audit.fxml"));
-            usersTable.getScene().setRoot(root);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    public void goToPatientSegmentation() {
-        if (!SessionManager.getInstance().isAdmin()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Accès refusé");
-            alert.setHeaderText(null);
-            alert.setContentText("Seul l'administrateur peut accéder à la segmentation patients.");
-            alert.showAndWait();
-            return;
-        }
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/com/chroniccare/patient-segmentation.fxml"));
             usersTable.getScene().setRoot(root);
         } catch (Exception e) {
             e.printStackTrace();
