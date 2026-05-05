@@ -23,6 +23,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.geometry.Pos;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.TextInputDialog;
 
@@ -102,14 +103,13 @@ public class ProduitsDashboardController {
             private final Button btnDetail = new Button("Détails");
             private final HBox box = new HBox(6, btnWishlist, btnCommander, btnPanier, btnDetail);
             {
-                btnWishlist.setStyle(
-                        "-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5; -fx-font-size: 14;");
-                btnCommander.setStyle(
-                        "-fx-background-color: #2563eb; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5;");
-                btnPanier.setStyle(
-                        "-fx-background-color: #0f172a; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5;");
-                btnDetail.setStyle(
-                        "-fx-background-color: #6b7280; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5;");
+                box.setAlignment(Pos.CENTER_LEFT);
+                box.getStyleClass().add("products-action-box");
+
+                btnWishlist.getStyleClass().addAll("table-action-danger", "table-action-wishlist");
+                btnCommander.getStyleClass().add("table-action-primary");
+                btnPanier.getStyleClass().add("table-action-secondary");
+                btnDetail.getStyleClass().add("table-action-secondary");
 
                 btnWishlist.setOnAction(e -> {
                     Produit produit = getTableView().getItems().get(getIndex());
@@ -370,19 +370,23 @@ public class ProduitsDashboardController {
         User user = SessionManager.getInstance().getCurrentUser();
         if (produit == null || user == null) {
             button.setText("♡");
-            button.setStyle(
-                    "-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5; -fx-font-size: 14;");
+            button.getStyleClass().remove("table-action-wishlist-active");
             return;
         }
 
         try {
             boolean inWishlist = wishlistService.isInWishlist(user.getId(), produit.getId());
             button.setText(inWishlist ? "❤️" : "♡");
-            button.setStyle(inWishlist
-                    ? "-fx-background-color: #dc2626; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5; -fx-font-size: 14;"
-                    : "-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5; -fx-font-size: 14;");
+            if (inWishlist) {
+                if (!button.getStyleClass().contains("table-action-wishlist-active")) {
+                    button.getStyleClass().add("table-action-wishlist-active");
+                }
+            } else {
+                button.getStyleClass().remove("table-action-wishlist-active");
+            }
         } catch (Exception e) {
             button.setText("♡");
+            button.getStyleClass().remove("table-action-wishlist-active");
         }
     }
 

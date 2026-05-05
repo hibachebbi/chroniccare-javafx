@@ -77,12 +77,10 @@ public class CommandesDashboardController {
             private final Button btnRappel = new Button("Rappel email");
             private final HBox box = new HBox(5, btnCheckout, btnAnnuler, btnRappel);
             {
-                btnCheckout.setStyle(
-                        "-fx-background-color: #2563eb; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5;");
-                btnAnnuler.setStyle(
-                        "-fx-background-color: #f59e0b; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5;");
-                btnRappel.setStyle(
-                        "-fx-background-color: #0ea5e9; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5;");
+            box.getStyleClass().add("order-action-box");
+            btnCheckout.getStyleClass().add("table-action-primary");
+            btnAnnuler.getStyleClass().add("table-action-warning");
+            btnRappel.getStyleClass().add("table-action-info");
 
                 btnCheckout.setOnAction(e -> {
                     Commande commande = getTableView().getItems().get(getIndex());

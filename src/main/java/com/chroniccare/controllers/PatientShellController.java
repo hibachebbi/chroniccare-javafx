@@ -24,6 +24,8 @@ public class PatientShellController {
     @FXML
     private VBox sidebarRoot;
     @FXML
+    private VBox sidebarNavContent;
+    @FXML
     private Label sidebarAvatar;
     @FXML
     private ImageView sidebarAvatarImage;
@@ -140,10 +142,11 @@ public class PatientShellController {
     }
 
     private void addShopButtonsToSidebar() {
-        if (sidebarRoot == null) {
+        VBox navContainer = sidebarNavContent != null ? sidebarNavContent : sidebarRoot;
+        if (navContainer == null) {
             return;
         }
-        if (sidebarRoot.lookup("#btnProduits") != null) {
+        if (navContainer.lookup("#btnProduits") != null) {
             return;
         }
 
@@ -163,15 +166,15 @@ public class PatientShellController {
         shopSection.getChildren().addAll(shopLabel, btnProduits, btnPanier, btnCommandes, btnLivraisons, btnWishlist,
                 btnCheckout);
 
-        int insertIndex = sidebarRoot.getChildren().size();
-        for (int i = 0; i < sidebarRoot.getChildren().size(); i++) {
-            if (sidebarRoot.getChildren().get(i).getStyleClass().contains("sidebar-bottom")) {
+        int insertIndex = navContainer.getChildren().size();
+        for (int i = 0; i < navContainer.getChildren().size(); i++) {
+            if (navContainer.getChildren().get(i).getStyleClass().contains("sidebar-bottom")) {
                 insertIndex = i;
                 break;
             }
         }
 
-        sidebarRoot.getChildren().add(insertIndex, shopSection);
+        navContainer.getChildren().add(insertIndex, shopSection);
     }
 
     private Button createShopButton(String id, String text, Runnable action) {
@@ -348,6 +351,7 @@ public class PatientShellController {
         pageTitle.setText("Mes consultations");
         loadContent("/com/chroniccare/patient-consultations.fxml");
     }
+
     @FXML
     public void goToForum() {
         pageTitle.setText("Forum");

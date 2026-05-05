@@ -430,6 +430,93 @@
     -fx-background-color: #b91c1c;
 }
 
+/* =========================
+   PRODUITS DASHBOARD (THEME ACTIVITE)
+   ========================= */
+
+.products-page {
+    -fx-padding: 22;
+    -fx-background-color: #f1f5f9;
+}
+
+.products-search-field {
+    -fx-pref-height: 40;
+}
+
+.products-filter-combo {
+    -fx-pref-width: 210;
+    -fx-pref-height: 40;
+}
+
+.products-table {
+    -fx-min-height: 420;
+}
+
+.products-action-box {
+    -fx-alignment: CENTER_LEFT;
+}
+
+.table-action-wishlist {
+    -fx-pref-width: 40;
+    -fx-min-width: 40;
+    -fx-max-width: 40;
+    -fx-padding: 7 0;
+    -fx-font-size: 14px;
+    -fx-background-color: #ef4444;
+}
+
+.table-action-wishlist:hover {
+    -fx-background-color: #dc2626;
+}
+
+.table-action-wishlist-active {
+    -fx-background-color: #b91c1c;
+}
+
+.products-pagination-row {
+    -fx-padding: 6 0 0 0;
+}
+
+.products-page-label {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #334155;
+}
+
+.products-count-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: #64748b;
+    -fx-padding: 2 4;
+}
+
+/* =========================
+   PANIER DASHBOARD (THEME PRODUITS)
+   ========================= */
+
+.panier-page {
+    -fx-spacing: 18;
+}
+
+.panier-table {
+    -fx-min-height: 420;
+}
+
+.panier-footer-row {
+    -fx-padding: 6 0 0 0;
+}
+
+.panier-total-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f172a;
+    -fx-background-color: #eff6ff;
+    -fx-background-radius: 999px;
+    -fx-padding: 8 14;
+    -fx-border-color: #bfdbfe;
+    -fx-border-width: 1;
+    -fx-border-radius: 999px;
+}
+
 .error-label {
     -fx-text-fill: #dc2626;
     -fx-font-size: 13px;

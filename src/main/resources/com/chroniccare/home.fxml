@@ -4,10 +4,7 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.image.ImageView?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.chroniccare.controllers.HomeController"
-            prefWidth="1200" prefHeight="760"
-            stylesheets="@home-styles.css">
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.chroniccare.controllers.HomeController" prefWidth="1200" prefHeight="760" stylesheets="@home-styles.css">
 
     <left>
         <VBox fx:id="sidebarRoot" styleClass="sidebar" prefWidth="230" spacing="0">
@@ -19,124 +16,87 @@
                 <Label text="Suivi medical intelligent" styleClass="brand-subtitle"/>
             </VBox>
             <VBox styleClass="sidebar-user-card" spacing="6" alignment="CENTER_LEFT">
-                <StackPane maxWidth="48" minWidth="48" prefWidth="48"
-                           maxHeight="48" minHeight="48" prefHeight="48"
-                           alignment="TOP_LEFT">
+                <StackPane maxWidth="48" minWidth="48" prefWidth="48" maxHeight="48" minHeight="48" prefHeight="48" alignment="TOP_LEFT">
                     <Label fx:id="sidebarAvatar" styleClass="sidebar-avatar"/>
-                    <ImageView fx:id="sidebarAvatarImage" fitWidth="48" fitHeight="48"
-                               preserveRatio="false" visible="false" managed="false"/>
+                    <ImageView fx:id="sidebarAvatarImage" fitWidth="48" fitHeight="48" preserveRatio="false" visible="false" managed="false"/>
                 </StackPane>
                 <Label fx:id="sidebarUserName" styleClass="sidebar-user-name"/>
                 <Label fx:id="sidebarRoleBadge" styleClass="sidebar-role-badge"/>
             </VBox>
             <Separator styleClass="sidebar-sep"/>
+            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" VBox.vgrow="ALWAYS" styleClass="sidebar-nav-scroll">
+                <VBox spacing="0">
 
-            <!-- SIDEBAR ADMIN -->
-            <VBox fx:id="adminNavBox" spacing="2" styleClass="nav-section"
-                  VBox.vgrow="ALWAYS" visible="false" managed="false">
-                <Label text="TABLEAU DE BORD" styleClass="nav-section-label"/>
-                <Button text="🏠  Accueil" styleClass="nav-btn, nav-track" userData="adm:home"
-                        onAction="#showHome" maxWidth="Infinity"/>
-                <Button text="👤  Mon profil" styleClass="nav-btn, nav-track" userData="adm:profile"
-                        onAction="#goToProfile" maxWidth="Infinity"/>
-                <Label text="ADMINISTRATION" styleClass="nav-section-label"/>
-                <Button text="👥  Gestion utilisateurs" styleClass="nav-btn, nav-track" userData="adm:users"
-                        onAction="#goToUsers" maxWidth="Infinity"/>
-                <Button text="🔒  Comptes bloques" styleClass="nav-btn, nav-track" userData="adm:blocked"
-                        onAction="#goToBlockedAccounts" maxWidth="Infinity"/>
-                <Button text="📝  Audit medical" styleClass="nav-btn, nav-track" userData="adm:audit"
-                        onAction="#goToMedicalAudit" maxWidth="Infinity"/>
-                <Button text="🧩  Segmentation patients" styleClass="nav-btn, nav-track" userData="adm:segment"
-                        onAction="#goToPatientSegmentation" maxWidth="Infinity"/>
-                <Button text="📊  Statistiques" styleClass="nav-btn, nav-track" userData="adm:stats"
-                        onAction="#goToStats" maxWidth="Infinity"/>
-                <Label text="NUTRITION" styleClass="nav-section-label"/>
-                <Button text="📋  Consultations patient" styleClass="nav-btn, nav-track" userData="adm:consult"
-                        onAction="#goToAdminConsultLedger" maxWidth="Infinity"/>
-                <Button text="📆  RDV nutrition" styleClass="nav-btn, nav-track" userData="adm:nutrdv"
-                        onAction="#goToAdminNutritionRdv" maxWidth="Infinity"/>
-            </VBox>
-
-            <!-- SIDEBAR NUTRITIONNISTE -->
-            <VBox fx:id="nutriNavBox" spacing="2" styleClass="nav-section"
-                  VBox.vgrow="ALWAYS" visible="false" managed="false">
-                <Label text="NAVIGATION" styleClass="nav-section-label"/>
-                <Button text="🏠  Accueil" styleClass="nav-btn, nav-track" userData="nut:home"
-                        onAction="#showHome" maxWidth="Infinity"/>
-                <Button text="👤  Mon profil" styleClass="nav-btn, nav-track" userData="nut:profile"
-                        onAction="#goToProfile" maxWidth="Infinity"/>
-                <Button fx:id="btnUsers" text="👥  Gestion Utilisateurs"
-                        styleClass="nav-btn"
-                        onAction="#goToUsers" maxWidth="Infinity"/>
-                <Label text="FORUM" styleClass="nav-section-label"/>
-                <Button text="💬  Forum"
-                        styleClass="nav-btn"
-                        onAction="#goToForum"
-                        maxWidth="Infinity"/>
-                <Label text="MES SOINS" styleClass="nav-section-label"/>
-                <Button text="📋  Mon suivi" styleClass="nav-btn, nav-track" userData="nut:suivi"
-                        onAction="#goToNutritionHomeSuivi" maxWidth="Infinity"/>
-                <Button text="📋  Etat patient" styleClass="nav-btn, nav-track" userData="nut:etat"
-                        onAction="#showEtatModule" maxWidth="Infinity"/>
-                <Button text="🏃  Activite patient" styleClass="nav-btn, nav-track" userData="nut:activite"
-                        onAction="#showActiviteModule" maxWidth="Infinity"/>
-                <Button text="📆  RDV" styleClass="nav-btn, nav-track" userData="nut:rdv"
-                        onAction="#goToRdv" maxWidth="Infinity"/>
-            </VBox>
-
-            <!-- SIDEBAR PATIENT / COACH -->
-            <VBox fx:id="defaultNavBox" spacing="2" styleClass="nav-section"
-                  VBox.vgrow="ALWAYS" visible="false" managed="false">
-                <Label text="NAVIGATION" styleClass="nav-section-label"/>
-                <Button fx:id="btnHome" text="Accueil" styleClass="nav-btn, nav-btn-active"
-                        onAction="#showHome" maxWidth="Infinity"/>
-                <Button fx:id="btnProfile" text="Mon Profil" styleClass="nav-btn"
-                        onAction="#goToProfile" maxWidth="Infinity"/>
-                <!-- Coach -->
-                <VBox fx:id="coachNav" spacing="2" visible="false" managed="false">
-                    <Label text="MES OUTILS" styleClass="nav-section-label"/>
-                    <Button fx:id="btnCoachEvents" text="Evenements" styleClass="nav-btn"
-                            onAction="#goToCoachEvents" maxWidth="Infinity"/>
-                    <Button fx:id="btnCoachExercises" text="Exercices" styleClass="nav-btn"
-                            onAction="#goToCoachExercises" maxWidth="Infinity"/>
-                    <Button fx:id="btnCoachEtat" text="Mon Etat" styleClass="nav-btn"
-                            onAction="#showEtatModule" maxWidth="Infinity"/>
-                    <Button fx:id="btnCoachActivite" text="Activite" styleClass="nav-btn"
-                            onAction="#showActiviteModule" maxWidth="Infinity"/>
-                    <Label text="FORUM" styleClass="nav-section-label"/>
-                    <Button text="💬  Forum" styleClass="nav-btn"
-                            onAction="#goToForum" maxWidth="Infinity"/>
-                </VBox>
-                <!-- Patient -->
-                <VBox fx:id="patientNav" spacing="2" visible="false" managed="false">
-                    <Label text="MES SOINS" styleClass="nav-section-label"/>
-                    <Button fx:id="btnEtat" text="Mon Etat" styleClass="nav-btn"
-                            onAction="#showEtatModule" maxWidth="Infinity"/>
-                    <Button fx:id="btnActivite" text="Activite" styleClass="nav-btn"
-                            onAction="#showActiviteModule" maxWidth="Infinity"/>
-
-                    <VBox fx:id="patientEventsNav" spacing="2">
-                        <Button text="Evenements" styleClass="nav-btn"
-                                onAction="#goToPatientEvents" maxWidth="Infinity"/>
-                        <Button text="Mes inscriptions" styleClass="nav-btn"
-                                onAction="#goToPatientRegistrations" maxWidth="Infinity"/>
-                        <Button fx:id="btnPatientBookRdv" text="Prendre RDV" styleClass="nav-btn"
-                                onAction="#goToPatientBookRdv" maxWidth="Infinity"/>
-                        <Button fx:id="btnPatientConsultations" text="Mes consultations" styleClass="nav-btn"
-                                onAction="#goToPatientConsultations" maxWidth="Infinity"/>
+                    <!-- SIDEBAR ADMIN -->
+                    <VBox fx:id="adminNavBox" spacing="2" styleClass="nav-section" visible="false" managed="false">
+                        <Label text="TABLEAU DE BORD" styleClass="nav-section-label"/>
+                        <Button text="🏠  Accueil" styleClass="nav-btn, nav-track" userData="adm:home" onAction="#showHome" maxWidth="Infinity"/>
+                        <Button text="👤  Mon profil" styleClass="nav-btn, nav-track" userData="adm:profile" onAction="#goToProfile" maxWidth="Infinity"/>
+                        <Label text="ADMINISTRATION" styleClass="nav-section-label"/>
+                        <Button text="👥  Gestion utilisateurs" styleClass="nav-btn, nav-track" userData="adm:users" onAction="#goToUsers" maxWidth="Infinity"/>
+                        <Button text="🔒  Comptes bloques" styleClass="nav-btn, nav-track" userData="adm:blocked" onAction="#goToBlockedAccounts" maxWidth="Infinity"/>
+                        <Button text="📝  Audit medical" styleClass="nav-btn, nav-track" userData="adm:audit" onAction="#goToMedicalAudit" maxWidth="Infinity"/>
+                        <Button text="🧩  Segmentation patients" styleClass="nav-btn, nav-track" userData="adm:segment" onAction="#goToPatientSegmentation" maxWidth="Infinity"/>
+                        <Button text="📊  Statistiques" styleClass="nav-btn, nav-track" userData="adm:stats" onAction="#goToStats" maxWidth="Infinity"/>
+                        <Label text="NUTRITION" styleClass="nav-section-label"/>
+                        <Button text="📋  Consultations patient" styleClass="nav-btn, nav-track" userData="adm:consult" onAction="#goToAdminConsultLedger" maxWidth="Infinity"/>
+                        <Button text="📆  RDV nutrition" styleClass="nav-btn, nav-track" userData="adm:nutrdv" onAction="#goToAdminNutritionRdv" maxWidth="Infinity"/>
                     </VBox>
-                    <Button text="Nutrition" styleClass="nav-btn" maxWidth="Infinity"/>
-                    <Button text="Medicaments" styleClass="nav-btn" maxWidth="Infinity"/>
-                    <Button fx:id="btnStats" text="Mes Statistiques" styleClass="nav-btn"
-                            onAction="#goToStats" maxWidth="Infinity"/>
-                </VBox>
-            </VBox>
 
-            <VBox styleClass="sidebar-bottom">
-                <Separator styleClass="sidebar-sep"/>
-                <Button text="Deconnexion" styleClass="nav-btn, nav-btn-logout"
-                        onAction="#handleLogout" maxWidth="Infinity"/>
-            </VBox>
+                    <!-- SIDEBAR NUTRITIONNISTE -->
+                    <VBox fx:id="nutriNavBox" spacing="2" styleClass="nav-section" visible="false" managed="false">
+                        <Label text="NAVIGATION" styleClass="nav-section-label"/>
+                        <Button text="🏠  Accueil" styleClass="nav-btn, nav-track" userData="nut:home" onAction="#showHome" maxWidth="Infinity"/>
+                        <Button text="👤  Mon profil" styleClass="nav-btn, nav-track" userData="nut:profile" onAction="#goToProfile" maxWidth="Infinity"/>
+                        <Button fx:id="btnUsers" text="👥  Gestion Utilisateurs" styleClass="nav-btn" onAction="#goToUsers" maxWidth="Infinity"/>
+                        <Label text="FORUM" styleClass="nav-section-label"/>
+                        <Button text="💬  Forum" styleClass="nav-btn" onAction="#goToForum" maxWidth="Infinity"/>
+                        <Label text="MES SOINS" styleClass="nav-section-label"/>
+                        <Button text="📋  Mon suivi" styleClass="nav-btn, nav-track" userData="nut:suivi" onAction="#goToNutritionHomeSuivi" maxWidth="Infinity"/>
+                        <Button text="📋  Etat patient" styleClass="nav-btn, nav-track" userData="nut:etat" onAction="#showEtatModule" maxWidth="Infinity"/>
+                        <Button text="🏃  Activite patient" styleClass="nav-btn, nav-track" userData="nut:activite" onAction="#showActiviteModule" maxWidth="Infinity"/>
+                        <Button text="📆  RDV" styleClass="nav-btn, nav-track" userData="nut:rdv" onAction="#goToRdv" maxWidth="Infinity"/>
+                    </VBox>
+
+                    <!-- SIDEBAR PATIENT / COACH -->
+                    <VBox fx:id="defaultNavBox" spacing="2" styleClass="nav-section" visible="false" managed="false">
+                        <Label text="NAVIGATION" styleClass="nav-section-label"/>
+                        <Button fx:id="btnHome" text="Accueil" styleClass="nav-btn, nav-btn-active" onAction="#showHome" maxWidth="Infinity"/>
+                        <Button fx:id="btnProfile" text="Mon Profil" styleClass="nav-btn" onAction="#goToProfile" maxWidth="Infinity"/>
+                        <!-- Coach -->
+                        <VBox fx:id="coachNav" spacing="2" visible="false" managed="false">
+                            <Label text="MES OUTILS" styleClass="nav-section-label"/>
+                            <Button fx:id="btnCoachEvents" text="Evenements" styleClass="nav-btn" onAction="#goToCoachEvents" maxWidth="Infinity"/>
+                            <Button fx:id="btnCoachExercises" text="Exercices" styleClass="nav-btn" onAction="#goToCoachExercises" maxWidth="Infinity"/>
+                            <Button fx:id="btnCoachEtat" text="Mon Etat" styleClass="nav-btn" onAction="#showEtatModule" maxWidth="Infinity"/>
+                            <Button fx:id="btnCoachActivite" text="Activite" styleClass="nav-btn" onAction="#showActiviteModule" maxWidth="Infinity"/>
+                            <Label text="FORUM" styleClass="nav-section-label"/>
+                            <Button text="💬  Forum" styleClass="nav-btn" onAction="#goToForum" maxWidth="Infinity"/>
+                        </VBox>
+                        <!-- Patient -->
+                        <VBox fx:id="patientNav" spacing="2" visible="false" managed="false">
+                            <Label text="MES SOINS" styleClass="nav-section-label"/>
+                            <Button fx:id="btnEtat" text="Mon Etat" styleClass="nav-btn" onAction="#showEtatModule" maxWidth="Infinity"/>
+                            <Button fx:id="btnActivite" text="Activite" styleClass="nav-btn" onAction="#showActiviteModule" maxWidth="Infinity"/>
+
+                            <VBox fx:id="patientEventsNav" spacing="2">
+                                <Button text="Evenements" styleClass="nav-btn" onAction="#goToPatientEvents" maxWidth="Infinity"/>
+                                <Button text="Mes inscriptions" styleClass="nav-btn" onAction="#goToPatientRegistrations" maxWidth="Infinity"/>
+                                <Button fx:id="btnPatientBookRdv" text="Prendre RDV" styleClass="nav-btn" onAction="#goToPatientBookRdv" maxWidth="Infinity"/>
+                                <Button fx:id="btnPatientConsultations" text="Mes consultations" styleClass="nav-btn" onAction="#goToPatientConsultations" maxWidth="Infinity"/>
+                            </VBox>
+                            <Button text="Nutrition" styleClass="nav-btn" maxWidth="Infinity"/>
+                            <Button text="Medicaments" styleClass="nav-btn" maxWidth="Infinity"/>
+                            <Button fx:id="btnStats" text="Mes Statistiques" styleClass="nav-btn" onAction="#goToStats" maxWidth="Infinity"/>
+                        </VBox>
+                    </VBox>
+
+                    <VBox styleClass="sidebar-bottom">
+                        <Separator styleClass="sidebar-sep"/>
+                        <Button text="Deconnexion" styleClass="nav-btn, nav-btn-logout" onAction="#handleLogout" maxWidth="Infinity"/>
+                    </VBox>
+                </VBox>
+            </ScrollPane>
         </VBox>
     </left>
 
@@ -149,8 +109,7 @@
                 <HBox styleClass="topbar-user-pill" alignment="CENTER" spacing="8">
                     <StackPane>
                         <Label fx:id="topbarAvatar" styleClass="topbar-avatar"/>
-                        <ImageView fx:id="topbarAvatarImage" fitWidth="28" fitHeight="28"
-                                   preserveRatio="false" visible="false" managed="false"/>
+                        <ImageView fx:id="topbarAvatarImage" fitWidth="28" fitHeight="28" preserveRatio="false" visible="false" managed="false"/>
                     </StackPane>
                     <Label fx:id="topbarUserName" styleClass="topbar-username"/>
                 </HBox>
@@ -227,8 +186,7 @@
                                         <Label fx:id="infoTel" text="-" styleClass="info-value"/>
                                     </VBox>
                                 </HBox>
-                                <Button text="Modifier mon profil" styleClass="btn-primary"
-                                        onAction="#goToProfile"/>
+                                <Button text="Modifier mon profil" styleClass="btn-primary" onAction="#goToProfile"/>
                             </VBox>
 
                             <VBox styleClass="card, card-tips" spacing="16" prefWidth="320">
@@ -261,16 +219,13 @@
                             </HBox>
                             <Separator/>
                             <HBox spacing="12">
-                                <Button text="Gerer les utilisateurs" styleClass="btn-primary"
-                                        onAction="#goToUsers"/>
-                                <Button text="Ajouter un utilisateur" styleClass="btn-secondary"
-                                        onAction="#goToAddUser"/>
+                                <Button text="Gerer les utilisateurs" styleClass="btn-primary" onAction="#goToUsers"/>
+                                <Button text="Ajouter un utilisateur" styleClass="btn-secondary" onAction="#goToAddUser"/>
                             </HBox>
                         </VBox>
                     </VBox>
 
-                    <VBox fx:id="suiviModuleContainer" styleClass="card, suivi-host"
-                          spacing="16" visible="false" managed="false"/>
+                    <VBox fx:id="suiviModuleContainer" styleClass="card, suivi-host" spacing="16" visible="false" managed="false"/>
 
                 </VBox>
             </ScrollPane>

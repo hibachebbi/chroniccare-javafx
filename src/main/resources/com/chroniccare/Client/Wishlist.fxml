@@ -1,65 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.Priority?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.chroniccare.controllers.Client.WishlistController"
-            fx:id="root" style="-fx-font-family: 'Segoe UI'; -fx-background-color: #f5f5f5;">
+            fx:id="root"
+            styleClass="wishlist-page">
 
-    <!-- TOP: Navigation Bar -->
     <top>
-        <HBox spacing="10" style="-fx-background-color: #2c3e50; -fx-padding: 15;" alignment="CENTER_LEFT">
-            <Label text="❤️ Ma Wishlist" style="-fx-text-fill: white; -fx-font-size: 24; -fx-font-weight: bold;"/>
-            <Region HBox.hgrow="ALWAYS"/>
-            <Button text="🏠 Accueil" onAction="#goToHome" style="-fx-font-size: 12; -fx-padding: 10; -fx-cursor: hand;"/>
-            <Button text="📦 Produits" onAction="#goToProduits" style="-fx-font-size: 12; -fx-padding: 10; -fx-cursor: hand;"/>
-            <Button text="📋 Commandes" onAction="#goToCommandes" style="-fx-font-size: 12; -fx-padding: 10; -fx-cursor: hand;"/>
-            <Button text="🛒 Panier" onAction="#goToPanier" style="-fx-font-size: 12; -fx-padding: 10; -fx-cursor: hand;"/>
-            <Button text="🚪 Déconnexion" onAction="#goToLogin" style="-fx-font-size: 12; -fx-padding: 10; -fx-cursor: hand; -fx-background-color: #ef4444; -fx-text-fill: white;"/>
-        </HBox>
+        <VBox spacing="18" styleClass="products-page">
+            <HBox alignment="CENTER_LEFT" spacing="16" styleClass="welcome-banner">
+                <Label text="❤️" styleClass="banner-emoji"/>
+                <VBox spacing="4" HBox.hgrow="ALWAYS">
+                    <Label text="Ma wishlist" styleClass="welcome-title"/>
+                    <Label text="Gardez vos produits préférés à portée de main et envoyez-les rapidement dans le panier."
+                           styleClass="welcome-subtitle" wrapText="true"/>
+                </VBox>
+                <Label text="PATIENT" styleClass="sidebar-role-badge, sidebar-role-patient"/>
+            </HBox>
+
+            <VBox spacing="14" styleClass="card">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="Favoris enregistrés" styleClass="card-title"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="Accueil" onAction="#goToHome" styleClass="btn-neutral"/>
+                    <Button text="Produits" onAction="#goToProduits" styleClass="btn-primary"/>
+                    <Button text="Commandes" onAction="#goToCommandes" styleClass="btn-primary"/>
+                    <Button text="Panier" onAction="#goToPanier" styleClass="btn-primary"/>
+                    <Button text="Deconnexion" onAction="#goToLogin" styleClass="btn-danger"/>
+                </HBox>
+                <Separator/>
+                <Label fx:id="countLabel" text="Total: 0 produit(s) dans votre wishlist" styleClass="products-count-label"/>
+            </VBox>
+        </VBox>
     </top>
 
-    <!-- CENTER: Wishlist Table -->
     <center>
-        <VBox spacing="15" style="-fx-padding: 20;">
-            <!-- Info Label -->
-            <Label fx:id="countLabel" text="Total: 0 produit(s) dans votre wishlist"
-                   style="-fx-font-size: 14; -fx-text-fill: #2c3e50;"/>
-
-            <!-- Empty State -->
-            <Label text="Votre wishlist est vide. Ajoutez des produits!" fx:id="emptyLabel"
+        <VBox spacing="14" styleClass="card wishlist-center-card">
+            <Label fx:id="emptyLabel" text="Votre wishlist est vide. Ajoutez des produits!"
                    visible="true" managed="true"
-                   style="-fx-text-fill: #95a5a6; -fx-font-size: 16; -fx-padding: 40;"/>
+                   styleClass="wishlist-empty-label"/>
 
-            <!-- Table -->
-            <TableView fx:id="wishlistTable" style="-fx-font-size: 12;" VBox.vgrow="ALWAYS">
+            <TableView fx:id="wishlistTable" VBox.vgrow="ALWAYS" styleClass="modern-table, wishlist-table">
                 <columns>
-                    <TableColumn fx:id="nomCol" text="Nom du Produit" prefWidth="300"/>
+                    <TableColumn fx:id="nomCol" text="Nom du produit" prefWidth="300"/>
                     <TableColumn fx:id="prixCol" text="Prix" prefWidth="100"/>
                     <TableColumn fx:id="stockCol" text="Stock" prefWidth="100"/>
-                    <TableColumn fx:id="actionsCol" text="Actions" prefWidth="250"/>
+                    <TableColumn fx:id="actionsCol" text="Actions" prefWidth="280"/>
                 </columns>
             </TableView>
         </VBox>
     </center>
 
-    <!-- BOTTOM: Footer -->
     <bottom>
-        <HBox spacing="10" style="-fx-background-color: #ecf0f1; -fx-padding: 15;" alignment="CENTER">
+        <HBox spacing="10" styleClass="wishlist-footer" alignment="CENTER">
             <Label text="💡 Utilisez votre wishlist pour garder vos produits préférés en un seul endroit"
-                   style="-fx-text-fill: #7f8c8d; -fx-font-size: 12;"/>
+                   styleClass="products-count-label"/>
         </HBox>
     </bottom>
 
 </BorderPane>
-

@@ -3,10 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.ImageView?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.chroniccare.controllers.PatientShellController"
-            prefWidth="1200" prefHeight="760"
-            stylesheets="@home-styles.css">
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.chroniccare.controllers.PatientShellController" prefWidth="1200" prefHeight="760" stylesheets="@home-styles.css">
 
     <left>
         <VBox fx:id="sidebarRoot" styleClass="sidebar" prefWidth="230" spacing="0">
@@ -18,44 +15,36 @@
                 <Label text="Suivi medical intelligent" styleClass="brand-subtitle"/>
             </VBox>
             <VBox styleClass="sidebar-user-card" spacing="6" alignment="CENTER_LEFT">
-                <StackPane maxWidth="48" minWidth="48" prefWidth="48"
-                           maxHeight="48" minHeight="48" prefHeight="48" alignment="TOP_LEFT">
+                <StackPane maxWidth="48" minWidth="48" prefWidth="48" maxHeight="48" minHeight="48" prefHeight="48" alignment="TOP_LEFT">
                     <Label fx:id="sidebarAvatar" styleClass="sidebar-avatar"/>
-                    <ImageView fx:id="sidebarAvatarImage" fitWidth="48" fitHeight="48"
-                               preserveRatio="false" visible="false" managed="false"/>
+                    <ImageView fx:id="sidebarAvatarImage" fitWidth="48" fitHeight="48" preserveRatio="false" visible="false" managed="false"/>
                 </StackPane>
                 <Label fx:id="sidebarUserName" styleClass="sidebar-user-name"/>
                 <Label text="Patient" styleClass="sidebar-role-badge, sidebar-role-patient"/>
             </VBox>
             <Separator styleClass="sidebar-sep"/>
-            <VBox styleClass="nav-section" spacing="2" VBox.vgrow="ALWAYS">
-                <Label text="NAVIGATION" styleClass="nav-section-label"/>
-                <Button fx:id="btnHome" text="🏠  Accueil"
-                        styleClass="nav-btn" onAction="#showHome" maxWidth="Infinity"/>
-                <Button fx:id="btnProfile" text="👤  Mon Profil"
-                        styleClass="nav-btn" onAction="#showProfile" maxWidth="Infinity"/>
-                <Label text="MES SOINS" styleClass="nav-section-label"/>
-                <Button fx:id="btnEtat" text="📋  Mon État"
-                        styleClass="nav-btn" onAction="#showEtat" maxWidth="Infinity"/>
-                <Button fx:id="btnActivite" text="🏃  Mon Activité"
-                        styleClass="nav-btn" onAction="#showActivite" maxWidth="Infinity"/>
-                <Button fx:id="btnEvents" text="🎯  Événements"
-                        styleClass="nav-btn" onAction="#showEvents" maxWidth="Infinity"/>
-                <Button fx:id="btnRegistrations" text="📝  Mes inscriptions"
-                        styleClass="nav-btn" onAction="#showRegistrations" maxWidth="Infinity"/>
-                <Button fx:id="btnRdv" text="📆  Prendre RDV"
-                        styleClass="nav-btn" onAction="#showRdv" maxWidth="Infinity"/>
-                <Button fx:id="btnConsultations" text="💬  Mes consultations"
-                        styleClass="nav-btn" onAction="#showConsultations" maxWidth="Infinity"/>
-                <Label text="FORUM" styleClass="nav-section-label"/>
-                <Button text="💬  Forum"
-                        styleClass="nav-btn" onAction="#goToForum" maxWidth="Infinity"/>
-            </VBox>
-            <VBox styleClass="sidebar-bottom">
-                <Separator styleClass="sidebar-sep"/>
-                <Button text="⏻  Déconnexion" styleClass="nav-btn, nav-btn-logout"
-                        onAction="#handleLogout" maxWidth="Infinity"/>
-            </VBox>
+            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" VBox.vgrow="ALWAYS" styleClass="sidebar-nav-scroll">
+                <VBox fx:id="sidebarNavContent" spacing="0">
+                    <VBox styleClass="nav-section" spacing="2">
+                        <Label text="NAVIGATION" styleClass="nav-section-label"/>
+                        <Button fx:id="btnHome" text="🏠  Accueil" styleClass="nav-btn" onAction="#showHome" maxWidth="Infinity"/>
+                        <Button fx:id="btnProfile" text="👤  Mon Profil" styleClass="nav-btn" onAction="#showProfile" maxWidth="Infinity"/>
+                        <Label text="MES SOINS" styleClass="nav-section-label"/>
+                        <Button fx:id="btnEtat" text="📋  Mon État" styleClass="nav-btn" onAction="#showEtat" maxWidth="Infinity"/>
+                        <Button fx:id="btnActivite" text="🏃  Mon Activité" styleClass="nav-btn" onAction="#showActivite" maxWidth="Infinity"/>
+                        <Button fx:id="btnEvents" text="🎯  Événements" styleClass="nav-btn" onAction="#showEvents" maxWidth="Infinity"/>
+                        <Button fx:id="btnRegistrations" text="📝  Mes inscriptions" styleClass="nav-btn" onAction="#showRegistrations" maxWidth="Infinity"/>
+                        <Button fx:id="btnRdv" text="📆  Prendre RDV" styleClass="nav-btn" onAction="#showRdv" maxWidth="Infinity"/>
+                        <Button fx:id="btnConsultations" text="💬  Mes consultations" styleClass="nav-btn" onAction="#showConsultations" maxWidth="Infinity"/>
+                        <Label text="FORUM" styleClass="nav-section-label"/>
+                        <Button text="💬  Forum" styleClass="nav-btn" onAction="#goToForum" maxWidth="Infinity"/>
+                    </VBox>
+                    <VBox styleClass="sidebar-bottom">
+                        <Separator styleClass="sidebar-sep"/>
+                        <Button text="⏻  Déconnexion" styleClass="nav-btn, nav-btn-logout" onAction="#handleLogout" maxWidth="Infinity"/>
+                    </VBox>
+                </VBox>
+            </ScrollPane>
         </VBox>
     </left>
 
@@ -68,8 +57,7 @@
                 <HBox styleClass="topbar-user-pill" alignment="CENTER" spacing="8">
                     <StackPane>
                         <Label fx:id="topbarAvatar" styleClass="topbar-avatar"/>
-                        <ImageView fx:id="topbarAvatarImage" fitWidth="28" fitHeight="28"
-                                   preserveRatio="false" visible="false" managed="false"/>
+                        <ImageView fx:id="topbarAvatarImage" fitWidth="28" fitHeight="28" preserveRatio="false" visible="false" managed="false"/>
                     </StackPane>
                     <Label fx:id="topbarUserName" styleClass="topbar-username"/>
                 </HBox>
